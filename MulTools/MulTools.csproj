@@ -65,12 +65,6 @@
     <Compile Include="Forms\文件操作.Designer.cs">
       <DependentUpon>文件操作.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\视频关机.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\视频关机.Designer.cs">
-      <DependentUpon>视频关机.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\进程专杀.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,7 +81,6 @@
     <Compile Include="Function\Function.cs" />
     <Compile Include="Function\Win32.cs" />
     <Compile Include="Function\XmlHelper.cs" />
-    <Compile Include="Models\IP.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\IP速换.resx">
@@ -95,6 +88,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\定时关机.resx">
       <DependentUpon>定时关机.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\文件操作.resx">
+      <DependentUpon>文件操作.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\进程专杀.resx">
       <DependentUpon>进程专杀.cs</DependentUpon>
@@ -124,6 +120,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Components\Components.csproj">
+      <Project>{be2698f3-756a-474a-8d9a-0465f5d1ba28}</Project>
+      <Name>Components</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

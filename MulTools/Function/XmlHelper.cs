@@ -100,7 +100,7 @@ namespace MulTools.Function
         /// <param name="xPath">xPath</param>
         /// <param name="elementName">节点名称</param>
         /// <param name="dict">节点属性</param>
-        public void AppendNode( Models.IP obj)
+        public void AppendNode( Components.Models.IP obj)
         {
             CreateXMLElement();
             //XmlNode node = _xml.SelectSingleNode(xPath);//"/Root/Rules"
@@ -124,7 +124,7 @@ namespace MulTools.Function
         /// </summary>
         /// <param name="xPath">xPath</param>
         /// <param name="dict">节点属性</param>
-        public void UpdateNode(string xPath, string Name, Models.IP obj)
+        public void UpdateNode(string xPath, string Name, Components.Models.IP obj)
         {
             CreateXMLElement();
             //XmlElement element = (XmlElement)_xml.SelectSingleNode(xPath);

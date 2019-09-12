@@ -64,12 +64,18 @@ namespace MulTools.Forms
                         span = ((DateTime)((DateTimePicker)(sender)).Value).AddDays(1) - DateTime.Now;
                     this.timerClose = new System.Timers.Timer(Convert.ToDouble(span.TotalMilliseconds));
                 }
+                this.timerClose.Elapsed += TimerClose_Elapsed;
                 this.timerClose.Start();
                 this.Top = Screen.PrimaryScreen.WorkingArea.Height - this.Size.Height;
                 this.Left = Screen.PrimaryScreen.WorkingArea.Width - this.Size.Width;
             }
             if (e.KeyCode == Keys.Space)
                 Functions.DoExitWin(Win32.EWX_SHUTDOWN);
+        }
+
+        private void TimerClose_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            Functions.DoExitWin(Win32.EWX_SHUTDOWN);
         }
 
         private void 定时关机_Load(object sender, EventArgs e)

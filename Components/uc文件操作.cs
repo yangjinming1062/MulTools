@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MulTools.Forms
+namespace Components
 {
-    public partial class 视频关机 : Form
+    public partial class uc文件操作 : UserControl
     {
-        public 视频关机()
+        public uc文件操作()
         {
             InitializeComponent();
         }
+        public List<Models.fileInfo> lsFile = new List<Models.fileInfo>();
     }
 }
