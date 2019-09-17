@@ -40,8 +40,9 @@
             this.btKill.Font = new System.Drawing.Font("楷体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btKill.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.btKill.Location = new System.Drawing.Point(0, 0);
+            this.btKill.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btKill.Name = "btKill";
-            this.btKill.Size = new System.Drawing.Size(25, 25);
+            this.btKill.Size = new System.Drawing.Size(33, 31);
             this.btKill.TabIndex = 0;
             this.btKill.Text = "杀";
             this.btKill.UseVisualStyleBackColor = false;
@@ -49,9 +50,10 @@
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(29, 2);
+            this.txtName.Location = new System.Drawing.Point(39, 2);
+            this.txtName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(100, 21);
+            this.txtName.Size = new System.Drawing.Size(132, 25);
             this.txtName.TabIndex = 1;
             this.txtName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtName_KeyDown);
             // 
@@ -61,9 +63,10 @@
             this.btClose.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btClose.Font = new System.Drawing.Font("楷体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btClose.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.btClose.Location = new System.Drawing.Point(131, 0);
+            this.btClose.Location = new System.Drawing.Point(175, 0);
+            this.btClose.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btClose.Name = "btClose";
-            this.btClose.Size = new System.Drawing.Size(25, 25);
+            this.btClose.Size = new System.Drawing.Size(33, 31);
             this.btClose.TabIndex = 0;
             this.btClose.Text = "X";
             this.btClose.UseVisualStyleBackColor = false;
@@ -71,16 +74,19 @@
             // 
             // 进程专杀
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(155, 25);
+            this.ClientSize = new System.Drawing.Size(207, 31);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.btClose);
             this.Controls.Add(this.btKill);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.MaximumSize = new System.Drawing.Size(155, 25);
-            this.MinimumSize = new System.Drawing.Size(155, 25);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MaximumSize = new System.Drawing.Size(207, 31);
+            this.MinimumSize = new System.Drawing.Size(207, 31);
             this.Name = "进程专杀";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "进程专杀";
             this.Load += new System.EventHandler(this.进程专杀_Load);
             this.ResumeLayout(false);

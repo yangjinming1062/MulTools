@@ -53,53 +53,54 @@
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.menuStrip.Size = new System.Drawing.Size(158, 305);
+            this.menuStrip.Size = new System.Drawing.Size(91, 305);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "功能菜单";
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(141, 24);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(74, 24);
             this.toolStripMenuItem1.Text = "文件操作";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.MenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(141, 24);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(74, 24);
             this.toolStripMenuItem2.Text = "定时关机";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.MenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(141, 24);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(74, 24);
             this.toolStripMenuItem3.Text = "进程专杀";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.MenuItem_Click);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(141, 24);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(74, 24);
             this.toolStripMenuItem5.Text = "IP速换";
             this.toolStripMenuItem5.Click += new System.EventHandler(this.MenuItem_Click);
             // 
             // tbPanel
             // 
+            this.tbPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.tbPanel.ColumnCount = 2;
             this.tbPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tbPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tbPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbPanel.Location = new System.Drawing.Point(158, 0);
-            this.tbPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbPanel.Location = new System.Drawing.Point(91, 0);
+            this.tbPanel.Margin = new System.Windows.Forms.Padding(4);
             this.tbPanel.Name = "tbPanel";
             this.tbPanel.RowCount = 4;
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tbPanel.Size = new System.Drawing.Size(257, 305);
+            this.tbPanel.Size = new System.Drawing.Size(324, 305);
             this.tbPanel.TabIndex = 1;
             // 
             // notifyIcon1
@@ -118,7 +119,7 @@
             this.Controls.Add(this.menuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MainMenuStrip = this.menuStrip;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmMenu";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

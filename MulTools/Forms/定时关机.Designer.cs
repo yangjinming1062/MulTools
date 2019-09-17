@@ -36,18 +36,20 @@
             // 
             this.dtp.Format = System.Windows.Forms.DateTimePickerFormat.Time;
             this.dtp.Location = new System.Drawing.Point(0, 0);
+            this.dtp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dtp.Name = "dtp";
             this.dtp.ShowUpDown = true;
-            this.dtp.Size = new System.Drawing.Size(75, 21);
+            this.dtp.Size = new System.Drawing.Size(99, 25);
             this.dtp.TabIndex = 0;
             this.dtp.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Dtp_KeyDown);
             // 
             // cbJS
             // 
             this.cbJS.AutoSize = true;
-            this.cbJS.Location = new System.Drawing.Point(80, 3);
+            this.cbJS.Location = new System.Drawing.Point(107, 4);
+            this.cbJS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbJS.Name = "cbJS";
-            this.cbJS.Size = new System.Drawing.Size(48, 16);
+            this.cbJS.Size = new System.Drawing.Size(59, 19);
             this.cbJS.TabIndex = 1;
             this.cbJS.Text = "计时";
             this.cbJS.UseVisualStyleBackColor = true;
@@ -55,15 +57,18 @@
             // 
             // 定时关机
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(126, 21);
+            this.ClientSize = new System.Drawing.Size(168, 26);
             this.Controls.Add(this.cbJS);
             this.Controls.Add(this.dtp);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.MaximumSize = new System.Drawing.Size(126, 21);
-            this.MinimumSize = new System.Drawing.Size(126, 21);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MaximumSize = new System.Drawing.Size(168, 26);
+            this.MinimumSize = new System.Drawing.Size(168, 26);
             this.Name = "定时关机";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "定时关机";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.定时关机_FormClosed);
             this.Load += new System.EventHandler(this.定时关机_Load);

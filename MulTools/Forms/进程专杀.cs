@@ -24,7 +24,7 @@ namespace MulTools.Forms
                 {
                     foreach (string killName in killList)
                     {
-                        if (temp.ProcessName.Contains(killName))
+                        if (temp.ProcessName.Equals(killName))
                             temp.Kill();
                     }
                 }
@@ -65,6 +65,7 @@ namespace MulTools.Forms
             Left = Screen.PrimaryScreen.WorkingArea.Width - Size.Width;
             TopMost = true;
             timerKill.Elapsed += TimerKill_Elapsed;
+            txtName.Focus();
         }
 
         private void TimerKill_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
