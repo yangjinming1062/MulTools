@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using MulTools.Function;
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using MulTools.Function;
 
 namespace MulTools.Forms
 {
@@ -30,17 +24,17 @@ namespace MulTools.Forms
                 switch (m.WParam.ToInt32())
                 {
                     case 1062:
-                        this.Opacity = (this.Opacity + 0.1) % 1;
+                        Opacity = (Opacity + 0.1) % 1;
                         break;
                     case 1063:
-                        if (this.Opacity < 1)
-                            this.Opacity = 1;
+                        if (Opacity < 1)
+                            Opacity = 1;
                         else
-                            this.Opacity = 0;
+                            Opacity = 0;
                         break;
                     case 1064:
-                        if (this.Opacity > 0.5)
-                            this.Close();
+                        if (Opacity > 0.5)
+                            Close();
                         break;
                 }
             }
@@ -53,21 +47,21 @@ namespace MulTools.Forms
             {
                 if (cbJS.Checked)
                 {
-                    DateTime dateTime = (DateTime)((DateTimePicker)(sender)).Value;
+                    DateTime dateTime = ((DateTimePicker)(sender)).Value;
                     int time = (dateTime.Hour * 60 + dateTime.Minute) * 60000 + dateTime.Second * 1000;
-                    this.timerClose = new System.Timers.Timer(Convert.ToDouble(time));
+                    timerClose = new System.Timers.Timer(Convert.ToDouble(time));
                 }
                 else
                 {
-                    TimeSpan span = (DateTime)((DateTimePicker)(sender)).Value - DateTime.Now;
+                    TimeSpan span = ((DateTimePicker)(sender)).Value - DateTime.Now;
                     if (span.Milliseconds < 0)
-                        span = ((DateTime)((DateTimePicker)(sender)).Value).AddDays(1) - DateTime.Now;
-                    this.timerClose = new System.Timers.Timer(Convert.ToDouble(span.TotalMilliseconds));
+                        span = ((DateTimePicker)(sender)).Value.AddDays(1) - DateTime.Now;
+                    timerClose = new System.Timers.Timer(Convert.ToDouble(span.TotalMilliseconds));
                 }
-                this.timerClose.Elapsed += TimerClose_Elapsed;
-                this.timerClose.Start();
-                this.Top = Screen.PrimaryScreen.WorkingArea.Height - this.Size.Height;
-                this.Left = Screen.PrimaryScreen.WorkingArea.Width - this.Size.Width;
+                timerClose.Elapsed += TimerClose_Elapsed;
+                timerClose.Start();
+                Top = Screen.PrimaryScreen.WorkingArea.Height - Size.Height;
+                Left = Screen.PrimaryScreen.WorkingArea.Width - Size.Width;
             }
             if (e.KeyCode == Keys.Space)
                 Functions.DoExitWin(Win32.EWX_SHUTDOWN);
@@ -80,7 +74,7 @@ namespace MulTools.Forms
 
         private void 定时关机_Load(object sender, EventArgs e)
         {
-            this.StartPosition = FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterParent;
             Win32.RegisterHotKey(Handle, 1062, 0x0004, Keys.J);
             Win32.RegisterHotKey(Handle, 1063, 0x0004, Keys.G);
             Win32.RegisterHotKey(Handle, 1064, 0, Keys.Escape);
@@ -95,11 +89,11 @@ namespace MulTools.Forms
         {
             if (cbJS.Checked)
             {
-                this.dtp.Value = DateTime.Now.Date;
+                dtp.Value = DateTime.Now.Date;
             }
             else
             {
-                this.dtp.Value = DateTime.Now;
+                dtp.Value = DateTime.Now;
             }
         }
     }

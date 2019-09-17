@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MulTools.Function;
+using System;
 using System.Windows.Forms;
-using MulTools.Function;
 
 namespace MulTools
 {
@@ -24,25 +17,25 @@ namespace MulTools
         /// <param name="e"></param>
         private void MenuItem_Click(object sender, EventArgs e)
         {
-            var frm = frmFactory.GetForm(((ToolStripItem)sender).Text);
-            this.Visible = false;
+            Form frm = frmFactory.GetForm(((ToolStripItem)sender).Text);
+            Visible = false;
             DialogResult ds = frm.ShowDialog();
             if (ds == DialogResult.Cancel || ds == DialogResult.No)
-                this.Visible = true;
+                Visible = true;
         }
 
         private void NotifyIcon1_Click(object sender, EventArgs e)
         {
-            if (this.WindowState == FormWindowState.Minimized)
+            if (WindowState == FormWindowState.Minimized)
             {
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-                this.Activate();
+                Show();
+                WindowState = FormWindowState.Normal;
+                Activate();
             }
             else
             {
-                this.WindowState = FormWindowState.Minimized;
-                this.Hide();
+                WindowState = FormWindowState.Minimized;
+                Hide();
             }
         }
     }

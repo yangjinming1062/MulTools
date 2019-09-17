@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\fileInfo.cs" />
     <Compile Include="Models\IP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="uc文件操作.cs">

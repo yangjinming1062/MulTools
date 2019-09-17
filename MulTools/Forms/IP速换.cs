@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Components.Models;
+using MulTools.Function;
+using System;
 using System.Collections.Generic;
 using System.Management;
 using System.Net;
-using System.Xml;
 using System.Windows.Forms;
-using MulTools.Function;
-using Components.Models;
+using System.Xml;
 
 namespace MulTools.Forms
 {
@@ -18,17 +18,19 @@ namespace MulTools.Forms
 
         #region 变量
         //string FilePath = Application.StartupPath + "\\IP.xml";
-        XmlHelper xmlHelper = new XmlHelper("IP.xml");
+        private readonly XmlHelper xmlHelper = new XmlHelper("IP.xml");
         #endregion
 
         #region Function
-        bool Valid()
+        private bool Valid()
         {
-            List<TextBox> list = new List<TextBox>();
-            list.Add(txtIP);
-            list.Add(txtYM);
-            list.Add(txtWG);
-            foreach (var t in list)
+            List<TextBox> list = new List<TextBox>
+            {
+                txtIP,
+                txtYM,
+                txtWG
+            };
+            foreach (TextBox t in list)
             {
                 try
                 {
@@ -143,7 +145,7 @@ namespace MulTools.Forms
             ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
             ManagementObjectCollection nics = mc.GetInstances();
             cmbWK.Items.Clear();
-            this.cmbWK.SelectedIndexChanged -= new EventHandler(this.CmbWK_SelectedIndexChanged);
+            cmbWK.SelectedIndexChanged -= new EventHandler(CmbWK_SelectedIndexChanged);
             foreach (ManagementObject nic in nics)
             {
                 if (Convert.ToBoolean(nic["ipEnabled"]) == true)
@@ -152,15 +154,15 @@ namespace MulTools.Forms
                     //    txtName.Text += prop.Name + ":" + prop.Value + "\n";
                     //MessageBox.Show(txtName.Text);
                     txtName.Text = "";
-                    txtIP.Text = (nic["IPAddress"] as String[])[0];//IP地址
-                    txtYM.Text = (nic["IPSubnet"] as String[])[0];//子网掩码
+                    txtIP.Text = (nic["IPAddress"] as string[])[0];//IP地址
+                    txtYM.Text = (nic["IPSubnet"] as string[])[0];//子网掩码
                     if (nic["DefaultIPGateway"] != null)
-                        txtWG.Text = (nic["DefaultIPGateway"] as String[])[0];//默认网关
+                        txtWG.Text = (nic["DefaultIPGateway"] as string[])[0];//默认网关
                     if (nic["DNSServerSearchOrder"] != null)
                     {
-                        txtFDNS.Text = (nic["DNSServerSearchOrder"] as String[])[0];
-                        if ((nic["DNSServerSearchOrder"] as String[]).Length > 1)
-                            txtSDNS.Text = (nic["DNSServerSearchOrder"] as String[])[1];
+                        txtFDNS.Text = (nic["DNSServerSearchOrder"] as string[])[0];
+                        if ((nic["DNSServerSearchOrder"] as string[]).Length > 1)
+                            txtSDNS.Text = (nic["DNSServerSearchOrder"] as string[])[1];
                     }
                     IP obj = new IP
                     {
@@ -297,7 +299,7 @@ namespace MulTools.Forms
         #endregion
     }
 
-    enum IPenum
+    internal enum IPenum
     {
         NAME = 0,
         IPDZ = 1,

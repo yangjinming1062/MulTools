@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace MulTools.Function
 {
-    class Win32
+    internal class Win32
     {
         #region 权限
         // 这个结构体将会传递给API。使用StructLayout 

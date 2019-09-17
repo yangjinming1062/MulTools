@@ -8,7 +8,7 @@ namespace MulTools.Function
         public static Form GetForm(string name)
         {
             Form frm = null;
-            switch(name)
+            switch (name)
             {
                 case "进程专杀": frm = new 进程专杀(); break;
                 case "定时关机": frm = new 定时关机(); break;

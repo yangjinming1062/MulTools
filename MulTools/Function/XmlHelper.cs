@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Xml;
 using System.IO;
+using System.Xml;
 
 namespace MulTools.Function
 {
@@ -10,7 +10,7 @@ namespace MulTools.Function
         /// <summary>
         /// XML文件的物理路径
         /// </summary>
-        private string _filePath = string.Empty;
+        private readonly string _filePath = string.Empty;
         /// <summary>
         /// Xml文档
         /// </summary>
@@ -44,7 +44,7 @@ namespace MulTools.Function
             _xml = new XmlDocument();//创建一个XML对象
             if (File.Exists(_filePath))
             {
-                _xml.Load(this._filePath);//加载XML文件
+                _xml.Load(_filePath);//加载XML文件
             }
             _element = _xml.DocumentElement;//为XML的根节点赋值
         }
@@ -100,7 +100,7 @@ namespace MulTools.Function
         /// <param name="xPath">xPath</param>
         /// <param name="elementName">节点名称</param>
         /// <param name="dict">节点属性</param>
-        public void AppendNode( Components.Models.IP obj)
+        public void AppendNode(Components.Models.IP obj)
         {
             CreateXMLElement();
             //XmlNode node = _xml.SelectSingleNode(xPath);//"/Root/Rules"
@@ -114,7 +114,7 @@ namespace MulTools.Function
             element.SetAttribute("SDNS", obj.SDNS);
 
             _element.AppendChild(element);
-            _xml.Save(this._filePath);//保存文件
+            _xml.Save(_filePath);//保存文件
         }
         #endregion
 
@@ -143,7 +143,7 @@ namespace MulTools.Function
                     break;
                 }
             }
-            _xml.Save(this._filePath);//保存文件
+            _xml.Save(_filePath);//保存文件
         }
         #endregion
 
@@ -168,7 +168,7 @@ namespace MulTools.Function
                     break;
                 }
             }
-            _xml.Save(this._filePath);
+            _xml.Save(_filePath);
         }
         #endregion //删除节点
 
@@ -179,7 +179,7 @@ namespace MulTools.Function
         public void Save()
         {
             CreateXMLElement();//创建XML的根节点
-            _xml.Save(this._filePath);//保存XML文件
+            _xml.Save(_filePath);//保存XML文件
         }
         #endregion //保存XML文件
 
