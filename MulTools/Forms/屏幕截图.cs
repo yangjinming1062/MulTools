@@ -1,11 +1,6 @@
 ﻿using MulTools.Function;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Windows.Forms;
 
@@ -25,8 +20,8 @@ namespace MulTools.Forms
         private Bitmap bitmap;
         private Point start = new Point();// 屏笔起始点
         private Point end = new Point();// 屏笔结束点
-        private MouseHook mouseHook = new MouseHook();// 鼠标钩子
-        private KeyboardHook keyboardHook = new KeyboardHook();// 键盘钩子
+        private readonly MouseHook mouseHook = new MouseHook();// 鼠标钩子
+        private readonly KeyboardHook keyboardHook = new KeyboardHook();// 键盘钩子
         private System.Timers.Timer timerPic = null;
         private string gifTempPath;
         #endregion
@@ -48,7 +43,18 @@ namespace MulTools.Forms
 
         private void bmpTogif()
         {
-            //todo
+            string fileName = string.Format("{0}/{1}.gif", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
+            //Delay time is one hundredths (1/100) of a second between frames;
+            AnimatedGif.AnimatedGifCreator gif = AnimatedGif.AnimatedGif.Create(fileName, 10);//这里因为timer设置的100ms这里对应就写的10
+            DirectoryInfo dirInfo = new DirectoryInfo(gifTempPath);
+            foreach (FileSystemInfo imgFile in dirInfo.GetFileSystemInfos())
+            {
+                Image img = Image.FromFile(imgFile.FullName);
+                gif.AddFrame(img);
+                img.Dispose();
+                File.Delete(imgFile.FullName);
+            }
+            gif.Dispose();
         }
 
         private void 屏幕截图_Load(object sender, EventArgs e)
@@ -77,9 +83,9 @@ namespace MulTools.Forms
 
         private void KeyboardHook_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Escape)
+            if (e.KeyCode == Keys.Escape)
             {
-                if(inDraw)
+                if (inDraw)
                 {
                     bitmap = new Bitmap(picBox.Width, picBox.Height);
                     picBox.Image = bitmap;
@@ -156,7 +162,7 @@ namespace MulTools.Forms
 
         private void BtGif_Click(object sender, EventArgs e)
         {
-            if(btGif.Text == "动图")
+            if (btGif.Text == "动图")
             {
                 btGif.BackColor = Color.RoyalBlue;
                 btGif.Text = "停止";
@@ -173,7 +179,7 @@ namespace MulTools.Forms
 
         private void BtPen_Click(object sender, EventArgs e)
         {
-            if(btPen.Text == "启动画笔")
+            if (btPen.Text == "启动画笔")
             {
                 inDraw = true;
                 btPen.Text = "关闭画笔";

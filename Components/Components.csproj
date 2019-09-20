@@ -7,7 +7,7 @@
     <ProjectGuid>{BE2698F3-756A-474A-8D9A-0465F5D1BA28}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Components</RootNamespace>
+    <RootNamespace>MulTools.Components</RootNamespace>
     <AssemblyName>Components</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

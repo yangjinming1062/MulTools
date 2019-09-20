@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 
 namespace MulTools.Function
 {
@@ -57,6 +58,80 @@ namespace MulTools.Function
             ok = Win32.ExitWindowsEx(flg, 0);
         }
 
+        #region 文件夹操作
+        /// <summary>
+        /// 删除文件夹
+        /// </summary>
+        /// <param name="path"></param>
+        public static void DeleteDir(string path)
+        {
+            try
+            {
+                DirectoryInfo dirInfo = new DirectoryInfo(path);
+                foreach (FileSystemInfo file in dirInfo.GetFileSystemInfos())
+                {
+                    if (file.Attributes == FileAttributes.Directory || string.IsNullOrEmpty(file.Extension))
+                        DeleteDir(file.FullName);
+                    else
+                        File.Delete(file.FullName);
+                }
+                Directory.Delete(path);
+            }
+            catch { }
+        }
+        /// <summary>
+        /// 复制文件夹
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="sou"></param>
+        /// <param name="des"></param>
+        public static void CopyDir(string path, string sou, string des)
+        {
+            if (!Directory.Exists(path.Replace(sou, des)))
+                Directory.CreateDirectory(path.Replace(sou, des));
+
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            foreach (FileSystemInfo file in dirInfo.GetFileSystemInfos())
+            {
+                try
+                {
+                    if (file.Attributes == FileAttributes.Directory || string.IsNullOrEmpty(file.Extension))
+                        CopyDir(file.FullName, sou, des);
+                    else
+                        File.Copy(file.FullName, file.FullName.Replace(sou, des));
+                }
+                catch
+                { continue; }
+            }
+        }
+        /// <summary>
+        /// 剪切文件夹
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="sou"></param>
+        /// <param name="des"></param>
+        public static void CutDir(string path, string sou, string des)
+        {
+            if (!Directory.Exists(path.Replace(sou, des)))
+                Directory.CreateDirectory(path.Replace(sou, des));
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            foreach (FileSystemInfo file in dirInfo.GetFileSystemInfos())
+            {
+                try
+                {
+                    if (file.Attributes == FileAttributes.Directory || string.IsNullOrEmpty(file.Extension))
+                        CutDir(file.FullName, sou, des);
+                    else
+                        File.Move(file.FullName, file.FullName.Replace(sou, des));
+                }
+                catch
+                { continue; }
+            }
+            Directory.Delete(path);
+        }
+        #endregion
+
+        #region 屏幕缩放比
         /// <summary>
         /// 当前系统显示的缩放比
         /// </summary>
@@ -71,6 +146,7 @@ namespace MulTools.Function
                 return Convert.ToDecimal(H) / Convert.ToDecimal(realH);
             }
         }
+
         /// <summary>
         /// 因为缩放率的影响，需要进行比例换算
         /// </summary>
@@ -78,6 +154,7 @@ namespace MulTools.Function
         {
             return Convert.ToInt32(res * Rate);
         }
+
         /// <summary>
         /// 这里主要是处理鼠标返回的坐标点，需要除以缩放比例
         /// </summary>
@@ -88,5 +165,6 @@ namespace MulTools.Function
             Point res = new Point(Convert.ToInt32(source.X / Rate), Convert.ToInt32(source.Y / Rate));
             return res;
         }
+        #endregion
     }
 }

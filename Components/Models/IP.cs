@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace Components.Models
+namespace MulTools.Components.Models
 {
     [XmlRoot("IP")]
     public class IP

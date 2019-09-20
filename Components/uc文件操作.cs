@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Components
+namespace MulTools.Components
 {
     public partial class uc文件操作 : UserControl
     {
@@ -39,84 +39,6 @@ namespace Components
         }
 
         public List<ListViewItem> lsFile = new List<ListViewItem>();
-
-        #region 文件夹操作
-        /// <summary>
-        /// 删除文件夹
-        /// </summary>
-        /// <param name="path"></param>
-        public void DeleteDir(string path)
-        {
-            try
-            {
-                DirectoryInfo dirInfo = new DirectoryInfo(path);
-                foreach (FileSystemInfo file in dirInfo.GetFileSystemInfos())
-                {
-                    if (file.Attributes == FileAttributes.Directory || string.IsNullOrEmpty(file.Extension))
-                        DeleteDir(file.FullName);
-                    else
-                        File.Delete(file.FullName);
-                }
-                Directory.Delete(path);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return;
-            }
-        }
-        /// <summary>
-        /// 复制文件夹
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="sou"></param>
-        /// <param name="des"></param>
-        public void CopyDir(string path, string sou, string des)
-        {
-            if (!Directory.Exists(path.Replace(sou, des)))
-                Directory.CreateDirectory(path.Replace(sou, des));
-
-            DirectoryInfo dirInfo = new DirectoryInfo(path);
-            foreach (FileSystemInfo file in dirInfo.GetFileSystemInfos())
-            {
-                try
-                {
-                    if (file.Attributes == FileAttributes.Directory || string.IsNullOrEmpty(file.Extension))
-                        CopyDir(file.FullName, sou, des);
-                    else
-                        File.Copy(file.FullName, file.FullName.Replace(sou, des));
-                }
-                catch
-                { continue; }
-            }
-        }
-        /// <summary>
-        /// 剪切文件夹
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="sou"></param>
-        /// <param name="des"></param>
-        public void CutDir(string path, string sou, string des)
-        {
-            if (!Directory.Exists(path.Replace(sou, des)))
-                Directory.CreateDirectory(path.Replace(sou, des));
-            DirectoryInfo dirInfo = new DirectoryInfo(path);
-            foreach (FileSystemInfo file in dirInfo.GetFileSystemInfos())
-            {
-                try
-                {
-                    if (file.Attributes == FileAttributes.Directory || string.IsNullOrEmpty(file.Extension))
-                        CutDir(file.FullName, sou, des);
-                    else
-                        File.Move(file.FullName, file.FullName.Replace(sou, des));
-                }
-                catch
-                { continue; }
-            }
-            Directory.Delete(path);
-        }
-        #endregion
-
         /// <summary>
         /// 生成文件列表
         /// </summary>
@@ -327,7 +249,7 @@ namespace Components
             foreach (ListViewItem obj in fileLV.SelectedItems)
             {
                 if (obj.SubItems[(int)Cols.文件类型].Text == "文件夹")
-                    DeleteDir(obj.Name);
+                    MulTools.Function.Functions.DeleteDir(obj.Name);
                 else
                     File.Delete(obj.Name);
                 fileLV.Items.Remove(obj);
@@ -341,7 +263,7 @@ namespace Components
             foreach (ListViewItem obj in fileLV.SelectedItems)
             {
                 if (obj.SubItems[(int)Cols.文件类型].Text == "文件夹")
-                    CutDir(obj.Name, txtDirpath.Text, TargetDirPath);
+                    MulTools.Function.Functions.CutDir(obj.Name, txtDirpath.Text, TargetDirPath);
                 else
                     File.Move(obj.Name, Path.Combine(TargetDirPath, Path.GetFileName(obj.Name)));
             }
@@ -355,7 +277,7 @@ namespace Components
                 foreach (ListViewItem obj in fileLV.SelectedItems)
                 {
                     if (obj.SubItems[(int)Cols.文件类型].Text == "文件夹")
-                        CopyDir(obj.Name, txtDirpath.Text, TargetDirPath);
+                        MulTools.Function.Functions.CopyDir(obj.Name, txtDirpath.Text, TargetDirPath);
                     else
                         File.Copy(obj.Name, Path.Combine(TargetDirPath, Path.GetFileName(obj.Name)));
                 }

@@ -1,4 +1,4 @@
-﻿namespace Components
+﻿namespace MulTools.Components
 {
     partial class uc文件操作
     {
