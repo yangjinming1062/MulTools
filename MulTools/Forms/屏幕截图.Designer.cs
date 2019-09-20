@@ -377,6 +377,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "屏幕截图";
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "屏幕截图";
             this.TopMost = true;
             this.TransparencyKey = System.Drawing.Color.White;

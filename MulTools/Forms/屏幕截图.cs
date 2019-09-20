@@ -52,9 +52,9 @@ namespace MulTools.Forms
                 Image img = Image.FromFile(imgFile.FullName);
                 gif.AddFrame(img);
                 img.Dispose();
-                File.Delete(imgFile.FullName);
             }
             gif.Dispose();
+            Functions.DeleteDir(gifTempPath);
         }
 
         private void 屏幕截图_Load(object sender, EventArgs e)
@@ -67,11 +67,8 @@ namespace MulTools.Forms
             keyboardHook.KeyDown += KeyboardHook_KeyDown;
 
             txtPath.Text = Path.Combine(Application.StartupPath, "屏幕截图");
-            gifTempPath = Path.Combine(txtPath.Text, "temp");
             if (!Directory.Exists(txtPath.Text))
                 Directory.CreateDirectory(txtPath.Text);
-            if (!Directory.Exists(gifTempPath))
-                Directory.CreateDirectory(gifTempPath);
             timerPic = new System.Timers.Timer(100);
             timerPic.Elapsed += TimerPic_Elapsed;
         }
@@ -167,6 +164,8 @@ namespace MulTools.Forms
             {
                 btGif.BackColor = Color.RoyalBlue;
                 btGif.Text = "停止";
+                gifTempPath = Path.Combine(txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
+                Directory.CreateDirectory(gifTempPath);
                 timerPic.Start();
             }
             else
