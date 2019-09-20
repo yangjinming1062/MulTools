@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace MulTools.Function
 {
-    internal class Win32
+    public class Win32
     {
         #region 权限
         // 这个结构体将会传递给API。使用StructLayout 
@@ -86,14 +86,48 @@ namespace MulTools.Function
 
         #region 关机
         [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
-        internal static extern bool ExitWindowsEx(int flg, int rea);//关机
+        public static extern bool ExitWindowsEx(int flg, int rea);//关机
 
-        internal const int EWX_LOGOFF = 0x00000000;//ExitWindowsEx的参数类型：关闭所有进程然后注销用户
-        internal const int EWX_SHUTDOWN = 0x00000001;//ExitWindowsEx的参数类型：关机
-        internal const int EWX_REBOOT = 0x00000002;//ExitWindowsEx的参数类型：重启
-        internal const int EWX_FORCE = 0x00000004;
-        internal const int EWX_POWEROFF = 0x00000008;//ExitWindowsEx的参数类型：关闭系统并关闭电源，该系统必须支持断电
-        internal const int EWX_FORCEIFHUNG = 0x00000010;
+        public const int EWX_LOGOFF = 0x00000000;//ExitWindowsEx的参数类型：关闭所有进程然后注销用户
+        public const int EWX_SHUTDOWN = 0x00000001;//ExitWindowsEx的参数类型：关机
+        public const int EWX_REBOOT = 0x00000002;//ExitWindowsEx的参数类型：重启
+        public const int EWX_FORCE = 0x00000004;
+        public const int EWX_POWEROFF = 0x00000008;//ExitWindowsEx的参数类型：关闭系统并关闭电源，该系统必须支持断电
+        public const int EWX_FORCEIFHUNG = 0x00000010;
+        #endregion
+
+        #region 键鼠钩子
+        [DllImport("User32.dll")]
+        public static extern IntPtr GetDC(IntPtr Hwnd);
+
+        [System.Runtime.InteropServices.DllImport("User32.dll")]
+        public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
+
+        [DllImport("gdi32.dll")]
+        public static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr SetWindowsHookExW(int idHook, HookProc lpfn, IntPtr hmod, uint dwThreadID);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall, SetLastError = true)]
+        public static extern int UnhookWindowsHookEx(int idHook);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        public static extern int CallNextHookEx(int idHook, int nCode, int wParam, IntPtr lParam);
+
+        [DllImport("user32")]
+        public static extern int ToAscii(int uVirtKey, int uScanCode, byte[] lpbKeyState, byte[] lpwTransKey, int fuState);
+
+        [DllImport("user32")]
+        public static extern int GetKeyboardState(byte[] pbKeyState);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        public static extern short GetKeyState(int vKey);
+
+        public delegate int HookProc(int nCode, int wParam, IntPtr lParam);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr GetModuleHandle(string lpModuleName);
         #endregion
     }
 }

@@ -14,6 +14,7 @@ namespace MulTools.Function
                 case "定时关机": frm = new 定时关机(); break;
                 case "文件操作": frm = new 文件操作(); break;
                 case "IP速换": frm = new IP速换(); break;
+                case "屏幕截图": frm = new 屏幕截图(); break;
             }
             return frm;
         }

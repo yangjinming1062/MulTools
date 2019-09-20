@@ -62,6 +62,12 @@
     <Compile Include="Forms\定时关机.Designer.cs">
       <DependentUpon>定时关机.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\屏幕截图.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\屏幕截图.Designer.cs">
+      <DependentUpon>屏幕截图.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\文件操作.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,9 +87,6 @@
       <DependentUpon>frmMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Function\frmFactory.cs" />
-    <Compile Include="Function\Function.cs" />
-    <Compile Include="Function\Win32.cs" />
-    <Compile Include="Function\XmlHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\IP速换.resx">
@@ -91,6 +94,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\定时关机.resx">
       <DependentUpon>定时关机.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\屏幕截图.resx">
+      <DependentUpon>屏幕截图.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\文件操作.resx">
       <DependentUpon>文件操作.cs</DependentUpon>

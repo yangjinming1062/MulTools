@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.fsWatcher = new System.IO.FileSystemWatcher();
             this.bgWorker = new System.ComponentModel.BackgroundWorker();
             this.tbPanel = new System.Windows.Forms.TableLayoutPanel();
             this.panelTop = new System.Windows.Forms.Panel();
@@ -61,16 +60,10 @@
             this.tsmItemRename = new System.Windows.Forms.ToolStripMenuItem();
             this.pgBar = new System.Windows.Forms.ProgressBar();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            ((System.ComponentModel.ISupportInitialize)(this.fsWatcher)).BeginInit();
             this.panelTop.SuspendLayout();
             this.panelBottom.SuspendLayout();
             this.lvMenu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // fsWatcher
-            // 
-            this.fsWatcher.EnableRaisingEvents = true;
-            this.fsWatcher.SynchronizingObject = this;
             // 
             // bgWorker
             // 
@@ -326,7 +319,7 @@
             this.tsmItemReplace,
             this.tsmItemRename});
             this.lvMenu.Name = "lvMenu";
-            this.lvMenu.Size = new System.Drawing.Size(213, 176);
+            this.lvMenu.Size = new System.Drawing.Size(213, 148);
             // 
             // tsmItemOpen
             // 
@@ -399,7 +392,6 @@
             this.Controls.Add(this.pgBar);
             this.Name = "uc文件操作";
             this.Size = new System.Drawing.Size(568, 515);
-            ((System.ComponentModel.ISupportInitialize)(this.fsWatcher)).EndInit();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelBottom.ResumeLayout(false);
@@ -410,7 +402,6 @@
         }
 
         #endregion
-        private System.IO.FileSystemWatcher fsWatcher;
         private System.Windows.Forms.TableLayoutPanel tbPanel;
         private System.ComponentModel.BackgroundWorker bgWorker;
         private System.Windows.Forms.Panel panelTop;
