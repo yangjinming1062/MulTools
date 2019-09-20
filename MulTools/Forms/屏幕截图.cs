@@ -148,15 +148,16 @@ namespace MulTools.Forms
         {
             int w = Functions.GetRated(picBox.Width);
             int h = Functions.GetRated(picBox.Height);
-            bitmap = new Bitmap(w, h);
-            Graphics gp = Graphics.FromImage(bitmap);
+            Bitmap bt = new Bitmap(w, h);
+            Graphics gp = Graphics.FromImage(bt);
             gp.CopyFromScreen(Functions.GetRated(Location.X) + 10, Functions.GetRated(Location.Y + picBox.Location.Y + 30), 0, 0, new Size(w, h));
             string fileName;
             if (timerPic.Enabled)
                 fileName = string.Format("{0}/{1}.bmp", gifTempPath, DateTime.Now.ToString("yyMMdd_HHmmss"));
             else
                 fileName = string.Format("{0}/{1}.bmp", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
-            bitmap.Save(fileName);
+            bt.Save(fileName);
+            bt.Dispose();
             gp.Dispose();
         }
 
