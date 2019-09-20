@@ -6,6 +6,7 @@ using System.Management;
 using System.Net;
 using System.Windows.Forms;
 using System.Xml;
+using System.IO;
 
 namespace MulTools.Forms
 {
@@ -17,8 +18,7 @@ namespace MulTools.Forms
         }
 
         #region 变量
-        //string FilePath = Application.StartupPath + "\\IP.xml";
-        private readonly XmlHelper xmlHelper = new XmlHelper("IP.xml");
+        private XmlHelper xmlHelper;
         #endregion
 
         #region Function
@@ -88,6 +88,16 @@ namespace MulTools.Forms
         #region 事件
         private void IP速换_Load(object sender, EventArgs e)
         {
+            if (!File.Exists("IP.xml"))
+            {
+                //var f = File.Create("IP.xml");
+                //byte[] byt = System.Text.Encoding.Default.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><Root ></Root >");
+                //f.Write(byt, 0, byt.Length);
+                var f = File.CreateText("IP.xml");//两种写法哪种都行，但是我更喜欢不用转码的
+                f.Write("<?xml version=\"1.0\" encoding=\"UTF-8\"?><Root ></Root >");
+                f.Close();
+            }
+            xmlHelper = new XmlHelper("IP.xml");
             RefreshTree();
             BtRead_Click(null, null);
         }

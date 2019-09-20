@@ -36,7 +36,7 @@
             // 
             this.dtp.Format = System.Windows.Forms.DateTimePickerFormat.Time;
             this.dtp.Location = new System.Drawing.Point(0, 0);
-            this.dtp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtp.Margin = new System.Windows.Forms.Padding(4);
             this.dtp.Name = "dtp";
             this.dtp.ShowUpDown = true;
             this.dtp.Size = new System.Drawing.Size(99, 25);
@@ -47,9 +47,9 @@
             // 
             this.cbJS.AutoSize = true;
             this.cbJS.Location = new System.Drawing.Point(107, 4);
-            this.cbJS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbJS.Margin = new System.Windows.Forms.Padding(4);
             this.cbJS.Name = "cbJS";
-            this.cbJS.Size = new System.Drawing.Size(59, 19);
+            this.cbJS.Size = new System.Drawing.Size(56, 19);
             this.cbJS.TabIndex = 1;
             this.cbJS.Text = "计时";
             this.cbJS.UseVisualStyleBackColor = true;
@@ -63,12 +63,13 @@
             this.Controls.Add(this.cbJS);
             this.Controls.Add(this.dtp);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximumSize = new System.Drawing.Size(168, 26);
             this.MinimumSize = new System.Drawing.Size(168, 26);
             this.Name = "定时关机";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "定时关机";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.定时关机_FormClosed);
             this.Load += new System.EventHandler(this.定时关机_Load);
