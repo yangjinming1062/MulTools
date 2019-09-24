@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 
@@ -164,6 +165,32 @@ namespace MulTools.Function
         {
             Point res = new Point(Convert.ToInt32(source.X / Rate), Convert.ToInt32(source.Y / Rate));
             return res;
+        }
+        #endregion
+
+        #region 创建进程
+        /// <summary>
+        /// 执行Py中的方法
+        /// </summary>
+        /// <param name="path">文件相对或绝对路径</param>
+        /// <param name="func">待执行方法名</param>
+        /// <param name="args">方法参数,每个参数以空格隔开</param>
+        /// <returns></returns>
+        public static string PyFunc( string args, string path = "long.py")
+        {
+            Process pyProcess = new Process();
+            pyProcess.StartInfo.FileName = "python"; //这样来调用python，需要将python加入Path环境变量内
+            pyProcess.StartInfo.Arguments = string.Format("{0} {1}", path,args);
+            pyProcess.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
+            pyProcess.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
+            pyProcess.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息
+            pyProcess.StartInfo.RedirectStandardError = true;//重定向标准错误输出
+            pyProcess.StartInfo.CreateNoWindow = true;//不显示程序窗口
+            pyProcess.Start();//启动程序
+            pyProcess.StandardInput.AutoFlush = true;
+            string output = pyProcess.StandardOutput.ReadToEnd();
+            pyProcess.Close();
+            return output;
         }
         #endregion
     }

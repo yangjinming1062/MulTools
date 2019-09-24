@@ -21,7 +21,11 @@ namespace MulTools
             Visible = false;
             DialogResult ds = frm.ShowDialog();
             if (ds == DialogResult.Cancel || ds == DialogResult.No)
-                Visible = true;
+                try
+                {
+                    Visible = true;
+                }
+                catch { }
         }
 
         private void NotifyIcon1_Click(object sender, EventArgs e)

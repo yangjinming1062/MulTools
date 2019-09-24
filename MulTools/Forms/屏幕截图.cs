@@ -23,7 +23,7 @@ namespace MulTools.Forms
         private readonly MouseHook mouseHook = new MouseHook();// 鼠标钩子
         private readonly KeyboardHook keyboardHook = new KeyboardHook();// 键盘钩子
         private System.Timers.Timer timerPic = null;
-        private string gifTempPath;
+        private string CombineTempPath;
         #endregion
 
         /// <summary>
@@ -41,12 +41,12 @@ namespace MulTools.Forms
             return r;
         }
 
-        private void bmpTogif()
+        private void PicToGif()
         {
             string fileName = string.Format("{0}/{1}.gif", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
             //Delay time is one hundredths (1/100) of a second between frames;
             AnimatedGif.AnimatedGifCreator gif = AnimatedGif.AnimatedGif.Create(fileName, 10);//这里因为timer设置的100ms这里对应就写的10
-            DirectoryInfo dirInfo = new DirectoryInfo(gifTempPath);
+            DirectoryInfo dirInfo = new DirectoryInfo(CombineTempPath);
             foreach (FileSystemInfo imgFile in dirInfo.GetFileSystemInfos())
             {
                 Image img = Image.FromFile(imgFile.FullName);
@@ -54,7 +54,13 @@ namespace MulTools.Forms
                 img.Dispose();
             }
             gif.Dispose();
-            Functions.DeleteDir(gifTempPath);
+            Functions.DeleteDir(CombineTempPath);
+        }
+
+        private void PicToLong()
+        {
+            string fileName = string.Format("{0}/L{1}.jpg", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
+            Functions.PyFunc(string.Format("{0} {1} {2}", CombineTempPath, fileName, "bmp"));//因为用了numpy打包的话exe有240多MB，这里就直接用py了
         }
 
         private void 屏幕截图_Load(object sender, EventArgs e)
@@ -89,6 +95,11 @@ namespace MulTools.Forms
                 Location = new Point(Location.X - 1, Location.Y);
             else if (e.KeyCode == Keys.Right)
                 Location = new Point(Location.X + 1, Location.Y);
+
+            if (e.Alt && e.KeyCode == Keys.Q)
+            {
+                BtJPG_Click(null, null);
+            }
 
             if (e.KeyCode == Keys.Escape)
             {
@@ -153,14 +164,14 @@ namespace MulTools.Forms
 
         private void BtJPG_Click(object sender, EventArgs e)
         {
-            int w = Functions.GetRated(picBox.Width);
-            int h = Functions.GetRated(picBox.Height) - 1;
+            int w = Functions.GetRated(picBox.Width) - 6;
+            int h = Functions.GetRated(picBox.Height) - 6;
             Bitmap bt = new Bitmap(w, h);
             Graphics gp = Graphics.FromImage(bt);
-            gp.CopyFromScreen(Functions.GetRated(Location.X) + 10, Functions.GetRated(Location.Y + picBox.Location.Y + 32), 0, 0, new Size(w, h));
+            gp.CopyFromScreen(Functions.GetRated(Location.X) + 13, Functions.GetRated(Location.Y + picBox.Location.Y + 32) + 3, 0, 0, new Size(w, h));
             string fileName;
             if (timerPic.Enabled)
-                fileName = string.Format("{0}/{1}.bmp", gifTempPath, DateTime.Now.ToString("yyMMdd_HHmmss"));
+                fileName = string.Format("{0}/{1}.bmp", CombineTempPath, DateTime.Now.ToString("yyMMdd_HHmmss"));
             else
                 fileName = string.Format("{0}/{1}.bmp", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
             bt.Save(fileName);
@@ -174,8 +185,9 @@ namespace MulTools.Forms
             {
                 btGif.BackColor = Color.RoyalBlue;
                 btGif.Text = "停止";
-                gifTempPath = Path.Combine(txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
-                Directory.CreateDirectory(gifTempPath);
+                CombineTempPath = Path.Combine(txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
+                Directory.CreateDirectory(CombineTempPath);
+                timerPic.Interval = 100;
                 timerPic.Start();
             }
             else
@@ -183,7 +195,28 @@ namespace MulTools.Forms
                 timerPic.Stop();
                 btGif.BackColor = Color.Aquamarine;
                 btGif.Text = "动图";
-                bmpTogif();
+                PicToGif();
+            }
+        }
+
+        private void BtLong_Click(object sender, EventArgs e)
+        {
+            if (btLong.Text == "长图")
+            {
+                btLong.BackColor = Color.RoyalBlue;
+                btLong.Text = "停止";
+                CombineTempPath = Path.Combine(txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
+                Directory.CreateDirectory(CombineTempPath);
+                timerPic.Interval = 300;
+                timerPic.Start();
+            }
+            else
+            {
+                timerPic.Stop();
+                btLong.BackColor = Color.Aquamarine;
+                btLong.Text = "长图";
+                PicToLong();
+                Functions.DeleteDir(CombineTempPath);
             }
         }
 
@@ -194,7 +227,6 @@ namespace MulTools.Forms
                 inDraw = true;
                 btPen.Text = "关闭画笔";
                 mouseHook.Start();
-                
             }
             else
             {
