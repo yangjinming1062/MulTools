@@ -154,10 +154,10 @@ namespace MulTools.Forms
         private void BtJPG_Click(object sender, EventArgs e)
         {
             int w = Functions.GetRated(picBox.Width);
-            int h = Functions.GetRated(picBox.Height);
+            int h = Functions.GetRated(picBox.Height) - 1;
             Bitmap bt = new Bitmap(w, h);
             Graphics gp = Graphics.FromImage(bt);
-            gp.CopyFromScreen(Functions.GetRated(Location.X) + 10, Functions.GetRated(Location.Y + picBox.Location.Y + 30), 0, 0, new Size(w, h));
+            gp.CopyFromScreen(Functions.GetRated(Location.X) + 10, Functions.GetRated(Location.Y + picBox.Location.Y + 32), 0, 0, new Size(w, h));
             string fileName;
             if (timerPic.Enabled)
                 fileName = string.Format("{0}/{1}.bmp", gifTempPath, DateTime.Now.ToString("yyMMdd_HHmmss"));
