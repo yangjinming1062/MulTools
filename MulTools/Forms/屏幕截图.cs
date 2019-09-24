@@ -65,6 +65,7 @@ namespace MulTools.Forms
             mouseHook.MouseUp += MouseHook_MouseUp;
             mouseHook.MouseWheel += MouseHook_MouseWheel;
             keyboardHook.KeyDown += KeyboardHook_KeyDown;
+            keyboardHook.Start();
 
             txtPath.Text = Path.Combine(Application.StartupPath, "屏幕截图");
             if (!Directory.Exists(txtPath.Text))
@@ -80,6 +81,15 @@ namespace MulTools.Forms
 
         private void KeyboardHook_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Up)
+                Location = new Point(Location.X, Location.Y - 1);
+            else if (e.KeyCode == Keys.Down)
+                Location = new Point(Location.X, Location.Y + 1);
+            else if (e.KeyCode == Keys.Left)
+                Location = new Point(Location.X - 1, Location.Y);
+            else if (e.KeyCode == Keys.Right)
+                Location = new Point(Location.X + 1, Location.Y);
+
             if (e.KeyCode == Keys.Escape)
             {
                 if (inDraw)
@@ -184,14 +194,13 @@ namespace MulTools.Forms
                 inDraw = true;
                 btPen.Text = "关闭画笔";
                 mouseHook.Start();
-                keyboardHook.Start();
+                
             }
             else
             {
                 inDraw = false;
                 btPen.Text = "启动画笔";
                 mouseHook.Stop();
-                keyboardHook.Stop();
             }
             bitmap = new Bitmap(picBox.Width, picBox.Height);
             picBox.Image = bitmap;
