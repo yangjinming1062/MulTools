@@ -59,6 +59,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.bgWorkerLong = new System.ComponentModel.BackgroundWorker();
+            this.lbBar = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBox)).BeginInit();
             this.SuspendLayout();
@@ -66,6 +68,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.Controls.Add(this.lbBar);
             this.panel1.Controls.Add(this.button18);
             this.panel1.Controls.Add(this.button9);
             this.panel1.Controls.Add(this.button17);
@@ -431,6 +434,23 @@
             this.label4.TabIndex = 5;
             this.label4.Text = ".";
             // 
+            // bgWorkerLong
+            // 
+            this.bgWorkerLong.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorkerLong_DoWork);
+            this.bgWorkerLong.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorkerLong_RunWorkerCompleted);
+            // 
+            // lbBar
+            // 
+            this.lbBar.BackColor = System.Drawing.Color.PaleGreen;
+            this.lbBar.Font = new System.Drawing.Font("楷体", 12F, System.Drawing.FontStyle.Italic);
+            this.lbBar.Location = new System.Drawing.Point(12, 5);
+            this.lbBar.Name = "lbBar";
+            this.lbBar.Size = new System.Drawing.Size(171, 30);
+            this.lbBar.TabIndex = 21;
+            this.lbBar.Text = "图像合成中...";
+            this.lbBar.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbBar.Visible = false;
+            // 
             // 屏幕截图
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -492,5 +512,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lbBar;
+        private System.ComponentModel.BackgroundWorker bgWorkerLong;
     }
 }
