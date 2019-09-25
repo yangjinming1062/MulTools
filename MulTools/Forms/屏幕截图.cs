@@ -26,18 +26,11 @@ namespace MulTools.Forms
         private string CombineTempPath;
         #endregion
 
-        /// <summary>
-        /// todo:鼠标偏移暂时还有问题，留后调整
-        /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
+
         private Point GetPoint(Point point)
         {
             Point a = Functions.GetRated(point);
-            Point b = Functions.GetRated(Location);
-            Point c = Functions.GetRated(picBox.Location);
-            Point r = Functions.GetRated(new Point(a.X - b.X - c.X, a.Y - b.Y - c.Y));
-            r.Y -= 40;
+            Point r = new Point(a.X - Location.X - picBox.Location.X - 6, a.Y - Location.Y - picBox.Location.Y - 30);
             return r;
         }
 
@@ -85,6 +78,7 @@ namespace MulTools.Forms
             BtJPG_Click(null, null);
         }
 
+        #region 监视鼠标键盘
         private void KeyboardHook_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Up)
@@ -95,11 +89,6 @@ namespace MulTools.Forms
                 Location = new Point(Location.X - 1, Location.Y);
             else if (e.KeyCode == Keys.Right)
                 Location = new Point(Location.X + 1, Location.Y);
-
-            if (e.Alt && e.KeyCode == Keys.Q)
-            {
-                BtJPG_Click(null, null);
-            }
 
             if (e.KeyCode == Keys.Escape)
             {
@@ -155,25 +144,47 @@ namespace MulTools.Forms
                 }
             }
         }
+        #endregion
 
+        #region 画笔相关
+        /// <summary>
+        /// 点击颜色按钮事件
+        /// </summary>
         private void Bt_Click(object sender, EventArgs e)
         {
             Button bt = sender as Button;
             scPen.Color = bt.BackColor;
         }
 
+        private void BtPen_Click(object sender, EventArgs e)
+        {
+            if (btPen.Text == "启动画笔")
+            {
+                inDraw = true;
+                btPen.Text = "关闭画笔";
+                mouseHook.Start();
+            }
+            else
+            {
+                inDraw = false;
+                btPen.Text = "启动画笔";
+                mouseHook.Stop();
+            }
+            bitmap = new Bitmap(picBox.Width, picBox.Height);
+            picBox.Image = bitmap;
+        }
+        #endregion
+
+        #region 截图按钮
         private void BtJPG_Click(object sender, EventArgs e)
         {
-            int w = Functions.GetRated(picBox.Width) - 6;
-            int h = Functions.GetRated(picBox.Height) - 6;
+            int w = Functions.GetRated(picBox.Width - 4);//减5是为了不截到边框
+            int h = Functions.GetRated(picBox.Height - 4);//下面的加1和加64也是同样的目的
             Bitmap bt = new Bitmap(w, h);
             Graphics gp = Graphics.FromImage(bt);
-            gp.CopyFromScreen(Functions.GetRated(Location.X) + 13, Functions.GetRated(Location.Y + picBox.Location.Y + 32) + 3, 0, 0, new Size(w, h));
-            string fileName;
-            if (timerPic.Enabled)
-                fileName = string.Format("{0}/{1}.bmp", CombineTempPath, DateTime.Now.ToString("yyMMdd_HHmmss"));
-            else
-                fileName = string.Format("{0}/{1}.bmp", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
+            gp.CopyFromScreen(Functions.GetRated(Location.X + 10), Functions.GetRated(Location.Y + 65), 0, 0, new Size(w, h));
+            string fileName = timerPic.Enabled ? CombineTempPath : txtPath.Text;
+            fileName = string.Format("{0}/{1}.bmp", fileName, DateTime.Now.ToString("yyMMdd_HHmmss"));
             bt.Save(fileName);
             bt.Dispose();
             gp.Dispose();
@@ -219,24 +230,7 @@ namespace MulTools.Forms
                 Functions.DeleteDir(CombineTempPath);
             }
         }
-
-        private void BtPen_Click(object sender, EventArgs e)
-        {
-            if (btPen.Text == "启动画笔")
-            {
-                inDraw = true;
-                btPen.Text = "关闭画笔";
-                mouseHook.Start();
-            }
-            else
-            {
-                inDraw = false;
-                btPen.Text = "启动画笔";
-                mouseHook.Stop();
-            }
-            bitmap = new Bitmap(picBox.Width, picBox.Height);
-            picBox.Image = bitmap;
-        }
+        #endregion
 
         private void BtSavePath_Click(object sender, EventArgs e)
         {
