@@ -68,7 +68,7 @@ def CombinePic(imgA,imgB,fileName = 'LongPic.bmp'):
     img_new.close()
 
 
-def DirCombine(dirPath,fileName = 'temp.jpg',picType = 'bmp'):
+def DirCombine(dirPath,fileName = 'temp.jpg',picType = '*'):
     if type(dirPath) == list:
         if len(dirPath) == 3:
             picType = dirPath[2]
@@ -77,15 +77,16 @@ def DirCombine(dirPath,fileName = 'temp.jpg',picType = 'bmp'):
         dirPath = dirPath[0]
     fileList = glob(path.join(dirPath,"*.%s"%picType))#这里应该保证图片按顺序排列好
     if len(fileList) < 2:
+        print(path.join(dirPath,"*.%s"%picType))
         print('不需要拼接')
         return
     CombinePic(fileList[0],fileList[1],fileName)#先拿出来前两张生成初始目标图
-    for img in fileList[2:]:#一张张追加长度,拼接最后一张有问题索性忽略
+    for img in fileList[2:]:#一张张追加长度
         CombinePic(fileName,img,fileName)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 2:
+    if len(sys.argv) > 1:
         DirCombine(sys.argv[1:])
     else:
         DirCombine("屏幕截图")
