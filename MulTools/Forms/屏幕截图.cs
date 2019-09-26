@@ -179,11 +179,12 @@ namespace MulTools.Forms
         #region 截图按钮
         private void BtJPG_Click(object sender, EventArgs e)
         {
-            int w = Functions.GetRated(picBox.Width - 4);//减5是为了不截到边框
-            int h = Functions.GetRated(picBox.Height - 4);//下面的加1和加64也是同样的目的
+            int w = Functions.GetRated(picBox.Width) - Convert.ToInt16(Math.Ceiling(2 * Functions.Rate)) - 1;
+            int h = Functions.GetRated(picBox.Height) - Convert.ToInt16(Math.Ceiling(2 * Functions.Rate)) - 1;
             Bitmap bt = new Bitmap(w, h);
             Graphics gp = Graphics.FromImage(bt);
-            gp.CopyFromScreen(Functions.GetRated(Location.X + 10), Functions.GetRated(Location.Y + 65), 0, 0, new Size(w, h));
+            gp.CopyFromScreen(Functions.GetRated(Location.X + picBox.Location.X) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)),
+                Functions.GetRated(Location.Y + picBox.Location.Y) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)), 0, 0, new Size(w, h));
             string fileName = timerPic.Enabled ? CombineTempPath : txtPath.Text;
             fileName = string.Format("{0}/{1}.bmp", fileName, DateTime.Now.ToString("yyMMdd_HHmmss"));
             bt.Save(fileName);
@@ -246,10 +247,93 @@ namespace MulTools.Forms
         }
         #endregion
 
+        #region 无边框窗体移动
+        private bool InClick = false;
+        private Point mouseOff;//鼠标移动位置变量
+
+        private void panelTop_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                mouseOff = new Point(-e.X, -e.Y); //得到变量的值
+                InClick = true; //点击左键按下时标注为true
+            }
+        }
+
+        private void panelTop_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (InClick)
+                InClick = false;//释放鼠标后标注为false
+        }
+
+        private void panelTop_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (InClick)
+            {
+                Point mouseSet = Control.MousePosition;
+                mouseSet.Offset(mouseOff.X, mouseOff.Y);  //设置移动后的位置
+                Location = mouseSet;
+            }
+        }
+        #endregion
+
+        #region 调整窗体大小
+        const int HTLEFT = 10;
+        const int HTRIGHT = 11;
+        const int HTTOP = 12;
+        const int HTTOPLEFT = 13;
+        const int HTTOPRIGHT = 14;
+        const int HTBOTTOM = 15;
+        const int HTBOTTOMLEFT = 0x10;
+        const int HTBOTTOMRIGHT = 17;
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
+                case 0x0084:
+                    base.WndProc(ref m);
+                    Point vPoint = new Point((int)m.LParam & 0xFFFF,
+                        (int)m.LParam >> 16 & 0xFFFF);
+                    vPoint = PointToClient(vPoint);
+                    if (vPoint.X <= 5)
+                        if (vPoint.Y <= 5)
+                            m.Result = (IntPtr)HTTOPLEFT;
+                        else if (vPoint.Y >= ClientSize.Height - 5)
+                            m.Result = (IntPtr)HTBOTTOMLEFT;
+                        else m.Result = (IntPtr)HTLEFT;
+                    else if (vPoint.X >= ClientSize.Width - 5)
+                        if (vPoint.Y <= 5)
+                            m.Result = (IntPtr)HTTOPRIGHT;
+                        else if (vPoint.Y >= ClientSize.Height - 5)
+                            m.Result = (IntPtr)HTBOTTOMRIGHT;
+                        else m.Result = (IntPtr)HTRIGHT;
+                    else if (vPoint.Y <= 5)
+                        m.Result = (IntPtr)HTTOP;
+                    else if (vPoint.Y >= ClientSize.Height - 5)
+                        m.Result = (IntPtr)HTBOTTOM;
+                    break;
+                case 0x0201://鼠标左键按下的消息 
+                    m.Msg = 0x00A1;//更改消息为非客户区按下鼠标 
+                    m.LParam = IntPtr.Zero;//默认值 
+                    m.WParam = new IntPtr(2);//鼠标放在标题栏内 
+                    base.WndProc(ref m);
+                    break;
+                default:
+                    base.WndProc(ref m);
+                    break;
+            }
+        }
+        #endregion
+
         private void BtSavePath_Click(object sender, EventArgs e)
         {
             if (DirPathDg.ShowDialog() == DialogResult.OK)
                 txtPath.Text = DirPathDg.SelectedPath;
+        }
+
+        private void btCLose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
