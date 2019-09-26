@@ -61,6 +61,7 @@ namespace MulTools.Forms
             splitContainer1.SplitterDistance = splitContainer1.Width / 2;
             uc文件操作L.CurrentDirEvent += Uc文件操作L_CurrentDirEvent;
             uc文件操作R.CurrentDirEvent += Uc文件操作R_CurrentDirEvent;
+            Components.Function.NoneBorderHelper.Set(this, panelTop);
         }
 
         private void Uc文件操作R_CurrentDirEvent(string dirPath)
@@ -93,35 +94,5 @@ namespace MulTools.Forms
         {
             CompareFile(uc文件操作R, uc文件操作L);
         }
-
-        #region 无边框窗体移动
-        private bool InClick = false;
-        private Point mouseOff;//鼠标移动位置变量
-
-        private void PanelTop_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                mouseOff = new Point(-e.X, -e.Y); //得到变量的值
-                InClick = true; //点击左键按下时标注为true
-            }
-        }
-
-        private void PanelTop_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (InClick)
-                InClick = false;//释放鼠标后标注为false
-        }
-
-        private void PanelTop_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (InClick)
-            {
-                Point mouseSet = Control.MousePosition;
-                mouseSet.Offset(mouseOff.X, mouseOff.Y);  //设置移动后的位置
-                Location = mouseSet;
-            }
-        }
-        #endregion
     }
 }

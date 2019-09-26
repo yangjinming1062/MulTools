@@ -1,4 +1,4 @@
-﻿using MulTools.Function;
+﻿using MulTools.Components.Function;
 using System;
 using System.Drawing;
 using System.IO;
@@ -70,6 +70,7 @@ namespace MulTools.Forms
                 Directory.CreateDirectory(txtPath.Text);
             timerPic = new System.Timers.Timer();
             timerPic.Elapsed += TimerPic_Elapsed;
+            NoneBorderHelper.Set(this, panelTop);
         }
 
         private void TimerPic_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -235,94 +236,6 @@ namespace MulTools.Forms
         private void bgWorkerLong_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             lbBar.Visible = false;
-        }
-        #endregion
-
-        #region 无边框窗体移动,调整大小
-        private bool InClick = false;
-        private Point mouseOff;//鼠标移动位置变量
-        #region 调整窗体大小
-        public const int WM_SYSCOMMAND = 0x0112;
-        public const int SC_MOVE = 0xF010;
-        public const int HTCAPTION = 0x0002;
-        public const int SC_MINIMIZE = 0xF020;
-        public const int SC_MAXIMIZE = 0xF030;
-        public const int SC_RESTORE = 0xF120;
-        public const int SC_SIZE = 0xF000;
-        //改变窗体大小，SC_SIZE+下面的值
-        public const int LEFT = 0x0001;//光标在窗体左边缘
-        public const int RIGHT = 0x0002;//右边缘
-        public const int UP = 0x0003;//上边缘
-        public const int LEFTUP = 0x0004;//左上角
-        public const int RIGHTUP = 0x0005;//右上角
-        public const int BOTTOM = 0x0006;//下边缘
-        public const int LEFTBOTTOM = 0x0007;//左下角
-        public const int RIGHTBOTTOM = 0x0008;//右下角
-        #endregion
-
-        private void panelTop_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Clicks == 2)
-            {
-                if (WindowState == FormWindowState.Maximized)
-                    WindowState = FormWindowState.Normal;
-                else
-                    WindowState = FormWindowState.Maximized;
-            }
-            else
-            {
-                if (e.Button == MouseButtons.Left)
-                {
-                    int direction; 
-                    if (e.Location.X < 10 && e.Location.Y < 10)
-                        direction = LEFTUP;
-                    else if (e.Location.X > panelTop.Width - 10 && e.Location.Y < 10)
-                        direction = RIGHTUP;
-                    else if (e.Location.X < 10 && e.Location.Y >= 10)
-                        direction = LEFT;
-                    else if (e.Location.X > panelTop.Width - 10 && e.Location.Y >= 10)
-                        direction = RIGHT;
-                    else if (e.Location.Y < 10)
-                        direction = UP;
-                    else
-                    {
-                        mouseOff = new Point(-e.X, -e.Y); //得到变量的值
-                        InClick = true; //点击左键按下时标注为true
-                        return;
-                    }
-                    Win32.ReleaseCapture();
-                    Win32.SendMessage(this.Handle, WM_SYSCOMMAND, SC_SIZE + direction, 0);
-                }
-            }
-        }
-
-        private void panelTop_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (InClick)
-                InClick = false;//释放鼠标后标注为false
-        }
-
-        private void panelTop_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (InClick)
-            {
-                Point mouseSet = Control.MousePosition;
-                mouseSet.Offset(mouseOff.X, mouseOff.Y);  //设置移动后的位置
-                Location = mouseSet;
-            }
-
-            if (e.Location.X < 10 && e.Location.Y < 10)
-                panelTop.Cursor = Cursors.SizeNWSE;
-            else if (e.Location.X > panelTop.Width - 10 && e.Location.Y < 10)
-                panelTop.Cursor = Cursors.SizeNESW;
-            else if (e.Location.X < 10 && e.Location.Y >= 10)
-                panelTop.Cursor = Cursors.SizeWE;
-            else if (e.Location.X > panelTop.Width - 10 && e.Location.Y >= 10)
-                panelTop.Cursor = Cursors.SizeWE;
-            else if (e.Location.Y < 10)
-                panelTop.Cursor = Cursors.SizeNS;
-            else
-                panelTop.Cursor = Cursors.Default;
         }
         #endregion
 

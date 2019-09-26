@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.panelTop = new System.Windows.Forms.Panel();
+            this.btCLose = new System.Windows.Forms.Button();
             this.lbBar = new System.Windows.Forms.Label();
             this.button18 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
@@ -61,7 +62,6 @@
             this.lbRight = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.bgWorkerLong = new System.ComponentModel.BackgroundWorker();
-            this.btCLose = new System.Windows.Forms.Button();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBox)).BeginInit();
             this.SuspendLayout();
@@ -101,9 +101,23 @@
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(589, 32);
             this.panelTop.TabIndex = 0;
-            this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
-            this.panelTop.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseMove);
-            this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
+            // 
+            // btCLose
+            // 
+            this.btCLose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btCLose.BackColor = System.Drawing.Color.Red;
+            this.btCLose.FlatAppearance.BorderColor = System.Drawing.Color.Red;
+            this.btCLose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btCLose.Font = new System.Drawing.Font("宋体", 9F);
+            this.btCLose.ForeColor = System.Drawing.Color.White;
+            this.btCLose.Location = new System.Drawing.Point(558, 6);
+            this.btCLose.Margin = new System.Windows.Forms.Padding(2);
+            this.btCLose.Name = "btCLose";
+            this.btCLose.Size = new System.Drawing.Size(20, 20);
+            this.btCLose.TabIndex = 24;
+            this.btCLose.Text = "X";
+            this.btCLose.UseVisualStyleBackColor = false;
+            this.btCLose.Click += new System.EventHandler(this.btCLose_Click);
             // 
             // lbBar
             // 
@@ -486,23 +500,6 @@
             // 
             this.bgWorkerLong.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorkerLong_DoWork);
             this.bgWorkerLong.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorkerLong_RunWorkerCompleted);
-            // 
-            // btCLose
-            // 
-            this.btCLose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btCLose.BackColor = System.Drawing.Color.Red;
-            this.btCLose.FlatAppearance.BorderColor = System.Drawing.Color.Red;
-            this.btCLose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btCLose.Font = new System.Drawing.Font("宋体", 9F);
-            this.btCLose.ForeColor = System.Drawing.Color.White;
-            this.btCLose.Location = new System.Drawing.Point(562, 6);
-            this.btCLose.Margin = new System.Windows.Forms.Padding(2);
-            this.btCLose.Name = "btCLose";
-            this.btCLose.Size = new System.Drawing.Size(20, 20);
-            this.btCLose.TabIndex = 24;
-            this.btCLose.Text = "X";
-            this.btCLose.UseVisualStyleBackColor = false;
-            this.btCLose.Click += new System.EventHandler(this.btCLose_Click);
             // 
             // 屏幕截图
             // 
