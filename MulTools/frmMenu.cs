@@ -10,6 +10,7 @@ namespace MulTools
         {
             InitializeComponent();
         }
+        Form frm;//因为菜单一次只提供一个功能，把具体功能窗体作为全局变量，大家都通过一个NotifyIcon实现显示
         /// <summary>
         /// 菜单按钮点击事件（所以按钮都绑定此事件）
         /// </summary>
@@ -17,12 +18,13 @@ namespace MulTools
         /// <param name="e"></param>
         private void MenuItem_Click(object sender, EventArgs e)
         {
-            Form frm = frmFactory.GetForm(((ToolStripItem)sender).Text);
+            frm = frmFactory.GetForm(((ToolStripItem)sender).Text);
             Visible = false;
             DialogResult ds = frm.ShowDialog();
             if (ds == DialogResult.Cancel || ds == DialogResult.No)
                 try
                 {
+                    frm = null;
                     Visible = true;
                 }
                 catch { }
@@ -30,16 +32,25 @@ namespace MulTools
 
         private void NotifyIcon1_Click(object sender, EventArgs e)
         {
-            if (WindowState == FormWindowState.Minimized)
+            if (frm == null)
             {
-                Show();
-                WindowState = FormWindowState.Normal;
-                Activate();
+                if (WindowState == FormWindowState.Minimized)
+                {
+                    Show();
+                    WindowState = FormWindowState.Normal;
+                    Activate();
+                }
+                else
+                {
+                    WindowState = FormWindowState.Minimized;
+                    Hide();
+                }
             }
             else
             {
-                WindowState = FormWindowState.Minimized;
-                Hide();
+                frm.WindowState = FormWindowState.Normal;
+                frm.Show();
+                frm.Activate();
             }
         }
     }
