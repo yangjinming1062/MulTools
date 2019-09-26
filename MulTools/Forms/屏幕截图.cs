@@ -68,7 +68,7 @@ namespace MulTools.Forms
             txtPath.Text = Path.Combine(Application.StartupPath, "屏幕截图");
             if (!Directory.Exists(txtPath.Text))
                 Directory.CreateDirectory(txtPath.Text);
-            timerPic = new System.Timers.Timer(100);
+            timerPic = new System.Timers.Timer();
             timerPic.Elapsed += TimerPic_Elapsed;
         }
 
@@ -110,41 +110,31 @@ namespace MulTools.Forms
 
         private void MouseHook_MouseUp(object sender, MouseEventArgs e)
         {
-            if (mouseClick)
-            {
-                if (e.Button == MouseButtons.Left)
-                    mouseClick = false;
-            }
+            if (mouseClick && e.Button == MouseButtons.Left)
+                mouseClick = false;
         }
 
         private void MouseHook_MouseDown(object sender, MouseEventArgs e)
         {
-            if (inDraw)//ALT+Q
+            //因为不影响屏幕的操作，有的时候左键按下会有其他效果，增加右键
+            if (inDraw && (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right))
             {
-                //因为不影响屏幕的操作，有的时候左键按下会有其他效果，增加右键
-                if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
-                {
-                    start = GetPoint(e.Location);//记录开始位置
-                    //鼠标左键点下 则开始绘制
-                    mouseClick = true;
-                }
+                start = GetPoint(e.Location);//记录开始位置
+                mouseClick = true;//鼠标左键点下 则开始绘制
             }
         }
 
         private void MouseHook_MouseMove(object sender, MouseEventArgs e)
         {
-            if (inDraw)
+            if (inDraw && mouseClick)
             {
-                if (mouseClick)
-                {
-                    end = GetPoint(e.Location);//记录结束位置
-                    Graphics g = System.Drawing.Graphics.FromImage(bitmap);//创建画板
-                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                    g.DrawLine(scPen, start, end);//画线
-                    start = end;//将结束位置再次作为开始位置
-                    g.Dispose();
-                    picBox.Image = bitmap;
-                }
+                end = GetPoint(e.Location);//记录结束位置
+                Graphics g = System.Drawing.Graphics.FromImage(bitmap);//创建画板
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                g.DrawLine(scPen, start, end);//画线
+                start = end;//将结束位置再次作为开始位置
+                g.Dispose();
+                picBox.Image = bitmap;
             }
         }
         #endregion
@@ -184,14 +174,13 @@ namespace MulTools.Forms
             int w = Functions.GetRated(picBox.Width) - Convert.ToInt16(Math.Ceiling(2 * Functions.Rate)) - 1;
             int h = Functions.GetRated(picBox.Height) - Convert.ToInt16(Math.Ceiling(2 * Functions.Rate)) - 1;
             Bitmap bt = new Bitmap(w, h);
-            Graphics gp = Graphics.FromImage(bt);
-            gp.CopyFromScreen(Functions.GetRated(Location.X + picBox.Location.X) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)),
-                Functions.GetRated(Location.Y + picBox.Location.Y) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)), 0, 0, new Size(w, h));
-            string fileName = timerPic.Enabled ? CombineTempPath : txtPath.Text;
-            fileName = string.Format("{0}/{1}.bmp", fileName, DateTime.Now.ToString("yyMMdd_HHmmss"));
-            bt.Save(fileName);
-            bt.Dispose();
-            gp.Dispose();
+            using (Graphics gp = Graphics.FromImage(bt))
+            {
+                gp.CopyFromScreen(Functions.GetRated(Location.X + picBox.Location.X) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)),
+                    Functions.GetRated(Location.Y + picBox.Location.Y) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)), 0, 0, new Size(w, h));
+                bt.Save(string.Format("{0}/{1}.bmp", timerPic.Enabled ? CombineTempPath : txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss")));
+                bt.Dispose();
+            }
         }
 
         private void BtGif_Click(object sender, EventArgs e)
