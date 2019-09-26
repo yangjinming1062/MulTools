@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Function\Function.cs" />
     <Compile Include="Function\inputHook.cs" />
+    <Compile Include="Function\NoneBorderHelper.cs" />
     <Compile Include="Models\IP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="uc文件操作.cs">

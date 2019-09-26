@@ -1,4 +1,4 @@
-﻿using MulTools.Function;
+﻿using MulTools.Components.Function;
 using System;
 using System.Drawing;
 using System.Windows.Forms;

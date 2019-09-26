@@ -249,7 +249,7 @@ namespace MulTools.Components
             foreach (ListViewItem obj in fileLV.SelectedItems)
             {
                 if (obj.SubItems[(int)Cols.文件类型].Text == "文件夹")
-                    MulTools.Function.Functions.DeleteDir(obj.Name);
+                    MulTools.Components.Function.Functions.DeleteDir(obj.Name);
                 else
                     File.Delete(obj.Name);
                 fileLV.Items.Remove(obj);
@@ -263,7 +263,7 @@ namespace MulTools.Components
             foreach (ListViewItem obj in fileLV.SelectedItems)
             {
                 if (obj.SubItems[(int)Cols.文件类型].Text == "文件夹")
-                    MulTools.Function.Functions.CutDir(obj.Name, txtDirpath.Text, TargetDirPath);
+                    MulTools.Components.Function.Functions.CutDir(obj.Name, txtDirpath.Text, TargetDirPath);
                 else
                     File.Move(obj.Name, Path.Combine(TargetDirPath, Path.GetFileName(obj.Name)));
             }
@@ -277,7 +277,7 @@ namespace MulTools.Components
                 foreach (ListViewItem obj in fileLV.SelectedItems)
                 {
                     if (obj.SubItems[(int)Cols.文件类型].Text == "文件夹")
-                        MulTools.Function.Functions.CopyDir(obj.Name, txtDirpath.Text, TargetDirPath);
+                        MulTools.Components.Function.Functions.CopyDir(obj.Name, txtDirpath.Text, TargetDirPath);
                     else
                         File.Copy(obj.Name, Path.Combine(TargetDirPath, Path.GetFileName(obj.Name)));
                 }

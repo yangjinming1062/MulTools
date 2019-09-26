@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 
-namespace MulTools.Function
+namespace MulTools.Components.Function
 {
     public static class Functions
     {

@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace MulTools.Function
+namespace MulTools.Components.Function
 {
     /// <summary>  
     /// 鼠标和键盘钩子的抽象类

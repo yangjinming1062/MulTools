@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml;
 
-namespace MulTools.Function
+namespace MulTools.Components.Function
 {
     public class XmlHelper
     {

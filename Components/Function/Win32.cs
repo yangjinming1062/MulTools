@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace MulTools.Function
+namespace MulTools.Components.Function
 {
     public class Win32
     {

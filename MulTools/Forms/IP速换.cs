@@ -1,5 +1,5 @@
 ﻿using MulTools.Components.Models;
-using MulTools.Function;
+using MulTools.Components.Function;
 using System;
 using System.Collections.Generic;
 using System.Management;
