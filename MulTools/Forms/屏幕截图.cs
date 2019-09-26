@@ -29,7 +29,7 @@ namespace MulTools.Forms
         private Point GetPoint(Point point)
         {
             Point a = Functions.GetRated(point);
-            Point r = new Point(a.X - Location.X - picBox.Location.X - 6, a.Y - Location.Y - picBox.Location.Y - 30);
+            Point r = new Point(a.X - Location.X - picBox.Location.X, a.Y - Location.Y - picBox.Location.Y);
             return r;
         }
 
@@ -98,6 +98,8 @@ namespace MulTools.Forms
                 }
                 if (btLong.Text == "停止")
                     BtLong_Click(null, null);
+                if (btGif.Text == "停止")
+                    BtGif_Click(null, null);
             }
         }
 
@@ -200,7 +202,7 @@ namespace MulTools.Forms
                 btGif.Text = "停止";
                 CombineTempPath = Path.Combine(txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
                 Directory.CreateDirectory(CombineTempPath);
-                timerPic.Interval = 100;
+                timerPic.Interval = 150;
                 timerPic.Start();
             }
             else
@@ -247,16 +249,61 @@ namespace MulTools.Forms
         }
         #endregion
 
-        #region 无边框窗体移动
+        #region 无边框窗体移动,调整大小
         private bool InClick = false;
         private Point mouseOff;//鼠标移动位置变量
+        #region 调整窗体大小
+        public const int WM_SYSCOMMAND = 0x0112;
+        public const int SC_MOVE = 0xF010;
+        public const int HTCAPTION = 0x0002;
+        public const int SC_MINIMIZE = 0xF020;
+        public const int SC_MAXIMIZE = 0xF030;
+        public const int SC_RESTORE = 0xF120;
+        public const int SC_SIZE = 0xF000;
+        //改变窗体大小，SC_SIZE+下面的值
+        public const int LEFT = 0x0001;//光标在窗体左边缘
+        public const int RIGHT = 0x0002;//右边缘
+        public const int UP = 0x0003;//上边缘
+        public const int LEFTUP = 0x0004;//左上角
+        public const int RIGHTUP = 0x0005;//右上角
+        public const int BOTTOM = 0x0006;//下边缘
+        public const int LEFTBOTTOM = 0x0007;//左下角
+        public const int RIGHTBOTTOM = 0x0008;//右下角
+        #endregion
 
         private void panelTop_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Clicks == 2)
             {
-                mouseOff = new Point(-e.X, -e.Y); //得到变量的值
-                InClick = true; //点击左键按下时标注为true
+                if (WindowState == FormWindowState.Maximized)
+                    WindowState = FormWindowState.Normal;
+                else
+                    WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    int direction; 
+                    if (e.Location.X < 10 && e.Location.Y < 10)
+                        direction = LEFTUP;
+                    else if (e.Location.X > panelTop.Width - 10 && e.Location.Y < 10)
+                        direction = RIGHTUP;
+                    else if (e.Location.X < 10 && e.Location.Y >= 10)
+                        direction = LEFT;
+                    else if (e.Location.X > panelTop.Width - 10 && e.Location.Y >= 10)
+                        direction = RIGHT;
+                    else if (e.Location.Y < 10)
+                        direction = UP;
+                    else
+                    {
+                        mouseOff = new Point(-e.X, -e.Y); //得到变量的值
+                        InClick = true; //点击左键按下时标注为true
+                        return;
+                    }
+                    Win32.ReleaseCapture();
+                    Win32.SendMessage(this.Handle, WM_SYSCOMMAND, SC_SIZE + direction, 0);
+                }
             }
         }
 
@@ -274,54 +321,19 @@ namespace MulTools.Forms
                 mouseSet.Offset(mouseOff.X, mouseOff.Y);  //设置移动后的位置
                 Location = mouseSet;
             }
-        }
-        #endregion
 
-        #region 调整窗体大小
-        const int HTLEFT = 10;
-        const int HTRIGHT = 11;
-        const int HTTOP = 12;
-        const int HTTOPLEFT = 13;
-        const int HTTOPRIGHT = 14;
-        const int HTBOTTOM = 15;
-        const int HTBOTTOMLEFT = 0x10;
-        const int HTBOTTOMRIGHT = 17;
-        protected override void WndProc(ref Message m)
-        {
-            switch (m.Msg)
-            {
-                case 0x0084:
-                    base.WndProc(ref m);
-                    Point vPoint = new Point((int)m.LParam & 0xFFFF,
-                        (int)m.LParam >> 16 & 0xFFFF);
-                    vPoint = PointToClient(vPoint);
-                    if (vPoint.X <= 5)
-                        if (vPoint.Y <= 5)
-                            m.Result = (IntPtr)HTTOPLEFT;
-                        else if (vPoint.Y >= ClientSize.Height - 5)
-                            m.Result = (IntPtr)HTBOTTOMLEFT;
-                        else m.Result = (IntPtr)HTLEFT;
-                    else if (vPoint.X >= ClientSize.Width - 5)
-                        if (vPoint.Y <= 5)
-                            m.Result = (IntPtr)HTTOPRIGHT;
-                        else if (vPoint.Y >= ClientSize.Height - 5)
-                            m.Result = (IntPtr)HTBOTTOMRIGHT;
-                        else m.Result = (IntPtr)HTRIGHT;
-                    else if (vPoint.Y <= 5)
-                        m.Result = (IntPtr)HTTOP;
-                    else if (vPoint.Y >= ClientSize.Height - 5)
-                        m.Result = (IntPtr)HTBOTTOM;
-                    break;
-                case 0x0201://鼠标左键按下的消息 
-                    m.Msg = 0x00A1;//更改消息为非客户区按下鼠标 
-                    m.LParam = IntPtr.Zero;//默认值 
-                    m.WParam = new IntPtr(2);//鼠标放在标题栏内 
-                    base.WndProc(ref m);
-                    break;
-                default:
-                    base.WndProc(ref m);
-                    break;
-            }
+            if (e.Location.X < 10 && e.Location.Y < 10)
+                panelTop.Cursor = Cursors.SizeNWSE;
+            else if (e.Location.X > panelTop.Width - 10 && e.Location.Y < 10)
+                panelTop.Cursor = Cursors.SizeNESW;
+            else if (e.Location.X < 10 && e.Location.Y >= 10)
+                panelTop.Cursor = Cursors.SizeWE;
+            else if (e.Location.X > panelTop.Width - 10 && e.Location.Y >= 10)
+                panelTop.Cursor = Cursors.SizeWE;
+            else if (e.Location.Y < 10)
+                panelTop.Cursor = Cursors.SizeNS;
+            else
+                panelTop.Cursor = Cursors.Default;
         }
         #endregion
 
