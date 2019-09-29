@@ -15,6 +15,7 @@ namespace MulTools.Function
                 case "文件操作": frm = new 文件操作(); break;
                 case "IP速换": frm = new IP速换(); break;
                 case "屏幕截图": frm = new 屏幕截图(); break;
+                case "窗体监控": frm = new MulTools.Components.Monitor(); break;
             }
             return frm;
         }

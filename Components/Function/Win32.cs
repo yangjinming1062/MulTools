@@ -1,5 +1,9 @@
-﻿using System;
+﻿using MulTools.Components.Models;
+using MulTools.Components.Struct;
+using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace MulTools.Components.Function
@@ -135,6 +139,581 @@ namespace MulTools.Components.Function
         public static extern bool ReleaseCapture();
         [DllImport("user32.dll")]
         public static extern bool SendMessage(IntPtr hwnd, int wMsg, int wParam, int lParam);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsWindowVisible(IntPtr hWnd);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern IntPtr GetParent(IntPtr hWnd);
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetWindow(IntPtr hwnd, GetWindowMode mode);
         #endregion
+
+        #region 缩略图相关
+        public static System.Drawing.Point GetCursorPos()
+        {
+            NPoint ret;
+            if (GetCursorPosInternal(out ret))
+                return ret.ToPoint();
+            else
+                return default(System.Drawing.Point);
+        }
+
+        [DllImport("user32.dll", EntryPoint = "GetCursorPos")]
+        private static extern bool GetCursorPosInternal(out NPoint point);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool GetClientRect(IntPtr handle, out NRectangle rect);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool GetWindowRect(IntPtr handle, out NRectangle rect);
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern int GetWindowText(IntPtr hWnd, [Out] StringBuilder lpString, int nMaxCount);
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern int GetWindowTextLength(IntPtr hWnd);
+
+        /// <summary>
+        /// Gets a window's text via API call.
+        /// </summary>
+        /// <param name="hwnd">Window handle.</param>
+        /// <returns>Title of the window.</returns>
+        public static string GetWindowText(IntPtr hwnd)
+        {
+            int length = GetWindowTextLength(hwnd);
+            if (length > 0)
+            {
+                StringBuilder sb = new StringBuilder(length + 1);
+                if (GetWindowText(hwnd, sb, sb.Capacity) > 0)
+                    return sb.ToString();
+                else
+                    return String.Empty;
+            }
+            else
+                return String.Empty;
+        }
+
+        public enum WindowLong
+        {
+            WndProc = (-4),
+            HInstance = (-6),
+            HwndParent = (-8),
+            Style = (-16),
+            ExStyle = (-20),
+            UserData = (-21),
+            Id = (-12)
+        }
+
+        [Flags]
+        public enum WindowStyles : long
+        {
+            None = 0,
+            Child = 0x40000000L,
+            Disabled = 0x8000000L,
+            Minimize = 0x20000000L,
+            MinimizeBox = 0x20000L,
+            Visible = 0x10000000L
+        }
+
+        [Flags]
+        public enum WindowExStyles : long
+        {
+            AppWindow = 0x40000,
+            Layered = 0x80000,
+            NoActivate = 0x8000000L,
+            ToolWindow = 0x80,
+            TopMost = 8,
+            Transparent = 0x20
+        }
+
+        public static IntPtr GetWindowLong(IntPtr hWnd, WindowLong i)
+        {
+            if (IntPtr.Size == 8)
+                return GetWindowLongPtr64(hWnd, i);
+            else
+                return new IntPtr(GetWindowLong32(hWnd, i));
+        }
+
+        [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
+        static extern int GetWindowLong32(IntPtr hWnd, WindowLong nIndex);
+
+        [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
+        static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, WindowLong nIndex);
+
+        public static IntPtr SetWindowLong(IntPtr hWnd, WindowLong i, IntPtr dwNewLong)
+        {
+            if (IntPtr.Size == 8)
+                return SetWindowLongPtr64(hWnd, i, dwNewLong);
+            else
+                return new IntPtr(SetWindowLong32(hWnd, i, dwNewLong.ToInt32()));
+        }
+
+        [DllImport("user32.dll", EntryPoint = "SetWindowLong")]
+        static extern int SetWindowLong32(IntPtr hWnd, WindowLong nIndex, int dwNewLong);
+
+        [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
+        static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, WindowLong nIndex, IntPtr dwNewLong);
+
+        #region Window class
+
+        const int MaxClassLength = 255;
+
+        public static string GetWindowClass(IntPtr hwnd)
+        {
+            var sb = new StringBuilder(MaxClassLength + 1);
+            RealGetWindowClass(hwnd, sb, MaxClassLength);
+            return sb.ToString();
+        }
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern uint RealGetWindowClass(IntPtr hwnd, [Out] StringBuilder lpString, uint maxCount);
+
+        public enum ClassLong
+        {
+            Icon = -14,
+            IconSmall = -34
+        }
+
+        [DllImport("user32.dll", EntryPoint = "GetClassLongPtrW")]
+        static extern IntPtr GetClassLong64(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll", EntryPoint = "GetClassLongW")]
+        static extern int GetClassLong32(IntPtr hWnd, int nIndex);
+
+        public static IntPtr GetClassLong(IntPtr hWnd, ClassLong i)
+        {
+            if (IntPtr.Size == 8)
+                return GetClassLong64(hWnd, (int)i);
+            else
+                return new IntPtr(GetClassLong32(hWnd, (int)i));
+        }
+        #endregion
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetMenu(IntPtr hwnd);
+
+        [DllImport("user32.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool AdjustWindowRectEx(ref NRectangle clientToWindowRect, long windowStyle, bool hasMenu, long extendedWindowStyle);
+
+        /// <summary>
+        /// Converts client size rectangle to window rectangle, according to window styles.
+        /// </summary>
+        /// <param name="clientRectangle">Client area bounding box.</param>
+        /// <param name="windowStyle">Style of window to compute.</param>
+        /// <param name="extendedWindowStyle">Extended style of window to compute.</param>
+        public static NRectangle ConvertClientToWindowRect(NRectangle clientRectangle, long windowStyle, long extendedWindowStyle)
+        {
+            NRectangle tmp = clientRectangle;
+            if (AdjustWindowRectEx(ref tmp, windowStyle, false, extendedWindowStyle))
+                return tmp;
+            else
+                return clientRectangle;
+        }
+        #endregion
+
+        #region Injection
+        [DllImport("user32.dll")]
+        public static extern IntPtr RealChildWindowFromPoint(IntPtr parent, NPoint point);
+        [DllImport("user32.dll")]
+        static extern bool ScreenToClient(IntPtr hwnd, ref NPoint point);
+
+        /// <summary>
+        /// Converts a point in screen coordinates in client coordinates relative to a window.
+        /// </summary>
+        /// <param name="hwnd">Handle of the window whose client coordinate system should be used.</param>
+        /// <param name="screenPoint">Point expressed in screen coordinates.</param>
+        /// <returns>Point expressed in client coordinates.</returns>
+        public static NPoint ScreenToClient(IntPtr hwnd, NPoint screenPoint)
+        {
+            NPoint localCopy = new NPoint(screenPoint);
+            if (ScreenToClient(hwnd, ref localCopy))
+                return localCopy;
+            else
+                return new NPoint();
+        }
+        [DllImport("user32.dll")]
+        static extern bool ClientToScreen(IntPtr hwnd, ref NPoint point);
+
+        /// <summary>
+        /// Converts a point in client coordinates of a window to screen coordinates.
+        /// </summary>
+        /// <param name="hwnd">Handle to the window of the original point.</param>
+        /// <param name="clientPoint">Point expressed in client coordinates.</param>
+        /// <returns>Point expressed in screen coordinates.</returns>
+        public static NPoint ClientToScreen(IntPtr hwnd, NPoint clientPoint)
+        {
+            NPoint localCopy = new NPoint(clientPoint);
+            if (ClientToScreen(hwnd, ref localCopy))
+                return localCopy;
+            else
+                return new NPoint();
+        }
+
+        /// <summary>Inject a fake left mouse click on a target window, on a location expressed in client coordinates.</summary>
+		/// <param name="window">Target window to click on.</param>
+		/// <param name="clickLocation">Location of the mouse click expressed in client coordiantes of the target window.</param>
+		/// <param name="doubleClick">True if a double click should be injected.</param>
+		public static void InjectFakeMouseClick(IntPtr window, CloneClickEventArgs clickArgs)
+        {
+            NPoint clientClickLocation = NPoint.FromPoint(clickArgs.ClientClickLocation);
+            NPoint scrClickLocation = ClientToScreen(window, clientClickLocation);
+
+            //HACK (?)
+            //If target window has a Menu (which appears on the thumbnail) move the clicked location down
+            //in order to adjust (the menu isn't part of the window's client rect).
+            IntPtr hMenu = Win32.GetMenu(window);
+            if (hMenu != IntPtr.Zero)
+                scrClickLocation.Y -= SystemInformation.MenuHeight;
+
+            IntPtr hChild = GetRealChildControlFromPoint(window, scrClickLocation);
+            NPoint clntClickLocation = ScreenToClient(hChild, scrClickLocation);
+
+            if (clickArgs.Buttons == MouseButtons.Left)
+            {
+                if (clickArgs.IsDoubleClick)
+                    InjectDoubleLeftMouseClick(hChild, clntClickLocation);
+                else
+                    InjectLeftMouseClick(hChild, clntClickLocation);
+            }
+            else if (clickArgs.Buttons == MouseButtons.Right)
+            {
+                if (clickArgs.IsDoubleClick)
+                    InjectDoubleRightMouseClick(hChild, clntClickLocation);
+                else
+                    InjectRightMouseClick(hChild, clntClickLocation);
+            }
+        }
+
+        /// <summary>Returns the child control of a window corresponding to a screen location.</summary>
+		/// <param name="parent">Parent window to explore.</param>
+		/// <param name="scrClickLocation">Child control location in screen coordinates.</param>
+		private static IntPtr GetRealChildControlFromPoint(IntPtr parent, NPoint scrClickLocation)
+        {
+            IntPtr curr = parent, child = IntPtr.Zero;
+            do
+            {
+                child = RealChildWindowFromPoint(curr, ScreenToClient(curr, scrClickLocation));
+
+                if (child == IntPtr.Zero || child == curr)
+                    break;
+
+                curr = child;//Update for next loop
+            }
+            while (true);
+
+            //Safety check, shouldn't happen
+            if (curr == IntPtr.Zero)
+                curr = parent;
+
+            return curr;
+        }
+
+        private static void InjectLeftMouseClick(IntPtr child, NPoint clientLocation)
+        {
+            IntPtr lParamClickLocation = MessagingMethods.MakeLParam(clientLocation.X, clientLocation.Y);
+
+            MessagingMethods.PostMessage(child, WM.LBUTTONDOWN, new IntPtr(MK.LBUTTON), lParamClickLocation);
+            MessagingMethods.PostMessage(child, WM.LBUTTONUP, new IntPtr(MK.LBUTTON), lParamClickLocation);
+        }
+
+        private static void InjectRightMouseClick(IntPtr child, NPoint clientLocation)
+        {
+            IntPtr lParamClickLocation = MessagingMethods.MakeLParam(clientLocation.X, clientLocation.Y);
+
+            MessagingMethods.PostMessage(child, WM.RBUTTONDOWN, new IntPtr(MK.RBUTTON), lParamClickLocation);
+            MessagingMethods.PostMessage(child, WM.RBUTTONUP, new IntPtr(MK.RBUTTON), lParamClickLocation);
+        }
+
+        private static void InjectDoubleLeftMouseClick(IntPtr child, NPoint clientLocation)
+        {
+            IntPtr lParamClickLocation = MessagingMethods.MakeLParam(clientLocation.X, clientLocation.Y);
+            MessagingMethods.PostMessage(child, WM.LBUTTONDBLCLK, new IntPtr(MK.LBUTTON), lParamClickLocation);
+        }
+
+        private static void InjectDoubleRightMouseClick(IntPtr child, NPoint clientLocation)
+        {
+            IntPtr lParamClickLocation = MessagingMethods.MakeLParam(clientLocation.X, clientLocation.Y);
+            MessagingMethods.PostMessage(child, WM.RBUTTONDBLCLK, new IntPtr(MK.RBUTTON), lParamClickLocation);
+        }
+        #endregion
+    }
+    public static class MK
+    {
+        public const int LBUTTON = 0x0001;
+        public const int RBUTTON = 0x0002;
+        public const int MBUTTON = 0x0010;
+    }
+    /// <summary>
+    /// Windows Message codes.
+    /// </summary>
+    public static class WM
+    {
+        public const int GETICON = 0x7f;
+        public const int SIZING = 0x214;
+        public const int NCHITTEST = 0x84;
+        public const int NCPAINT = 0x0085;
+        public const int LBUTTONDOWN = 0x0201;
+        public const int LBUTTONUP = 0x0202;
+        public const int LBUTTONDBLCLK = 0x0203;
+        public const int RBUTTONDOWN = 0x0204;
+        public const int RBUTTONUP = 0x0205;
+        public const int RBUTTONDBLCLK = 0x0206;
+        public const int NCLBUTTONUP = 0x00A2;
+        public const int NCLBUTTONDOWN = 0x00A1;
+        public const int NCLBUTTONDBLCLK = 0x00A3;
+        public const int NCRBUTTONUP = 0x00A5;
+        public const int NCMOUSELEAVE = 0x02A2;
+        public const int SYSCOMMAND = 0x0112;
+        public const int GETTEXT = 0x000D;
+        public const int GETTEXTLENGTH = 0x000E;
+    }
+
+    /// <summary>
+    /// Native Win32 sizing codes (used by WM_SIZING message).
+    /// </summary>
+    public static class WMSZ
+    {
+        public const int LEFT = 1;
+        public const int RIGHT = 2;
+        public const int TOP = 3;
+        public const int BOTTOM = 6;
+    }
+    /// <summary>
+    /// Native Win32 Hit Testing codes.
+    /// </summary>
+    public static class HT
+    {
+        public const int TRANSPARENT = -1;
+        public const int CLIENT = 1;
+        public const int CAPTION = 2;
+    }
+
+    /// <summary>
+    /// Helper class that keeps a window handle (HWND),
+    /// the title of the window and can load its icon.
+    /// </summary>
+	public class WindowHandle : System.Windows.Forms.IWin32Window
+    {
+
+        IntPtr _handle;
+        string _title;
+
+        /// <summary>
+        /// Creates a new WindowHandle instance. The handle pointer must be valid, the title
+        /// may be null or empty and will be updated as requested.
+        /// </summary>
+		public WindowHandle(IntPtr p, string title)
+        {
+            _handle = p;
+            _title = title;
+        }
+
+        /// <summary>
+        /// Creates a new WindowHandle instance. Additional features of the handle will be queried as needed.
+        /// </summary>
+        /// <param name="p"></param>
+        public WindowHandle(IntPtr p)
+        {
+            _handle = p;
+            _title = null;
+        }
+
+        public string Title
+        {
+            get
+            {
+                if (_title == null)
+                    _title = Win32.GetWindowText(_handle) ?? string.Empty;
+                return _title;
+            }
+        }
+
+        Icon _icon = null;
+        bool _iconFetched = false;
+        public Icon Icon
+        {
+            get
+            {
+                if (!_iconFetched)
+                {
+                    //Fetch icon from window
+                    IntPtr hIcon;
+
+                    if (MessagingMethods.SendMessageTimeout(_handle, WM.GETICON, new IntPtr(2), new IntPtr(0),
+                        MessagingMethods.SendMessageTimeoutFlags.AbortIfHung | MessagingMethods.SendMessageTimeoutFlags.Block, 500, out hIcon) == IntPtr.Zero)
+                    {
+                        hIcon = IntPtr.Zero;
+                    }
+
+                    if (hIcon != IntPtr.Zero)
+                    {
+                        _icon = Icon.FromHandle(hIcon);
+                    }
+                    else
+                    {
+                        hIcon = (IntPtr)Win32.GetClassLong(_handle, Win32.ClassLong.IconSmall);//Fetch icon from window class
+                        if (hIcon.ToInt64() != 0)
+                            _icon = Icon.FromHandle(hIcon);
+                    }
+                }
+
+                _iconFetched = true;
+                return _icon;
+            }
+        }
+
+        string _class = null;
+
+        /// <summary>
+        /// Gets the window's class name.
+        /// </summary>
+        /// <remarks>
+        /// This value is cached and is never null.
+        /// </remarks>
+        public string Class
+        {
+            get
+            {
+                if (_class == null)
+                    _class = Win32.GetWindowClass(Handle) ?? string.Empty;
+                return _class;
+            }
+        }
+
+        #region Object override
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat("#{0}", _handle);
+
+            if (!string.IsNullOrWhiteSpace(_title) || !string.IsNullOrWhiteSpace(_class))
+            {
+                sb.Append(" (");
+                if (!string.IsNullOrWhiteSpace(_title))
+                {
+                    sb.AppendFormat("title '{0}'", _title);
+                    if (!string.IsNullOrWhiteSpace(_class))
+                        sb.Append(", ");
+                }
+                if (!string.IsNullOrWhiteSpace(_class))
+                    sb.AppendFormat("class {0}", _class);
+                sb.Append(")");
+            }
+            return sb.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(obj, this))
+                return true;
+
+            System.Windows.Forms.IWin32Window win = obj as System.Windows.Forms.IWin32Window;
+            if (win == null)
+                return false;
+
+            return (_handle.Equals(win.Handle));
+        }
+
+        public override int GetHashCode()
+        {
+            return _handle.GetHashCode();
+        }
+        #endregion
+
+        /// <summary>
+        /// IWin32Window Members
+        /// </summary>
+        public IntPtr Handle
+        {
+            get { return _handle; }
+        }
+
+        /// <summary>
+        /// Creates a new windowHandle instance from a given IntPtr handle.
+        /// </summary>
+        /// <param name="handle">Handle value.</param>
+        public static WindowHandle FromHandle(IntPtr handle)
+        {
+            return new WindowHandle(handle, null);
+        }
+    }
+
+    /// <summary>
+    /// Common methods for Win32 messaging.
+    /// </summary>
+    public static class MessagingMethods
+    {
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+        [Flags]
+        public enum SendMessageTimeoutFlags : uint
+        {
+            AbortIfHung = 2,
+            Block = 1,
+            Normal = 0
+        }
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessageTimeout(IntPtr hwnd, uint message, IntPtr wparam, IntPtr lparam, SendMessageTimeoutFlags flags, uint timeout, out IntPtr result);
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+        public static IntPtr MakeLParam(int LoWord, int HiWord)
+        {
+            return new IntPtr((HiWord << 16) | (LoWord & 0xffff));
+        }
+    }
+
+    public static class HookMethods
+    {
+        static HookMethods()
+        {
+            WM_SHELLHOOKMESSAGE = RegisterWindowMessage("SHELLHOOK");
+        }
+
+        public static int WM_SHELLHOOKMESSAGE
+        {
+            get;
+            private set;
+        }
+
+        const int HSHELL_HIGHBIT = 0x8000;
+
+        public const int HSHELL_WINDOWCREATED = 1;
+        public const int HSHELL_WINDOWDESTROYED = 2;
+        public const int HSHELL_WINDOWACTIVATED = 4;
+        public const int HSHELL_REDRAW = 6;
+        public const int HSHELL_RUDEAPPACTIVATED = (HSHELL_WINDOWACTIVATED | HSHELL_HIGHBIT);
+        public const int HSHELL_FLASH = (HSHELL_REDRAW | HSHELL_HIGHBIT);
+
+        /// <summary>
+        /// Registers the WM_ID for a window message.
+        /// </summary>
+        /// <param name="wndMessageName">Name of the window message.</param>
+        [DllImport("User32.dll")]
+        public static extern int RegisterWindowMessage(string wndMessageName);
+
+        /// <summary>
+        /// Registers a window as a shell hook window.
+        /// </summary>
+        [DllImport("User32.dll")]
+        public static extern bool RegisterShellHookWindow(IntPtr hwnd);
+
+        /// <summary>
+        /// Deregisters a window as a shell hook window.
+        /// </summary>
+        [DllImport("User32.dll")]
+        public static extern bool DeregisterShellHookWindow(IntPtr hwnd);
     }
 }
