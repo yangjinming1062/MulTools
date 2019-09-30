@@ -100,6 +100,8 @@ namespace MulTools.Components
 
         protected override void OnClosed(EventArgs e)
         {
+            if (taskIcon != null)
+                taskIcon.Dispose();
             base.OnClosed(e);
         }
 
