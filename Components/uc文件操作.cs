@@ -354,5 +354,10 @@ namespace MulTools.Components
             if (((ListView)(sender)).FocusedItem.SubItems[(int)Cols.文件类型].Text == "文件夹")
                 txtDirpath.Text = ((ListView)(sender)).FocusedItem.Name;
         }
+
+        private void fileLV_SizeChanged(object sender, EventArgs e)
+        {
+            cName.Width = fileLV.Width - cMD5.Width - cType.Width - 10;
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using WindowsFormsAero.TaskDialog;
 
 namespace MulTools.Components
 {
@@ -221,18 +222,12 @@ namespace MulTools.Components
         /// <summary>
         /// Computes height from width value, according to aspect ratio of window.
         /// </summary>
-        public int ComputeHeightFromWidth(int width)
-        {
-            return (int)Math.Round(((width - ExtraPadding.Horizontal) / AspectRatio) + ExtraPadding.Vertical);
-        }
+        public int ComputeHeightFromWidth(int width) => (int)Math.Round(((width - ExtraPadding.Horizontal) / AspectRatio) + ExtraPadding.Vertical);
 
         /// <summary>
         /// Computes width from height value, according to aspect ratio of window.
         /// </summary>
-        public int ComputeWidthFromHeight(int height)
-        {
-            return (int)Math.Round(((height - ExtraPadding.Vertical) * AspectRatio) + ExtraPadding.Horizontal);
-        }
+        public int ComputeWidthFromHeight(int height) => (int)Math.Round(((height - ExtraPadding.Vertical) * AspectRatio) + ExtraPadding.Horizontal);
         #endregion
 
         /// <summary>
@@ -246,6 +241,28 @@ namespace MulTools.Components
                 long exStyle = Win32.GetWindowLong(this.Handle, WindowLong.ExStyle).ToInt64();
                 return Win32.ConvertClientToWindowRect(new NRectangle(0, 0, 0, 0), style, exStyle).Size;
             }
+        }
+        /// <summary>
+        /// Displays an error task dialog.
+        /// </summary>
+        /// <param name="mainInstruction">Main instruction of the error dialog.</param>
+        /// <param name="explanation">Detailed informations about the error.</param>
+        /// <param name="errorMessage">Expanded error codes/messages.</param>
+        public void ShowErrorDialog(string mainInstruction, string explanation, string errorMessage)
+        {
+            TaskDialog dlg = new TaskDialog(mainInstruction, "错误", explanation)
+            {
+                CommonIcon = CommonIcon.Stop,
+                IsExpanded = false
+            };
+
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                dlg.ExpandedInformation = "错误：" + errorMessage;
+                dlg.ExpandedControlText = "详细错误";
+            }
+
+            dlg.Show(this);
         }
     }
 }

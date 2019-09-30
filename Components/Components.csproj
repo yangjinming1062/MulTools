@@ -102,6 +102,23 @@
       <DependentUpon>uc文件操作.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\pos_bottomleft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pos_bottomright.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pos_center.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pos_null.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pos_topleft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pos_topright.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

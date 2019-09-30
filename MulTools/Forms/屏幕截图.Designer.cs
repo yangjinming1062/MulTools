@@ -43,6 +43,12 @@
             this.menu_txtGiftime = new System.Windows.Forms.ToolStripTextBox();
             this.长图捕获间隔ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_txtLongtime = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtSimilar = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.txtLow = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.txtHeigh = new System.Windows.Forms.ToolStripTextBox();
             this.永久记录当前保存路径ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_cmbPath = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,12 +85,6 @@
             this.lbRight = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.bgWorkerLong = new System.ComponentModel.BackgroundWorker();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.txtSimilar = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.txtLow = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.txtHeigh = new System.Windows.Forms.ToolStripTextBox();
             this.panelTop.SuspendLayout();
             this.settingMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBox)).BeginInit();
@@ -157,7 +157,7 @@
             "bmp",
             "jpg"});
             this.menu_cmbPicType.Name = "menu_cmbPicType";
-            this.menu_cmbPicType.Size = new System.Drawing.Size(121, 25);
+            this.menu_cmbPicType.Size = new System.Drawing.Size(75, 25);
             this.menu_cmbPicType.Text = "bmp";
             // 
             // 删除临时图片长图ToolStripMenuItem
@@ -207,7 +207,6 @@
             // menu_GIFframetime
             // 
             this.menu_GIFframetime.BackColor = System.Drawing.SystemColors.Info;
-            this.menu_GIFframetime.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.menu_GIFframetime.Name = "menu_GIFframetime";
             this.menu_GIFframetime.Size = new System.Drawing.Size(60, 23);
             this.menu_GIFframetime.Text = "10";
@@ -223,7 +222,6 @@
             // menu_txtGiftime
             // 
             this.menu_txtGiftime.BackColor = System.Drawing.SystemColors.Info;
-            this.menu_txtGiftime.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.menu_txtGiftime.Name = "menu_txtGiftime";
             this.menu_txtGiftime.Size = new System.Drawing.Size(60, 23);
             this.menu_txtGiftime.Text = "100";
@@ -239,10 +237,55 @@
             // menu_txtLongtime
             // 
             this.menu_txtLongtime.BackColor = System.Drawing.SystemColors.Info;
-            this.menu_txtLongtime.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.menu_txtLongtime.Name = "menu_txtLongtime";
             this.menu_txtLongtime.Size = new System.Drawing.Size(60, 23);
             this.menu_txtLongtime.Text = "300";
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.txtSimilar,
+            this.toolStripSeparator1,
+            this.txtLow,
+            this.toolStripSeparator2,
+            this.txtHeigh});
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(196, 22);
+            this.toolStripMenuItem3.Text = "长截图合成参数";
+            // 
+            // txtSimilar
+            // 
+            this.txtSimilar.BackColor = System.Drawing.SystemColors.Info;
+            this.txtSimilar.Name = "txtSimilar";
+            this.txtSimilar.Size = new System.Drawing.Size(60, 23);
+            this.txtSimilar.Text = "0.85";
+            this.txtSimilar.ToolTipText = "区域相似度，0~1之间，越接近1合成要求越严格，容易认为不匹配";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(117, 6);
+            // 
+            // txtLow
+            // 
+            this.txtLow.BackColor = System.Drawing.SystemColors.Info;
+            this.txtLow.Name = "txtLow";
+            this.txtLow.Size = new System.Drawing.Size(60, 23);
+            this.txtLow.Text = "50";
+            this.txtLow.ToolTipText = "满足大致相似度后的可允许噪点范围，RGB差值低于该值认为匹配";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(117, 6);
+            // 
+            // txtHeigh
+            // 
+            this.txtHeigh.BackColor = System.Drawing.SystemColors.Info;
+            this.txtHeigh.Name = "txtHeigh";
+            this.txtHeigh.Size = new System.Drawing.Size(60, 23);
+            this.txtHeigh.Text = "200";
+            this.txtHeigh.ToolTipText = "同上，RGB差值高于该值认为相同（取值范围0~255）";
             // 
             // 永久记录当前保存路径ToolStripMenuItem
             // 
@@ -668,55 +711,6 @@
             // 
             this.bgWorkerLong.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorkerLong_DoWork);
             this.bgWorkerLong.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorkerLong_RunWorkerCompleted);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.txtSimilar,
-            this.toolStripSeparator1,
-            this.txtLow,
-            this.toolStripSeparator2,
-            this.txtHeigh});
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(196, 22);
-            this.toolStripMenuItem3.Text = "长截图合成参数";
-            // 
-            // txtSimilar
-            // 
-            this.txtSimilar.BackColor = System.Drawing.SystemColors.Info;
-            this.txtSimilar.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
-            this.txtSimilar.Name = "txtSimilar";
-            this.txtSimilar.Size = new System.Drawing.Size(60, 23);
-            this.txtSimilar.Text = "0.85";
-            this.txtSimilar.ToolTipText = "区域相似度，0~1之间，越接近1合成要求越严格，容易认为不匹配";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
-            // 
-            // txtLow
-            // 
-            this.txtLow.BackColor = System.Drawing.SystemColors.Info;
-            this.txtLow.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
-            this.txtLow.Name = "txtLow";
-            this.txtLow.Size = new System.Drawing.Size(60, 23);
-            this.txtLow.Text = "50";
-            this.txtLow.ToolTipText = "满足大致相似度后的可允许噪点范围，RGB差值低于该值认为匹配";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
-            // 
-            // txtHeigh
-            // 
-            this.txtHeigh.BackColor = System.Drawing.SystemColors.Info;
-            this.txtHeigh.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
-            this.txtHeigh.Name = "txtHeigh";
-            this.txtHeigh.Size = new System.Drawing.Size(60, 23);
-            this.txtHeigh.Text = "200";
-            this.txtHeigh.ToolTipText = "同上，RGB差值高于该值认为相同（取值范围0~255）";
             // 
             // 屏幕截图
             // 

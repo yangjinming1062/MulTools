@@ -82,12 +82,13 @@
             this.tbPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tbPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tbPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tbPanel.Location = new System.Drawing.Point(0, 431);
+            this.tbPanel.Location = new System.Drawing.Point(0, 345);
+            this.tbPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tbPanel.Name = "tbPanel";
             this.tbPanel.RowCount = 2;
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tbPanel.Size = new System.Drawing.Size(568, 84);
+            this.tbPanel.Size = new System.Drawing.Size(426, 67);
             this.tbPanel.TabIndex = 2;
             // 
             // panelTop
@@ -100,18 +101,20 @@
             this.panelTop.Controls.Add(this.cbDG);
             this.panelTop.Controls.Add(this.label1);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 23);
+            this.panelTop.Location = new System.Drawing.Point(0, 18);
+            this.panelTop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(568, 27);
+            this.panelTop.Size = new System.Drawing.Size(426, 22);
             this.panelTop.TabIndex = 3;
             // 
             // txtDirpath
             // 
             this.txtDirpath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDirpath.Location = new System.Drawing.Point(124, 0);
+            this.txtDirpath.Location = new System.Drawing.Point(93, 0);
+            this.txtDirpath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtDirpath.Name = "txtDirpath";
-            this.txtDirpath.Size = new System.Drawing.Size(276, 25);
+            this.txtDirpath.Size = new System.Drawing.Size(208, 21);
             this.txtDirpath.TabIndex = 1;
             this.txtDirpath.TextChanged += new System.EventHandler(this.TxtDirpath_TextChanged);
             // 
@@ -120,9 +123,10 @@
             this.btOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btOpen.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btOpen.Font = new System.Drawing.Font("楷体", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btOpen.Location = new System.Drawing.Point(512, 0);
+            this.btOpen.Location = new System.Drawing.Point(384, 0);
+            this.btOpen.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btOpen.Name = "btOpen";
-            this.btOpen.Size = new System.Drawing.Size(50, 25);
+            this.btOpen.Size = new System.Drawing.Size(38, 20);
             this.btOpen.TabIndex = 3;
             this.btOpen.Text = "打开";
             this.btOpen.UseVisualStyleBackColor = true;
@@ -133,9 +137,10 @@
             this.btBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btBack.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btBack.Font = new System.Drawing.Font("楷体", 7.8F);
-            this.btBack.Location = new System.Drawing.Point(460, 0);
+            this.btBack.Location = new System.Drawing.Point(345, 0);
+            this.btBack.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btBack.Name = "btBack";
-            this.btBack.Size = new System.Drawing.Size(50, 25);
+            this.btBack.Size = new System.Drawing.Size(38, 20);
             this.btBack.TabIndex = 3;
             this.btBack.Text = "上级";
             this.btBack.UseVisualStyleBackColor = true;
@@ -146,9 +151,10 @@
             this.btBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btBrowse.Font = new System.Drawing.Font("楷体", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btBrowse.Location = new System.Drawing.Point(402, 0);
+            this.btBrowse.Location = new System.Drawing.Point(302, 0);
+            this.btBrowse.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btBrowse.Name = "btBrowse";
-            this.btBrowse.Size = new System.Drawing.Size(48, 25);
+            this.btBrowse.Size = new System.Drawing.Size(36, 20);
             this.btBrowse.TabIndex = 2;
             this.btBrowse.Text = "...";
             this.btBrowse.UseVisualStyleBackColor = true;
@@ -157,9 +163,10 @@
             // cbDG
             // 
             this.cbDG.AutoSize = true;
-            this.cbDG.Location = new System.Drawing.Point(63, 4);
+            this.cbDG.Location = new System.Drawing.Point(47, 3);
+            this.cbDG.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbDG.Name = "cbDG";
-            this.cbDG.Size = new System.Drawing.Size(59, 19);
+            this.cbDG.Size = new System.Drawing.Size(48, 16);
             this.cbDG.TabIndex = 4;
             this.cbDG.Text = "递归";
             this.cbDG.UseVisualStyleBackColor = true;
@@ -168,9 +175,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 5);
+            this.label1.Location = new System.Drawing.Point(2, 4);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 15);
+            this.label1.Size = new System.Drawing.Size(53, 12);
             this.label1.TabIndex = 0;
             this.label1.Text = "文件夹：";
             // 
@@ -186,9 +194,10 @@
             this.panelBottom.Controls.Add(this.label4);
             this.panelBottom.Controls.Add(this.label2);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(0, 361);
+            this.panelBottom.Location = new System.Drawing.Point(0, 289);
+            this.panelBottom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(568, 70);
+            this.panelBottom.Size = new System.Drawing.Size(426, 56);
             this.panelBottom.TabIndex = 4;
             // 
             // btReName
@@ -196,9 +205,10 @@
             this.btReName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btReName.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btReName.Font = new System.Drawing.Font("楷体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btReName.Location = new System.Drawing.Point(469, 38);
+            this.btReName.Location = new System.Drawing.Point(352, 30);
+            this.btReName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btReName.Name = "btReName";
-            this.btReName.Size = new System.Drawing.Size(96, 23);
+            this.btReName.Size = new System.Drawing.Size(72, 18);
             this.btReName.TabIndex = 3;
             this.btReName.Text = "修改";
             this.btReName.UseVisualStyleBackColor = true;
@@ -209,9 +219,10 @@
             this.btReplace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btReplace.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btReplace.Font = new System.Drawing.Font("楷体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btReplace.Location = new System.Drawing.Point(469, 6);
+            this.btReplace.Location = new System.Drawing.Point(352, 5);
+            this.btReplace.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btReplace.Name = "btReplace";
-            this.btReplace.Size = new System.Drawing.Size(96, 23);
+            this.btReplace.Size = new System.Drawing.Size(72, 18);
             this.btReplace.TabIndex = 3;
             this.btReplace.Text = "替换";
             this.btReplace.UseVisualStyleBackColor = true;
@@ -219,54 +230,62 @@
             // 
             // txtTarget
             // 
-            this.txtTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTarget.Location = new System.Drawing.Point(338, 6);
+            this.txtTarget.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTarget.Location = new System.Drawing.Point(254, 5);
+            this.txtTarget.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtTarget.Name = "txtTarget";
-            this.txtTarget.Size = new System.Drawing.Size(125, 25);
+            this.txtTarget.Size = new System.Drawing.Size(95, 21);
             this.txtTarget.TabIndex = 2;
             // 
             // txtReName
             // 
             this.txtReName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtReName.Location = new System.Drawing.Point(164, 37);
+            this.txtReName.Location = new System.Drawing.Point(123, 30);
+            this.txtReName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtReName.Name = "txtReName";
-            this.txtReName.Size = new System.Drawing.Size(299, 25);
+            this.txtReName.Size = new System.Drawing.Size(225, 21);
             this.txtReName.TabIndex = 1;
             // 
             // txtSource
             // 
-            this.txtSource.Location = new System.Drawing.Point(102, 6);
+            this.txtSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSource.Location = new System.Drawing.Point(76, 5);
+            this.txtSource.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtSource.Name = "txtSource";
-            this.txtSource.Size = new System.Drawing.Size(198, 25);
+            this.txtSource.Size = new System.Drawing.Size(150, 21);
             this.txtSource.TabIndex = 1;
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 12F);
-            this.label3.Location = new System.Drawing.Point(303, 9);
+            this.label3.Location = new System.Drawing.Point(227, 7);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(29, 20);
+            this.label3.Size = new System.Drawing.Size(24, 16);
             this.label3.TabIndex = 0;
             this.label3.Text = "→";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 40);
+            this.label4.Location = new System.Drawing.Point(11, 32);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(143, 15);
+            this.label4.Size = new System.Drawing.Size(113, 12);
             this.label4.TabIndex = 0;
             this.label4.Text = "批量重命名[序号]：";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 10);
+            this.label2.Location = new System.Drawing.Point(11, 8);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(82, 15);
+            this.label2.Size = new System.Drawing.Size(65, 12);
             this.label2.TabIndex = 0;
             this.label2.Text = "批量替换：";
             // 
@@ -283,12 +302,14 @@
             this.fileLV.GridLines = true;
             this.fileLV.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.fileLV.HideSelection = false;
-            this.fileLV.Location = new System.Drawing.Point(0, 50);
+            this.fileLV.Location = new System.Drawing.Point(0, 40);
+            this.fileLV.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.fileLV.Name = "fileLV";
-            this.fileLV.Size = new System.Drawing.Size(568, 311);
+            this.fileLV.Size = new System.Drawing.Size(426, 249);
             this.fileLV.TabIndex = 5;
             this.fileLV.UseCompatibleStateImageBehavior = false;
             this.fileLV.View = System.Windows.Forms.View.Details;
+            this.fileLV.SizeChanged += new System.EventHandler(this.fileLV_SizeChanged);
             this.fileLV.DoubleClick += new System.EventHandler(this.FileLV_DoubleClick);
             // 
             // cName
@@ -306,7 +327,7 @@
             // 
             this.cMD5.Text = "MD5值";
             this.cMD5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.cMD5.Width = 120;
+            this.cMD5.Width = 100;
             // 
             // lvMenu
             // 
@@ -319,26 +340,26 @@
             this.tsmItemReplace,
             this.tsmItemRename});
             this.lvMenu.Name = "lvMenu";
-            this.lvMenu.Size = new System.Drawing.Size(213, 148);
+            this.lvMenu.Size = new System.Drawing.Size(183, 136);
             // 
             // tsmItemOpen
             // 
             this.tsmItemOpen.Name = "tsmItemOpen";
-            this.tsmItemOpen.Size = new System.Drawing.Size(212, 24);
+            this.tsmItemOpen.Size = new System.Drawing.Size(182, 22);
             this.tsmItemOpen.Text = "打开";
             this.tsmItemOpen.Click += new System.EventHandler(this.TsmItemOpen_Click);
             // 
             // tsmItemDelete
             // 
             this.tsmItemDelete.Name = "tsmItemDelete";
-            this.tsmItemDelete.Size = new System.Drawing.Size(212, 24);
+            this.tsmItemDelete.Size = new System.Drawing.Size(182, 22);
             this.tsmItemDelete.Text = "删除";
             this.tsmItemDelete.Click += new System.EventHandler(this.TsmItemDelete_Click);
             // 
             // tsmItemCut
             // 
             this.tsmItemCut.Name = "tsmItemCut";
-            this.tsmItemCut.Size = new System.Drawing.Size(212, 24);
+            this.tsmItemCut.Size = new System.Drawing.Size(182, 22);
             this.tsmItemCut.Text = "移动（剪切）";
             this.tsmItemCut.Visible = false;
             this.tsmItemCut.Click += new System.EventHandler(this.TsmItemCut_Click);
@@ -346,7 +367,7 @@
             // tsmItemCopy
             // 
             this.tsmItemCopy.Name = "tsmItemCopy";
-            this.tsmItemCopy.Size = new System.Drawing.Size(212, 24);
+            this.tsmItemCopy.Size = new System.Drawing.Size(182, 22);
             this.tsmItemCopy.Text = "移动（复制）";
             this.tsmItemCopy.Visible = false;
             this.tsmItemCopy.Click += new System.EventHandler(this.TsmItemCopy_Click);
@@ -354,14 +375,14 @@
             // tsmItemReplace
             // 
             this.tsmItemReplace.Name = "tsmItemReplace";
-            this.tsmItemReplace.Size = new System.Drawing.Size(212, 24);
+            this.tsmItemReplace.Size = new System.Drawing.Size(182, 22);
             this.tsmItemReplace.Text = "提取到\"批量替换\"";
             this.tsmItemReplace.Click += new System.EventHandler(this.TsmItemReplace_Click);
             // 
             // tsmItemRename
             // 
             this.tsmItemRename.Name = "tsmItemRename";
-            this.tsmItemRename.Size = new System.Drawing.Size(212, 24);
+            this.tsmItemRename.Size = new System.Drawing.Size(182, 22);
             this.tsmItemRename.Text = "提取到\"批量重命名\"";
             this.tsmItemRename.Click += new System.EventHandler(this.TsmItemRename_Click);
             // 
@@ -370,8 +391,9 @@
             this.pgBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.pgBar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.pgBar.Location = new System.Drawing.Point(0, 0);
+            this.pgBar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pgBar.Name = "pgBar";
-            this.pgBar.Size = new System.Drawing.Size(568, 23);
+            this.pgBar.Size = new System.Drawing.Size(426, 18);
             this.pgBar.Step = 1;
             this.pgBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.pgBar.TabIndex = 6;
@@ -383,15 +405,16 @@
             // 
             // uc文件操作
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.fileLV);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.tbPanel);
             this.Controls.Add(this.pgBar);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "uc文件操作";
-            this.Size = new System.Drawing.Size(568, 515);
+            this.Size = new System.Drawing.Size(426, 412);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelBottom.ResumeLayout(false);

@@ -5,25 +5,52 @@ using System.Windows.Forms;
 using MulTools.Components.Function;
 using MulTools.Components.Class;
 using MulTools.Components.WindowSeekers;
-using WindowsFormsAero.TaskDialog;
 
 namespace MulTools.Components
 {
     public partial class Monitor : AspectRatioForm
     {
         public ThumbnailPanel ThumbnailPanel { get; }
-        /// <summary>
-        /// Retrieves the window handle of the currently cloned thumbnail.
-        /// </summary>
+
         public WindowHandle CurrentThumbnailWindowHandle { get; set; }
 
-        /// <summary>
-        /// Gets the form's message pump manager.
-        /// </summary>
-        public MessagePumpManager MessagePumpManager { get; } = new MessagePumpManager();
+        public MessagePumpManager MessagePumpManager { get; }
 
         public BaseWindowSeeker WindowSeeker { get; set; }
+
+        private NotifyIcon taskIcon;
+
         public Monitor()
+        {
+            InitializeComponent();
+            DefaultNonClickTransparencyKey = this.TransparencyKey;
+            DefaultBorderStyle = this.FormBorderStyle;
+            ThumbnailPanel = new ThumbnailPanel
+            {
+                Location = Point.Empty,
+                Dock = DockStyle.Fill
+            };
+            Controls.Add(ThumbnailPanel);
+            this.KeyPreview = true;
+            WindowSeeker = new TaskWindowSeeker()
+            {
+                OwnerHandle = this.Handle,
+                SkipNotVisibleWindows = true
+            };
+            //分水岭
+            taskIcon = new NotifyIcon
+            {
+                Text = "窗体监控",
+                Icon = Icon,
+                Visible = true,
+                ContextMenuStrip = MenuStrip
+            };
+            taskIcon.DoubleClick += new EventHandler(TaskIcon_doubleclick);
+            ContextMenuStrip = MenuStrip;//传递指针进来构造的，不给右键菜单
+            ShowInTaskbar = true;
+        }
+
+        public Monitor(IntPtr h)
         {
             InitializeComponent();
             DefaultNonClickTransparencyKey = this.TransparencyKey;
@@ -35,30 +62,28 @@ namespace MulTools.Components
                 Dock = DockStyle.Fill
             };
             Controls.Add(ThumbnailPanel);
-
-            this.KeyPreview = true;//Set to Key event preview
+            this.KeyPreview = true;
 
             WindowSeeker = new TaskWindowSeeker()
             {
                 OwnerHandle = this.Handle,
                 SkipNotVisibleWindows = true
             };
-        }
-
-        public Monitor(IntPtr h) : this()
-        {
             WindowHandle w = new WindowHandle(h);
             this.SetThumbnail(w, null);
         }
 
-        #region Event override
+        void TaskIcon_doubleclick(object sender, EventArgs e)
+        {
+            ClickThroughEnabled = false;
+        }
 
+        #region Event override
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
             KeepAspectRatio = false;
             GlassMargins = new Padding(-1);
-
             MessagePumpManager.Initialize(this);
         }
 
@@ -136,8 +161,7 @@ namespace MulTools.Components
             base.OnMouseClick(e);
 
             if (e.Button == MouseButtons.Right)
-                //OpenContextMenu(null);
-                return;//todo
+                OpenContextMenu(null);
         }
 
         protected override void WndProc(ref Message m)
@@ -151,14 +175,7 @@ namespace MulTools.Components
                         if (m.WParam.ToInt32() == HT.CAPTION)
                         {
                             OpenContextMenu(null);
-                            m.Result = IntPtr.Zero;
-                            return;
-                        }
-                        break;
-                    case WM.NCLBUTTONDBLCLK:
-                        //Toggle fullscreen mode if double click on caption (whole glass area)
-                        if (m.WParam.ToInt32() == HT.CAPTION)
-                        {
+
                             m.Result = IntPtr.Zero;
                             return;
                         }
@@ -209,6 +226,8 @@ namespace MulTools.Components
             {
                 if (ClickThroughEnabled)//Disable click-through
                     ClickThroughEnabled = false;
+                else
+                    this.Dispose();
             }
         }
         #endregion
@@ -242,54 +261,9 @@ namespace MulTools.Components
         /// </summary>
         public void UnsetThumbnail()
         {
-            //Unset handle
             CurrentThumbnailWindowHandle = null;
             ThumbnailPanel.UnsetThumbnail();
-
-            //Disable aspect ratio
             KeepAspectRatio = false;
-        }
-
-        /// <summary>
-        /// Gets or sets the region displayed of the current thumbnail.
-        /// </summary>
-        public ThumbnailRegion SelectedThumbnailRegion
-        {
-            get
-            {
-                if (!ThumbnailPanel.IsShowingThumbnail || !ThumbnailPanel.ConstrainToRegion)
-                    return null;
-
-                return ThumbnailPanel.SelectedRegion;
-            }
-            set
-            {
-                if (!ThumbnailPanel.IsShowingThumbnail)
-                    return;
-
-                ThumbnailPanel.SelectedRegion = value;
-                SetAspectRatio(ThumbnailPanel.ThumbnailPixelSize, true);
-                FixPositionAndSize();
-            }
-        }
-
-        const int FixMargin = 10;
-
-        /// <summary>
-        /// Fixes the form's position and size, ensuring it is fully displayed in the current screen.
-        /// </summary>
-        private void FixPositionAndSize()
-        {
-            var screen = Screen.FromControl(this);
-
-            if (Width > screen.WorkingArea.Width)
-                Width = screen.WorkingArea.Width - FixMargin;
-            if (Height > screen.WorkingArea.Height)
-                Height = screen.WorkingArea.Height - FixMargin;
-            if (Location.X + Width > screen.WorkingArea.Right)
-                Location = new Point(screen.WorkingArea.Right - Width - FixMargin, Location.Y);
-            if (Location.Y + Height > screen.WorkingArea.Bottom)
-                Location = new Point(Location.X, screen.WorkingArea.Bottom - Height - FixMargin);
         }
 
         private void ThumbnailError(Exception ex, bool suppress, string title)
@@ -343,7 +317,6 @@ namespace MulTools.Components
 
         //Must NOT be equal to any other valid opacity value
         const double ClickThroughHoverOpacity = 0.6;
-
         Timer _clickThroughComeBackTimer = null;
         long _clickThroughComeBackTicks;
         const int ClickThroughComeBackTimerInterval = 1000;
@@ -356,7 +329,9 @@ namespace MulTools.Components
         private void RefreshClickThroughComeBack()
         {
             if (this.Opacity == 1.0)
+            {
                 this.Opacity = ClickThroughHoverOpacity;
+            }
 
             if (_clickThroughComeBackTimer == null)
             {
@@ -367,17 +342,19 @@ namespace MulTools.Components
             _clickThroughComeBackTicks = DateTime.UtcNow.Ticks;
             _clickThroughComeBackTimer.Start();
         }
-
         void _clickThroughComeBackTimer_Tick(object sender, EventArgs e)
         {
             var diff = DateTime.UtcNow.Subtract(new DateTime(_clickThroughComeBackTicks));
             if (diff.TotalSeconds > 2)
             {
                 var mousePointer = Win32.GetCursorPos();
+
                 if (!this.ContainsMousePointer(mousePointer))
                 {
                     if (this.Opacity == ClickThroughHoverOpacity)
+                    {
                         this.Opacity = 1.0;
+                    }
                     _clickThroughComeBackTimer.Stop();
                 }
             }
@@ -387,7 +364,7 @@ namespace MulTools.Components
         #region 显示边框
         readonly FormBorderStyle DefaultBorderStyle; // = FormBorderStyle.Sizable; // FormBorderStyle.SizableToolWindow;
 
-        public bool IsChromeVisible
+        public bool IsBorderVisible
         {
             get => (FormBorderStyle == DefaultBorderStyle);
             set
@@ -417,7 +394,6 @@ namespace MulTools.Components
                 Invalidate();
             }
         }
-
         #endregion
 
         #region 位置锁定
@@ -448,77 +424,89 @@ namespace MulTools.Components
         }
         #endregion
 
-        #region GUI
-        /// <summary>
-        /// Opens the context menu.
-        /// </summary>
-        /// <param name="position">Optional position of the mouse, relative to which the menu is shown.</param>
+        #region 菜单
         public void OpenContextMenu(Point? position)
         {
             Point menuPosition = MousePosition;
             if (position.HasValue)
                 menuPosition = position.Value;
 
-            //menuContext.Show(menuPosition);
+            MenuStrip.Show(menuPosition);
         }
 
-        /// <summary>
-        /// Gets the window's vertical chrome size.
-        /// </summary>
-        public int ChromeBorderVertical
+        private void IsShowBorder_Click(object sender, EventArgs e)
         {
-            get
+            IsBorderVisible = !IsBorderVisible;
+        }
+
+        private void MenuStrip_Opening(object sender, CancelEventArgs e)
+        {
+            menuitem_IsShowBorder.Checked = IsBorderVisible;
+        }
+
+        private void ClickThrough_Click(object sender, EventArgs e)
+        {
+            ClickThroughEnabled = true;
+        }
+
+        private void PositionLock_Click(object sender, EventArgs e)
+        {
+            switch(((ToolStripMenuItem)sender).Text)
             {
-                if (IsChromeVisible)
-                    return SystemInformation.FrameBorderSize.Height;
+                case "不锁定": PositionLock = null;break;
+                case "左上": PositionLock = ScreenPosition.TopLeft; break;
+                case "右上": PositionLock = ScreenPosition.TopRight; break;
+                case "中间": PositionLock = ScreenPosition.Center; break;
+                case "左下": PositionLock = ScreenPosition.BottomLeft; break;
+                case "右下": PositionLock = ScreenPosition.BottomRight; break;
+            }
+        }
+
+        private void Opacity_Click(object sender, EventArgs e)
+        {
+            if (this.Visible)
+                this.Opacity = (double)((ToolStripMenuItem)sender).Tag;
+        }
+
+        private void Close_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void SelectWindows_DropDownOpening(object sender, EventArgs e)
+        {
+            WindowSeeker.Refresh();
+            menuitem_Select.DropDownItems.Clear();
+            foreach (WindowHandle h in WindowSeeker.Windows)
+            {
+                var tsi = new ToolStripMenuItem();
+
+                if (h.Title.Length > 60)
+                {
+                    tsi.Text = h.Title.Substring(0, 60) + "...";
+                    tsi.ToolTipText = h.Title;
+                }
                 else
-                    return 0;
+                    tsi.Text = h.Title;
+
+                if (h.Icon != null)
+                    tsi.Image = h.Icon.ToBitmap();
+
+                tsi.Checked = h.Equals(CurrentThumbnailWindowHandle);
+                tsi.Tag = h;
+                tsi.Click += MenuWindowClickHandler;
+
+                menuitem_Select.DropDownItems.Add(tsi);
             }
         }
 
-        /// <summary>
-        /// Gets the window's horizontal chrome size.
-        /// </summary>
-        public int ChromeBorderHorizontal
+        private void MenuWindowClickHandler(object sender, EventArgs args)
         {
-            get
-            {
-                if (IsChromeVisible)
-                    return SystemInformation.FrameBorderSize.Width;
-                else
-                    return 0;
-            }
-        }
-
-        /// <summary>
-        /// Displays an error task dialog.
-        /// </summary>
-        /// <param name="mainInstruction">Main instruction of the error dialog.</param>
-        /// <param name="explanation">Detailed informations about the error.</param>
-        /// <param name="errorMessage">Expanded error codes/messages.</param>
-        private void ShowErrorDialog(string mainInstruction, string explanation, string errorMessage)
-        {
-            TaskDialog dlg = new TaskDialog(mainInstruction, "错误", explanation)
-            {
-                CommonIcon = CommonIcon.Stop,
-                IsExpanded = false
-            };
-
-            if (!string.IsNullOrEmpty(errorMessage))
-            {
-                dlg.ExpandedInformation = "错误：" + errorMessage;
-                dlg.ExpandedControlText = "详细错误";
-            }
-
-            dlg.Show(this);
-        }
-
-        /// <summary>
-        /// Ensures that the main form is visible (either closing the fullscreen mode or reactivating from task icon).
-        /// </summary>
-        public void EnsureMainFormVisible()
-        {
-            ClickThroughEnabled = false;
+            var tsi = (ToolStripMenuItem)sender;
+            if (tsi.Tag == null)
+                UnsetThumbnail();
+            else
+                SetThumbnail((WindowHandle)tsi.Tag, null);
         }
         #endregion
     }
