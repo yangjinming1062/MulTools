@@ -14,7 +14,7 @@ namespace MulTools.Components
 
         public WindowHandle CurrentThumbnailWindowHandle { get; set; }
 
-        public MessagePumpManager MessagePumpManager { get; }
+        public MessagePumpManager MessagePumpManager { get; } = new MessagePumpManager();
 
         public BaseWindowSeeker WindowSeeker { get; set; }
 
