@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace MulTools.Components
@@ -95,8 +94,6 @@ namespace MulTools.Components
         /// </remarks>
         public Point Offset => _bounds.Location;
 
-        const int MinimumRegionSize = 8;
-
         /// <summary>
         /// Computes the effective region representing the bounds inside a source thumbnail of a certain size.
         /// </summary>
@@ -191,9 +188,6 @@ namespace MulTools.Components
             Bounds = absoluteBounds;
         }
 
-        public override string ToString()
-        {
-            return string.Format("({0}, {1})", _bounds, (Relative) ? "relative" : "absolute");
-        }
+        public override string ToString() => string.Format("({0}, {1})", _bounds, (Relative) ? "relative" : "absolute");
     }
 }

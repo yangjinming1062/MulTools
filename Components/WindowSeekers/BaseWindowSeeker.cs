@@ -1,4 +1,5 @@
-﻿using MulTools.Components.Function;
+﻿using MulTools.Components.Class;
+using MulTools.Components.Function;
 using System;
 using System.Collections.Generic;
 
@@ -25,23 +26,12 @@ namespace MulTools.Components.WindowSeekers
     {
 
         #region IWindowSeeker
-
-        /// <summary>
-        /// Get the matching windows from the last refresh.
-        /// </summary>
         public abstract IList<WindowHandle> Windows
         {
             get;
         }
 
-        /// <summary>
-        /// Forces a window list refresh.
-        /// </summary>
-        public virtual void Refresh()
-        {
-            Win32.EnumWindows(RefreshCallback, IntPtr.Zero);
-        }
-
+        public virtual void Refresh() => Win32.EnumWindows(RefreshCallback, IntPtr.Zero);
         #endregion
 
         private bool RefreshCallback(IntPtr hwnd, IntPtr lParam)

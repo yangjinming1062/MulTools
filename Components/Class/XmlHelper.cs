@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml;
 
-namespace MulTools.Components.Function
+namespace MulTools.Components.Class
 {
     public class XmlHelper
     {
@@ -10,7 +10,7 @@ namespace MulTools.Components.Function
         /// <summary>
         /// XML文件的物理路径
         /// </summary>
-        private readonly string _filePath = string.Empty;
+        private string _filePath = string.Empty;
         /// <summary>
         /// Xml文档
         /// </summary>
@@ -22,9 +22,6 @@ namespace MulTools.Components.Function
         #endregion
 
         #region 构造方法
-        public XmlHelper()
-        {
-        }
         /// <summary>
         /// 实例化XmlHelper对象
         /// </summary>
@@ -198,16 +195,5 @@ namespace MulTools.Components.Function
             return System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
         }
         #endregion
-    }
-
-    /// <summary>
-    /// 结果集 枚举
-    /// </summary>
-    public enum Enum_result
-    {
-        等于0 = 0,
-        不为空 = 1,
-        大于0 = 2,
-        小于0 = 3
     }
 }

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using MulTools.Components;
 using MulTools.Components.Function;
-using MulTools.Components.Models;
+using MulTools.Components.Class;
 using MulTools.Components.WindowSeekers;
 using WindowsFormsAero.TaskDialog;
 
@@ -13,9 +11,7 @@ namespace MulTools.Components
 {
     public partial class Monitor : AspectRatioForm
     {
-        //GUI elements
-        ThumbnailPanel _thumbnailPanel;
-
+        public ThumbnailPanel ThumbnailPanel { get; }
         /// <summary>
         /// Retrieves the window handle of the currently cloned thumbnail.
         /// </summary>
@@ -29,21 +25,16 @@ namespace MulTools.Components
         public BaseWindowSeeker WindowSeeker { get; set; }
         public Monitor()
         {
-            _quickRegionDrawingHandler = new ThumbnailPanel.RegionDrawnHandler(HandleQuickRegionDrawn);
-
             InitializeComponent();
-
-            //Store default values
             DefaultNonClickTransparencyKey = this.TransparencyKey;
             DefaultBorderStyle = this.FormBorderStyle;
 
-            _thumbnailPanel = new ThumbnailPanel
+            ThumbnailPanel = new ThumbnailPanel
             {
                 Location = Point.Empty,
                 Dock = DockStyle.Fill
             };
-            _thumbnailPanel.CloneClick += new EventHandler<CloneClickEventArgs>(Thumbnail_CloneClick);
-            Controls.Add(_thumbnailPanel);
+            Controls.Add(ThumbnailPanel);
 
             this.KeyPreview = true;//Set to Key event preview
 
@@ -54,9 +45,10 @@ namespace MulTools.Components
             };
         }
 
-        public Monitor(WindowHandle h) : this()
+        public Monitor(IntPtr h) : this()
         {
-            this.SetThumbnail(h, null);
+            WindowHandle w = new WindowHandle(h);
+            this.SetThumbnail(w, null);
         }
 
         #region Event override
@@ -64,12 +56,9 @@ namespace MulTools.Components
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-
-            //Window init
             KeepAspectRatio = false;
             GlassMargins = new Padding(-1);
 
-            //Managers
             MessagePumpManager.Initialize(this);
         }
 
@@ -92,7 +81,6 @@ namespace MulTools.Components
         protected override void OnMove(EventArgs e)
         {
             base.OnMove(e);
-            AdjustSidePanelLocation();
         }
 
         protected override void OnResizeEnd(EventArgs e)
@@ -104,8 +92,8 @@ namespace MulTools.Components
         protected override void OnResizing(EventArgs e)
         {
             //Update aspect ratio from thumbnail while resizing (but do not refresh, resizing does that anyway)
-            if (_thumbnailPanel.IsShowingThumbnail)
-                SetAspectRatio(_thumbnailPanel.ThumbnailPixelSize, false);
+            if (ThumbnailPanel.IsShowingThumbnail)
+                SetAspectRatio(ThumbnailPanel.ThumbnailPixelSize, false);
         }
 
         protected override void OnActivated(EventArgs e)
@@ -130,8 +118,8 @@ namespace MulTools.Components
         {
             base.OnMouseWheel(e);
 
-            if (_thumbnailPanel.IsShowingThumbnail)
-                SetAspectRatio(_thumbnailPanel.ThumbnailPixelSize, false);
+            if (ThumbnailPanel.IsShowingThumbnail)
+                SetAspectRatio(ThumbnailPanel.ThumbnailPixelSize, false);
 
             int change = (int)(e.Delta / 6.0); //assumes a mouse wheel "tick" is in the 80-120 range
             AdjustSize(change);
@@ -148,10 +136,9 @@ namespace MulTools.Components
             base.OnMouseClick(e);
 
             if (e.Button == MouseButtons.Right)
-                OpenContextMenu(null);
+                //OpenContextMenu(null);
+                return;//todo
         }
-
-        private ThumbnailPanel.RegionDrawnHandler _quickRegionDrawingHandler;
 
         protected override void WndProc(ref Message m)
         {
@@ -164,16 +151,6 @@ namespace MulTools.Components
                         if (m.WParam.ToInt32() == HT.CAPTION)
                         {
                             OpenContextMenu(null);
-                            m.Result = IntPtr.Zero;
-                            return;
-                        }
-                        break;
-                    case WM.NCLBUTTONDOWN:
-                        if ((ModifierKeys & Keys.Control) == Keys.Control && ThumbnailPanel.IsShowingThumbnail && !ThumbnailPanel.DrawMouseRegions)
-                        {
-                            ThumbnailPanel.EnableMouseRegionsDrawingWithMouseDown();
-                            ThumbnailPanel.RegionDrawn += _quickRegionDrawingHandler;
-
                             m.Result = IntPtr.Zero;
                             return;
                         }
@@ -200,16 +177,6 @@ namespace MulTools.Components
                 base.WndProc(ref m);
             }
         }
-
-        private void HandleQuickRegionDrawn(object sender, ThumbnailRegion region)
-        {
-            //Reset region drawing state
-            ThumbnailPanel.DrawMouseRegions = false;
-            ThumbnailPanel.RegionDrawn -= _quickRegionDrawingHandler;
-
-            SelectedThumbnailRegion = region;
-        }
-
         #endregion
 
         #region Keyboard event handling
@@ -258,36 +225,16 @@ namespace MulTools.Components
             try
             {
                 CurrentThumbnailWindowHandle = handle;
-                _thumbnailPanel.SetThumbnailHandle(handle, region);
+                ThumbnailPanel.SetThumbnailHandle(handle, region);
 
                 //Set aspect ratio (this will resize the form), do not refresh if in fullscreen
-                SetAspectRatio(_thumbnailPanel.ThumbnailPixelSize, true);
+                SetAspectRatio(ThumbnailPanel.ThumbnailPixelSize, true);
             }
             catch (Exception ex)
             {
                 ThumbnailError(ex, false, "无法创建缩略图");
-                _thumbnailPanel.UnsetThumbnail();
+                ThumbnailPanel.UnsetThumbnail();
             }
-        }
-
-        /// <summary>
-        /// Enables group mode on a list of window handles.
-        /// </summary>
-        /// <param name="handles">List of window handles.</param>
-        public void SetThumbnailGroup(IList<WindowHandle> handles)
-        {
-            if (handles.Count == 0)
-                return;
-
-            //At last one thumbnail
-            SetThumbnail(handles[0], null);
-
-            //Handle if no real group
-            if (handles.Count == 1)
-                return;
-
-            CurrentThumbnailWindowHandle = null;
-            MessagePumpManager.Get<GroupSwitchManager>().EnableGroupMode(handles);
         }
 
         /// <summary>
@@ -297,7 +244,7 @@ namespace MulTools.Components
         {
             //Unset handle
             CurrentThumbnailWindowHandle = null;
-            _thumbnailPanel.UnsetThumbnail();
+            ThumbnailPanel.UnsetThumbnail();
 
             //Disable aspect ratio
             KeepAspectRatio = false;
@@ -310,18 +257,18 @@ namespace MulTools.Components
         {
             get
             {
-                if (!_thumbnailPanel.IsShowingThumbnail || !_thumbnailPanel.ConstrainToRegion)
+                if (!ThumbnailPanel.IsShowingThumbnail || !ThumbnailPanel.ConstrainToRegion)
                     return null;
 
-                return _thumbnailPanel.SelectedRegion;
+                return ThumbnailPanel.SelectedRegion;
             }
             set
             {
-                if (!_thumbnailPanel.IsShowingThumbnail)
+                if (!ThumbnailPanel.IsShowingThumbnail)
                     return;
 
-                _thumbnailPanel.SelectedRegion = value;
-                SetAspectRatio(_thumbnailPanel.ThumbnailPixelSize, true);
+                ThumbnailPanel.SelectedRegion = value;
+                SetAspectRatio(ThumbnailPanel.ThumbnailPixelSize, true);
                 FixPositionAndSize();
             }
         }
@@ -359,7 +306,7 @@ namespace MulTools.Components
         {
             try
             {
-                Size originalSize = _thumbnailPanel.ThumbnailPixelSize;
+                Size originalSize = ThumbnailPanel.ThumbnailPixelSize;
                 Size fittedSize = new Size((int)(originalSize.Width * p), (int)(originalSize.Height * p));
                 ClientSize = fittedSize;
                 RefreshScreenLock();
@@ -369,13 +316,6 @@ namespace MulTools.Components
                 ThumbnailError(ex, false, "无法调整窗口");
             }
         }
-        #endregion
-
-        #region Accessors
-        /// <summary>
-        /// Gets the form's thumbnail panel.
-        /// </summary>
-        public ThumbnailPanel ThumbnailPanel => _thumbnailPanel;
         #endregion
 
         #region 点击穿透
@@ -453,7 +393,7 @@ namespace MulTools.Components
             set
             {
                 //Cancel hiding chrome if no thumbnail is shown
-                if (!value && !_thumbnailPanel.IsShowingThumbnail)
+                if (!value && !ThumbnailPanel.IsShowingThumbnail)
                     return;
 
                 if (!value)
@@ -503,98 +443,10 @@ namespace MulTools.Components
         /// </summary>
         private void RefreshScreenLock()
         {
-            //If locked in position, move accordingly
-            if (PositionLock.HasValue)
+            if (PositionLock.HasValue)//If locked in position, move accordingly
                 this.SetScreenPosition(PositionLock.Value);
         }
         #endregion
-
-        //SidePanel _currentSidePanel = null;
-        SidePanelContainer _sidePanelContainer = null;
-
-        /// <summary>
-        /// Opens a new side panel.
-        /// </summary>
-        /// <param name="panel">The side panel to embed.</param>
-        public void SetSidePanel(SidePanel panel)
-        {
-            if (IsSidePanelOpen)
-                CloseSidePanel();
-
-            _sidePanelContainer = new SidePanelContainer(this);
-            _sidePanelContainer.SetSidePanel(panel);
-            _sidePanelContainer.Location = ComputeSidePanelLocation(_sidePanelContainer);
-            _sidePanelContainer.Show(this);
-        }
-
-        /// <summary>
-        /// Closes the current side panel.
-        /// </summary>
-        public void CloseSidePanel()
-        {
-            if (_sidePanelContainer == null || _sidePanelContainer.IsDisposed)
-            {
-                _sidePanelContainer = null;
-                return;
-            }
-
-            _sidePanelContainer.Hide();
-            _sidePanelContainer.FreeSidePanel();
-        }
-
-        /// <summary>
-        /// Gets whether a side panel is currently shown.
-        /// </summary>
-        public bool IsSidePanelOpen
-        {
-            get
-            {
-                if (_sidePanelContainer == null)
-                    return false;
-                if (_sidePanelContainer.IsDisposed)
-                {
-                    _sidePanelContainer = null;
-                    return false;
-                }
-
-                return _sidePanelContainer.Visible;
-            }
-        }
-
-        /// <summary>
-        /// Moves the side panel based on the main form's current location.
-        /// </summary>
-        protected void AdjustSidePanelLocation()
-        {
-            if (!IsSidePanelOpen)
-                return;
-
-            _sidePanelContainer.Location = ComputeSidePanelLocation(_sidePanelContainer);
-        }
-
-        /// <summary>
-        /// Computes the target location of a side panel form that ensures it is visible on the current
-        /// screen that contains the main form.
-        /// </summary>
-        private Point ComputeSidePanelLocation(Form sidePanel)
-        {
-            //Check if moving the panel on the form's right would put it off-screen
-            var screen = Screen.FromControl(this);
-            if (Location.X + Width + sidePanel.Width > screen.WorkingArea.Right)
-                return new Point(Location.X - sidePanel.Width, Location.Y);
-            else
-                return new Point(Location.X + Width, Location.Y);
-        }
-
-        void SidePanel_RequestClosing(object sender, EventArgs e)
-        {
-            CloseSidePanel();
-        }
-
-        void Thumbnail_CloneClick(object sender, CloneClickEventArgs e)
-        {
-            Win32.InjectFakeMouseClick(CurrentThumbnailWindowHandle.Handle, e);
-        }
 
         #region GUI
         /// <summary>
@@ -669,15 +521,5 @@ namespace MulTools.Components
             ClickThroughEnabled = false;
         }
         #endregion
-
-        private void Monitor_Load(object sender, EventArgs e)
-        {
-            WindowSeeker.Refresh();
-            this.SetThumbnailGroup(WindowSeeker.Windows);
-            //foreach (WindowHandle h in WindowSeeker.Windows)
-            //{
-                
-            //}
-        }
     }
 }

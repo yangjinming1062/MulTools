@@ -1,21 +1,28 @@
-﻿using System.Drawing;
+﻿using MulTools.Components.Function;
+using System.Drawing;
 using System.Windows.Forms;
 
-namespace MulTools.Components.Function
+namespace MulTools.Components.Class
 {
     /// <summary>
     /// 由于一次只有一个具体功能使用，所以就不需要实例化了，
     /// </summary>
     public static class NoneBorderHelper
     {
+        /// <summary>
+        /// 利用无边框窗体的panel实现操作
+        /// </summary>
+        /// <param name="f">无边框窗体</param>
+        /// <param name="p">窗体的panel，最佳选择是Dock.Top或者Fill的</param>
+        /// <param name="FeelBorderSize">调整大小感知区宽度</param>
         public static void Set(Form f, Panel p, int FeelBorderSize = 5)
         {
             frm = f;
             panel = p;
             feelSize = FeelBorderSize;
-            panel.MouseDown += new MouseEventHandler(panel_MouseDown);
-            panel.MouseMove += new MouseEventHandler(panel_MouseMove);
-            panel.MouseUp += new MouseEventHandler(panel_MouseUp);
+            panel.MouseDown += new MouseEventHandler(Panel_MouseDown);
+            panel.MouseMove += new MouseEventHandler(Panel_MouseMove);
+            panel.MouseUp += new MouseEventHandler(Panel_MouseUp);
         }
         private static Form frm;
         private static Panel panel;
@@ -41,7 +48,7 @@ namespace MulTools.Components.Function
         private static Point mouseOff;//鼠标移动位置变量
         private static int feelSize = 5;
 
-        private static void panel_MouseDown(object sender, MouseEventArgs e)
+        private static void Panel_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Clicks == 2)
             {
@@ -77,13 +84,13 @@ namespace MulTools.Components.Function
             }
         }
 
-        private static void panel_MouseUp(object sender, MouseEventArgs e)
+        private static void Panel_MouseUp(object sender, MouseEventArgs e)
         {
             if (InClick)
                 InClick = false;//释放鼠标后标注为false
         }
 
-        private static void panel_MouseMove(object sender, MouseEventArgs e)
+        private static void Panel_MouseMove(object sender, MouseEventArgs e)
         {
             if (InClick)
             {

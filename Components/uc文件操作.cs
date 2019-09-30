@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -249,7 +248,7 @@ namespace MulTools.Components
             foreach (ListViewItem obj in fileLV.SelectedItems)
             {
                 if (obj.SubItems[(int)Cols.文件类型].Text == "文件夹")
-                    MulTools.Components.Function.Functions.DeleteDir(obj.Name);
+                    Functions.DeleteDir(obj.Name);
                 else
                     File.Delete(obj.Name);
                 fileLV.Items.Remove(obj);
@@ -263,7 +262,7 @@ namespace MulTools.Components
             foreach (ListViewItem obj in fileLV.SelectedItems)
             {
                 if (obj.SubItems[(int)Cols.文件类型].Text == "文件夹")
-                    MulTools.Components.Function.Functions.CutDir(obj.Name, txtDirpath.Text, TargetDirPath);
+                    Functions.CutDir(obj.Name, txtDirpath.Text, TargetDirPath);
                 else
                     File.Move(obj.Name, Path.Combine(TargetDirPath, Path.GetFileName(obj.Name)));
             }
@@ -277,7 +276,7 @@ namespace MulTools.Components
                 foreach (ListViewItem obj in fileLV.SelectedItems)
                 {
                     if (obj.SubItems[(int)Cols.文件类型].Text == "文件夹")
-                        MulTools.Components.Function.Functions.CopyDir(obj.Name, txtDirpath.Text, TargetDirPath);
+                        Functions.CopyDir(obj.Name, txtDirpath.Text, TargetDirPath);
                     else
                         File.Copy(obj.Name, Path.Combine(TargetDirPath, Path.GetFileName(obj.Name)));
                 }
@@ -355,11 +354,5 @@ namespace MulTools.Components
             if (((ListView)(sender)).FocusedItem.SubItems[(int)Cols.文件类型].Text == "文件夹")
                 txtDirpath.Text = ((ListView)(sender)).FocusedItem.Name;
         }
-    }
-    public enum Cols
-    {
-        文件名,
-        文件类型,
-        MD5
     }
 }

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MulTools.Components.Function;
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace MulTools.Components.Function
+namespace MulTools.Components.Class
 {
     /// <summary>  
     /// 鼠标和键盘钩子的抽象类

@@ -4,7 +4,7 @@ using WindowsFormsAero.Dwm;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 using MulTools.Components.Function;
-using MulTools.Components.Models;
+using MulTools.Components.Class;
 
 namespace MulTools.Components
 {
@@ -84,7 +84,7 @@ namespace MulTools.Components
             var localCursor = this.PointToClient(Cursor.Position);
 
             DrawMouseRegions = true;
-            OnMouseDown(new MouseEventArgs(System.Windows.Forms.MouseButtons.Left, 1, localCursor.X, localCursor.Y, 0));
+            OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, localCursor.X, localCursor.Y, 0));
         }
 
         bool _drawMouseRegions = false;
@@ -186,7 +186,7 @@ namespace MulTools.Components
         /// </summary>
         /// <param name="handle">Handle of the window to clone.</param>
         /// <param name="region">Optional region.</param>
-        public void SetThumbnailHandle(WindowHandle handle, ThumbnailRegion region)
+        public void SetThumbnailHandle(WindowHandle handle, ThumbnailRegion region, Form owner=null)
         {
             if (_thumbnail != null && !_thumbnail.IsInvalid)
             {
@@ -195,9 +195,12 @@ namespace MulTools.Components
             }
 
             //Attempt to get top level Form from Control
-            Form owner = this.TopLevelControl as Form;
             if (owner == null)
-                throw new Exception("Internal error: ThumbnailPanel.TopLevelControl is not a Form.");
+            {
+                owner = this.TopLevelControl as Form;
+                if (owner == null)
+                    throw new Exception("Internal error: ThumbnailPanel.TopLevelControl is not a Form.");
+            }
 
             _labelGlass.Visible = false;
 
@@ -308,15 +311,8 @@ namespace MulTools.Components
             //Compute region rectangle in thumbnail coordinates
             var startPoint = ClientToThumbnail(new Point(left, top));
             var endPoint = ClientToThumbnail(new Point(right, bottom));
-            var final = new Rectangle(
-                startPoint.X,
-                startPoint.Y,
-                endPoint.X - startPoint.X,
-                endPoint.Y - startPoint.Y
-            );
+            var final = new Rectangle(startPoint.X, startPoint.Y, endPoint.X - startPoint.X, endPoint.Y - startPoint.Y);
 
-            //System.Diagnostics.Trace.WriteLine(string.Format("Drawn from {0} to {1}, as region {2}.", start, end, final));
-            //Signal
             OnRegionDrawn(final);
         }
 
@@ -346,7 +342,6 @@ namespace MulTools.Components
 
                 this.Invalidate();
             }
-
             base.OnMouseUp(e);
         }
 
@@ -451,19 +446,13 @@ namespace MulTools.Components
             position.Y -= _padHeight;
 
             //Determine position in fractional terms (on the size of the thumbnail control)
-            PointF proportionalPosition = new PointF(
-                (float)position.X / _thumbnailSize.Width,
-                (float)position.Y / _thumbnailSize.Height
-            );
+            PointF proportionalPosition = new PointF((float)position.X / _thumbnailSize.Width, (float)position.Y / _thumbnailSize.Height);
 
             //Get real pixel region info
             Size source = ThumbnailPixelSize;
             Point offset = (_regionEnabled) ? SelectedRegion.Offset : Point.Empty;
 
-            return new Point(
-                (int)((proportionalPosition.X * source.Width) + offset.X),
-                (int)((proportionalPosition.Y * source.Height) + offset.Y)
-            );
+            return new Point((int)((proportionalPosition.X * source.Width) + offset.X), (int)((proportionalPosition.Y * source.Height) + offset.Y));
         }
     }
 }

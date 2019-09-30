@@ -1,4 +1,5 @@
-﻿using MulTools.Components.Function;
+﻿using MulTools.Components.Class;
+using MulTools.Components.Function;
 using System.Collections.Generic;
 
 namespace MulTools.Components.WindowSeekers
@@ -8,7 +9,6 @@ namespace MulTools.Components.WindowSeekers
     /// </summary>
     class TaskWindowSeeker : BaseWindowSeeker
     {
-
         List<WindowHandle> _list = new List<WindowHandle>();
 
         public override IList<WindowHandle> Windows => _list;
@@ -21,8 +21,6 @@ namespace MulTools.Components.WindowSeekers
 
         protected override bool InspectWindow(WindowHandle handle)
         {
-            //Code taken from: http://www.thescarms.com/VBasic/alttab.aspx
-
             //Reject empty titles
             if (string.IsNullOrEmpty(handle.Title))
                 return true;
@@ -35,10 +33,10 @@ namespace MulTools.Components.WindowSeekers
             if ((long)Win32.GetParent(handle.Handle) == 0)
             {
                 bool hasOwner = (long)Win32.GetWindow(handle.Handle, GetWindowMode.GW_OWNER) != 0;
-                Win32.WindowExStyles exStyle = (Win32.WindowExStyles)Win32.GetWindowLong(handle.Handle, Win32.WindowLong.ExStyle);
+                WindowExStyles exStyle = (WindowExStyles)Win32.GetWindowLong(handle.Handle, WindowLong.ExStyle);
 
-                if (((exStyle & Win32.WindowExStyles.ToolWindow) == 0 && !hasOwner) || //unowned non-tool window
-                    ((exStyle & Win32.WindowExStyles.AppWindow) == Win32.WindowExStyles.AppWindow && hasOwner))
+                if (((exStyle & WindowExStyles.ToolWindow) == 0 && !hasOwner) || //unowned non-tool window
+                    ((exStyle & WindowExStyles.AppWindow) == WindowExStyles.AppWindow && hasOwner))
                 { //owned application window
 
                     _list.Add(handle);

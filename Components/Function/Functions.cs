@@ -1,31 +1,16 @@
-﻿using System;
+﻿using MulTools.Components.Function;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 
-namespace MulTools.Components.Function
+namespace MulTools.Components
 {
     public static class Functions
     {
         /// <summary>
         /// 提升进程权限
         /// </summary>
-        public static void PrivilegesUp()
-        {
-            bool ToF;
-            Win32.TokPriv1Luid tp;
-            tp.PrivilegeCount = 1;
-            tp.Luid = 0;
-            tp.Attr = Win32.SE_PRIVILEGE_ENABLED;
-
-            IntPtr hproc = Win32.GetCurrentProcess();
-            IntPtr htok = IntPtr.Zero;
-
-            ToF = Win32.OpenProcessToken(hproc, Win32.TOKEN_ADJUST_PRIVILEGES | Win32.TOKEN_QUERY, ref htok);//获得进程访问令牌的句柄
-            ToF = Win32.LookupPrivilegeValue(null, Win32.SE_DEBUG_NAME, ref tp.Luid);//查找newPrivileges参数对应的Luid
-            ToF = Win32.AdjustTokenPrivileges(htok, false, ref tp, 0, IntPtr.Zero, IntPtr.Zero);//通知系统修改进程权限
-        }
-
         public static void PrivilegesUp(string Privilege)
         {
             bool ToF;
@@ -151,21 +136,14 @@ namespace MulTools.Components.Function
         /// <summary>
         /// 因为缩放率的影响，需要进行比例换算
         /// </summary>
-        public static int GetRated(decimal res)
-        {
-            return Convert.ToInt32(res * Rate);
-        }
+        public static int GetRated(decimal res) => Convert.ToInt32(res * Rate);
 
         /// <summary>
         /// 这里主要是处理鼠标返回的坐标点，需要除以缩放比例
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static Point GetRated(Point source)
-        {
-            Point res = new Point(Convert.ToInt32(source.X / Rate), Convert.ToInt32(source.Y / Rate));
-            return res;
-        }
+        public static Point GetRated(Point source) => new Point(Convert.ToInt32(source.X / Rate), Convert.ToInt32(source.Y / Rate));
         #endregion
 
         #region 创建进程

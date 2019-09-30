@@ -34,7 +34,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(325, 280);
+            this.ClientSize = new System.Drawing.Size(489, 359);
             this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.HideCaption = true;
@@ -43,7 +43,6 @@
             this.Name = "Monitor";
             this.Text = "Monitor";
             this.TopMost = true;
-            this.Load += new System.EventHandler(this.Monitor_Load);
             this.ResumeLayout(false);
 
         }

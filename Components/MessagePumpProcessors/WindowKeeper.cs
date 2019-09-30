@@ -21,8 +21,6 @@ namespace MulTools.Components
                     IntPtr destroyedHandle = msg.LParam;
                     if (destroyedHandle == Form.CurrentThumbnailWindowHandle.Handle)
                     {
-                        //Disable group switch mode, since a window of the group has been destroyed
-                        Form.MessagePumpManager.Get<GroupSwitchManager>().Disable();
                         Form.UnsetThumbnail();//Disable cloning
                     }
                 }

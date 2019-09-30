@@ -22,19 +22,10 @@ namespace MulTools.Components.Struct
             Y = copy.Y;
         }
 
-        public static NPoint FromPoint(System.Drawing.Point point)
-        {
-            return new NPoint(point.X, point.Y);
-        }
+        public static NPoint FromPoint(System.Drawing.Point point) => new NPoint(point.X, point.Y);
 
-        public System.Drawing.Point ToPoint()
-        {
-            return new System.Drawing.Point(X, Y);
-        }
+        public System.Drawing.Point ToPoint() => new System.Drawing.Point(X, Y);
 
-        public override string ToString()
-        {
-            return "{" + X + "," + Y + "}";
-        }
+        public override string ToString() => "{" + X + "," + Y + "}";
     }
 }

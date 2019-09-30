@@ -13,7 +13,6 @@ namespace MulTools.Components
 
     public class MessagePumpManager : IDisposable
     {
-
         Dictionary<Type, IMessagePumpProcessor> _processors = new Dictionary<Type, IMessagePumpProcessor>();
 
         public Form Form { get; private set; }
@@ -34,8 +33,6 @@ namespace MulTools.Components
 
             //Register message pump processors
             Register(new WindowKeeper(), form);
-            Register(new GroupSwitchManager(), form);
-            Register(new FlashCloner(), form);
         }
 
         /// <summary>

@@ -111,7 +111,7 @@ namespace MulTools.Components
             Size = new Size(newWidth, newHeight);
             int deltaX = Size.Width - origSize.Width;
             int deltaY = Size.Height - origSize.Height;
-            Location = new System.Drawing.Point(Location.X - (deltaX / 2), Location.Y - (deltaY / 2));
+            Location = new Point(Location.X - (deltaX / 2), Location.Y - (deltaY / 2));
         }
 
         /// <summary>
@@ -242,8 +242,8 @@ namespace MulTools.Components
         {
             get
             {
-                long style = Win32.GetWindowLong(this.Handle, Win32.WindowLong.Style).ToInt64();
-                long exStyle = Win32.GetWindowLong(this.Handle, Win32.WindowLong.ExStyle).ToInt64();
+                long style = Win32.GetWindowLong(this.Handle, WindowLong.Style).ToInt64();
+                long exStyle = Win32.GetWindowLong(this.Handle, WindowLong.ExStyle).ToInt64();
                 return Win32.ConvertClientToWindowRect(new NRectangle(0, 0, 0, 0), style, exStyle).Size;
             }
         }

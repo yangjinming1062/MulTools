@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace MulTools.Components.Models
+namespace MulTools.Components.Class
 {
     public class CloneClickEventArgs : EventArgs
     {

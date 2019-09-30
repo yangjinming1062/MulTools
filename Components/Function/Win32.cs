@@ -1,7 +1,5 @@
-﻿using MulTools.Components.Models;
-using MulTools.Components.Struct;
+﻿using MulTools.Components.Struct;
 using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -70,12 +68,6 @@ namespace MulTools.Components.Function
         internal const string SE_INC_WORKING_SET_NAME = "SeIncreaseWorkingSetPrivilege";
         internal const string SE_TIME_ZONE_NAME = "SeTimeZonePrivilege";
         internal const string SE_CREATE_SYMBOLIC_LINK_NAME = "SeCreateSymbolicLinkPrivilege";
-
-        public static string[] PrivilegesList = { SE_CREATE_TOKEN_NAME, SE_ASSIGNPRIMARYTOKEN_NAME, SE_LOCK_MEMORY_NAME, SE_INCREASE_QUOTA_NAME, SE_UNSOLICITED_INPUT_NAME, SE_MACHINE_ACCOUNT_NAME
-                                  ,SE_TCB_NAME,SE_SECURITY_NAME,SE_TAKE_OWNERSHIP_NAME,SE_LOAD_DRIVER_NAME,SE_SYSTEM_PROFILE_NAME,SE_SYSTEMTIME_NAME,SE_PROF_SINGLE_PROCESS_NAME,
-                                  SE_INC_BASE_PRIORITY_NAME,SE_CREATE_PAGEFILE_NAME,SE_CREATE_PERMANENT_NAME,SE_BACKUP_NAME,SE_RESTORE_NAME,SE_SHUTDOWN_NAME,SE_DEBUG_NAME,SE_AUDIT_NAME,
-                                  SE_SYSTEM_ENVIRONMENT_NAME,SE_CHANGE_NOTIFY_NAME,SE_REMOTE_SHUTDOWN_NAME,SE_UNDOCK_NAME,SE_SYNC_AGENT_NAME,SE_ENABLE_DELEGATION_NAME,SE_MANAGE_VOLUME_NAME,
-                                  SE_IMPERSONATE_NAME,SE_CREATE_GLOBAL_NAME,SE_TRUSTED_CREDMAN_ACCESS_NAME,SE_RELABEL_NAME,SE_INC_WORKING_SET_NAME,SE_TIME_ZONE_NAME,SE_CREATE_SYMBOLIC_LINK_NAME};
         #endregion
 
         #region 热键
@@ -104,7 +96,7 @@ namespace MulTools.Components.Function
         [DllImport("User32.dll")]
         public static extern IntPtr GetDC(IntPtr Hwnd);
 
-        [System.Runtime.InteropServices.DllImport("User32.dll")]
+        [DllImport("User32.dll")]
         public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
 
         [DllImport("gdi32.dll")]
@@ -194,43 +186,10 @@ namespace MulTools.Components.Function
                 if (GetWindowText(hwnd, sb, sb.Capacity) > 0)
                     return sb.ToString();
                 else
-                    return String.Empty;
+                    return string.Empty;
             }
             else
-                return String.Empty;
-        }
-
-        public enum WindowLong
-        {
-            WndProc = (-4),
-            HInstance = (-6),
-            HwndParent = (-8),
-            Style = (-16),
-            ExStyle = (-20),
-            UserData = (-21),
-            Id = (-12)
-        }
-
-        [Flags]
-        public enum WindowStyles : long
-        {
-            None = 0,
-            Child = 0x40000000L,
-            Disabled = 0x8000000L,
-            Minimize = 0x20000000L,
-            MinimizeBox = 0x20000L,
-            Visible = 0x10000000L
-        }
-
-        [Flags]
-        public enum WindowExStyles : long
-        {
-            AppWindow = 0x40000,
-            Layered = 0x80000,
-            NoActivate = 0x8000000L,
-            ToolWindow = 0x80,
-            TopMost = 8,
-            Transparent = 0x20
+                return string.Empty;
         }
 
         public static IntPtr GetWindowLong(IntPtr hWnd, WindowLong i)
@@ -261,8 +220,6 @@ namespace MulTools.Components.Function
         [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
         static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, WindowLong nIndex, IntPtr dwNewLong);
 
-        #region Window class
-
         const int MaxClassLength = 255;
 
         public static string GetWindowClass(IntPtr hwnd)
@@ -274,12 +231,6 @@ namespace MulTools.Components.Function
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         static extern uint RealGetWindowClass(IntPtr hwnd, [Out] StringBuilder lpString, uint maxCount);
-
-        public enum ClassLong
-        {
-            Icon = -14,
-            IconSmall = -34
-        }
 
         [DllImport("user32.dll", EntryPoint = "GetClassLongPtrW")]
         static extern IntPtr GetClassLong64(IntPtr hWnd, int nIndex);
@@ -294,7 +245,6 @@ namespace MulTools.Components.Function
             else
                 return new IntPtr(GetClassLong32(hWnd, (int)i));
         }
-        #endregion
 
         [DllImport("user32.dll")]
         public static extern IntPtr GetMenu(IntPtr hwnd);
@@ -317,138 +267,6 @@ namespace MulTools.Components.Function
                 return clientRectangle;
         }
         #endregion
-
-        #region Injection
-        [DllImport("user32.dll")]
-        public static extern IntPtr RealChildWindowFromPoint(IntPtr parent, NPoint point);
-        [DllImport("user32.dll")]
-        static extern bool ScreenToClient(IntPtr hwnd, ref NPoint point);
-
-        /// <summary>
-        /// Converts a point in screen coordinates in client coordinates relative to a window.
-        /// </summary>
-        /// <param name="hwnd">Handle of the window whose client coordinate system should be used.</param>
-        /// <param name="screenPoint">Point expressed in screen coordinates.</param>
-        /// <returns>Point expressed in client coordinates.</returns>
-        public static NPoint ScreenToClient(IntPtr hwnd, NPoint screenPoint)
-        {
-            NPoint localCopy = new NPoint(screenPoint);
-            if (ScreenToClient(hwnd, ref localCopy))
-                return localCopy;
-            else
-                return new NPoint();
-        }
-        [DllImport("user32.dll")]
-        static extern bool ClientToScreen(IntPtr hwnd, ref NPoint point);
-
-        /// <summary>
-        /// Converts a point in client coordinates of a window to screen coordinates.
-        /// </summary>
-        /// <param name="hwnd">Handle to the window of the original point.</param>
-        /// <param name="clientPoint">Point expressed in client coordinates.</param>
-        /// <returns>Point expressed in screen coordinates.</returns>
-        public static NPoint ClientToScreen(IntPtr hwnd, NPoint clientPoint)
-        {
-            NPoint localCopy = new NPoint(clientPoint);
-            if (ClientToScreen(hwnd, ref localCopy))
-                return localCopy;
-            else
-                return new NPoint();
-        }
-
-        /// <summary>Inject a fake left mouse click on a target window, on a location expressed in client coordinates.</summary>
-		/// <param name="window">Target window to click on.</param>
-		/// <param name="clickLocation">Location of the mouse click expressed in client coordiantes of the target window.</param>
-		/// <param name="doubleClick">True if a double click should be injected.</param>
-		public static void InjectFakeMouseClick(IntPtr window, CloneClickEventArgs clickArgs)
-        {
-            NPoint clientClickLocation = NPoint.FromPoint(clickArgs.ClientClickLocation);
-            NPoint scrClickLocation = ClientToScreen(window, clientClickLocation);
-
-            //HACK (?)
-            //If target window has a Menu (which appears on the thumbnail) move the clicked location down
-            //in order to adjust (the menu isn't part of the window's client rect).
-            IntPtr hMenu = Win32.GetMenu(window);
-            if (hMenu != IntPtr.Zero)
-                scrClickLocation.Y -= SystemInformation.MenuHeight;
-
-            IntPtr hChild = GetRealChildControlFromPoint(window, scrClickLocation);
-            NPoint clntClickLocation = ScreenToClient(hChild, scrClickLocation);
-
-            if (clickArgs.Buttons == MouseButtons.Left)
-            {
-                if (clickArgs.IsDoubleClick)
-                    InjectDoubleLeftMouseClick(hChild, clntClickLocation);
-                else
-                    InjectLeftMouseClick(hChild, clntClickLocation);
-            }
-            else if (clickArgs.Buttons == MouseButtons.Right)
-            {
-                if (clickArgs.IsDoubleClick)
-                    InjectDoubleRightMouseClick(hChild, clntClickLocation);
-                else
-                    InjectRightMouseClick(hChild, clntClickLocation);
-            }
-        }
-
-        /// <summary>Returns the child control of a window corresponding to a screen location.</summary>
-		/// <param name="parent">Parent window to explore.</param>
-		/// <param name="scrClickLocation">Child control location in screen coordinates.</param>
-		private static IntPtr GetRealChildControlFromPoint(IntPtr parent, NPoint scrClickLocation)
-        {
-            IntPtr curr = parent, child = IntPtr.Zero;
-            do
-            {
-                child = RealChildWindowFromPoint(curr, ScreenToClient(curr, scrClickLocation));
-
-                if (child == IntPtr.Zero || child == curr)
-                    break;
-
-                curr = child;//Update for next loop
-            }
-            while (true);
-
-            //Safety check, shouldn't happen
-            if (curr == IntPtr.Zero)
-                curr = parent;
-
-            return curr;
-        }
-
-        private static void InjectLeftMouseClick(IntPtr child, NPoint clientLocation)
-        {
-            IntPtr lParamClickLocation = MessagingMethods.MakeLParam(clientLocation.X, clientLocation.Y);
-
-            MessagingMethods.PostMessage(child, WM.LBUTTONDOWN, new IntPtr(MK.LBUTTON), lParamClickLocation);
-            MessagingMethods.PostMessage(child, WM.LBUTTONUP, new IntPtr(MK.LBUTTON), lParamClickLocation);
-        }
-
-        private static void InjectRightMouseClick(IntPtr child, NPoint clientLocation)
-        {
-            IntPtr lParamClickLocation = MessagingMethods.MakeLParam(clientLocation.X, clientLocation.Y);
-
-            MessagingMethods.PostMessage(child, WM.RBUTTONDOWN, new IntPtr(MK.RBUTTON), lParamClickLocation);
-            MessagingMethods.PostMessage(child, WM.RBUTTONUP, new IntPtr(MK.RBUTTON), lParamClickLocation);
-        }
-
-        private static void InjectDoubleLeftMouseClick(IntPtr child, NPoint clientLocation)
-        {
-            IntPtr lParamClickLocation = MessagingMethods.MakeLParam(clientLocation.X, clientLocation.Y);
-            MessagingMethods.PostMessage(child, WM.LBUTTONDBLCLK, new IntPtr(MK.LBUTTON), lParamClickLocation);
-        }
-
-        private static void InjectDoubleRightMouseClick(IntPtr child, NPoint clientLocation)
-        {
-            IntPtr lParamClickLocation = MessagingMethods.MakeLParam(clientLocation.X, clientLocation.Y);
-            MessagingMethods.PostMessage(child, WM.RBUTTONDBLCLK, new IntPtr(MK.RBUTTON), lParamClickLocation);
-        }
-        #endregion
-    }
-    public static class MK
-    {
-        public const int LBUTTON = 0x0001;
-        public const int RBUTTON = 0x0002;
-        public const int MBUTTON = 0x0010;
     }
     /// <summary>
     /// Windows Message codes.
@@ -496,156 +314,6 @@ namespace MulTools.Components.Function
     }
 
     /// <summary>
-    /// Helper class that keeps a window handle (HWND),
-    /// the title of the window and can load its icon.
-    /// </summary>
-	public class WindowHandle : System.Windows.Forms.IWin32Window
-    {
-
-        IntPtr _handle;
-        string _title;
-
-        /// <summary>
-        /// Creates a new WindowHandle instance. The handle pointer must be valid, the title
-        /// may be null or empty and will be updated as requested.
-        /// </summary>
-		public WindowHandle(IntPtr p, string title)
-        {
-            _handle = p;
-            _title = title;
-        }
-
-        /// <summary>
-        /// Creates a new WindowHandle instance. Additional features of the handle will be queried as needed.
-        /// </summary>
-        /// <param name="p"></param>
-        public WindowHandle(IntPtr p)
-        {
-            _handle = p;
-            _title = null;
-        }
-
-        public string Title
-        {
-            get
-            {
-                if (_title == null)
-                    _title = Win32.GetWindowText(_handle) ?? string.Empty;
-                return _title;
-            }
-        }
-
-        Icon _icon = null;
-        bool _iconFetched = false;
-        public Icon Icon
-        {
-            get
-            {
-                if (!_iconFetched)
-                {
-                    //Fetch icon from window
-                    IntPtr hIcon;
-
-                    if (MessagingMethods.SendMessageTimeout(_handle, WM.GETICON, new IntPtr(2), new IntPtr(0),
-                        MessagingMethods.SendMessageTimeoutFlags.AbortIfHung | MessagingMethods.SendMessageTimeoutFlags.Block, 500, out hIcon) == IntPtr.Zero)
-                    {
-                        hIcon = IntPtr.Zero;
-                    }
-
-                    if (hIcon != IntPtr.Zero)
-                    {
-                        _icon = Icon.FromHandle(hIcon);
-                    }
-                    else
-                    {
-                        hIcon = (IntPtr)Win32.GetClassLong(_handle, Win32.ClassLong.IconSmall);//Fetch icon from window class
-                        if (hIcon.ToInt64() != 0)
-                            _icon = Icon.FromHandle(hIcon);
-                    }
-                }
-
-                _iconFetched = true;
-                return _icon;
-            }
-        }
-
-        string _class = null;
-
-        /// <summary>
-        /// Gets the window's class name.
-        /// </summary>
-        /// <remarks>
-        /// This value is cached and is never null.
-        /// </remarks>
-        public string Class
-        {
-            get
-            {
-                if (_class == null)
-                    _class = Win32.GetWindowClass(Handle) ?? string.Empty;
-                return _class;
-            }
-        }
-
-        #region Object override
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            sb.AppendFormat("#{0}", _handle);
-
-            if (!string.IsNullOrWhiteSpace(_title) || !string.IsNullOrWhiteSpace(_class))
-            {
-                sb.Append(" (");
-                if (!string.IsNullOrWhiteSpace(_title))
-                {
-                    sb.AppendFormat("title '{0}'", _title);
-                    if (!string.IsNullOrWhiteSpace(_class))
-                        sb.Append(", ");
-                }
-                if (!string.IsNullOrWhiteSpace(_class))
-                    sb.AppendFormat("class {0}", _class);
-                sb.Append(")");
-            }
-            return sb.ToString();
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(obj, this))
-                return true;
-
-            System.Windows.Forms.IWin32Window win = obj as System.Windows.Forms.IWin32Window;
-            if (win == null)
-                return false;
-
-            return (_handle.Equals(win.Handle));
-        }
-
-        public override int GetHashCode()
-        {
-            return _handle.GetHashCode();
-        }
-        #endregion
-
-        /// <summary>
-        /// IWin32Window Members
-        /// </summary>
-        public IntPtr Handle
-        {
-            get { return _handle; }
-        }
-
-        /// <summary>
-        /// Creates a new windowHandle instance from a given IntPtr handle.
-        /// </summary>
-        /// <param name="handle">Handle value.</param>
-        public static WindowHandle FromHandle(IntPtr handle)
-        {
-            return new WindowHandle(handle, null);
-        }
-    }
-
-    /// <summary>
     /// Common methods for Win32 messaging.
     /// </summary>
     public static class MessagingMethods
@@ -669,10 +337,7 @@ namespace MulTools.Components.Function
         [DllImport("user32.dll", SetLastError = false)]
         public static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
-        public static IntPtr MakeLParam(int LoWord, int HiWord)
-        {
-            return new IntPtr((HiWord << 16) | (LoWord & 0xffff));
-        }
+        public static IntPtr MakeLParam(int LoWord, int HiWord) => new IntPtr((HiWord << 16) | (LoWord & 0xffff));
     }
 
     public static class HookMethods
