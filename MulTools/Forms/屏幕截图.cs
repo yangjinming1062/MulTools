@@ -53,7 +53,7 @@ namespace MulTools.Forms
 
         private void PicToLong()
         {
-            string fileName = string.Format("{0}/L{1}.", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
+            string fileName = string.Format("{0}/L{1}", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
             //6个参数，分别是待处理文件夹，长图名称，待处理文件类型，相似度参数，最小值上限，最大值下限；后四个有默认值可以不修改
             string res = Functions.BuildLongPic(string.Format("{0} {1}.{2} {3} {4} {5} {6}", CombineTempPath, fileName, Settings.Default.PicType,
                 Settings.Default.PicType, Settings.Default.LongPicSimilar.ToString(), Settings.Default.LongPicLow.ToString(), Settings.Default.LongPicHeigh.ToString()));
