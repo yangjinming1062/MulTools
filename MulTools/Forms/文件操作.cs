@@ -61,7 +61,7 @@ namespace MulTools.Forms
             splitContainer1.SplitterDistance = splitContainer1.Width / 2;
             uc文件操作L.CurrentDirEvent += Uc文件操作L_CurrentDirEvent;
             uc文件操作R.CurrentDirEvent += Uc文件操作R_CurrentDirEvent;
-            Components.Function.NoneBorderHelper.Set(this, panelTop);
+            Components.Class.NoneBorderHelper.Set(this, panelTop);
         }
 
         private void Uc文件操作R_CurrentDirEvent(string dirPath)

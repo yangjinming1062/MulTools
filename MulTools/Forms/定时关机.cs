@@ -64,12 +64,12 @@ namespace MulTools.Forms
                 Left = Screen.PrimaryScreen.WorkingArea.Width - Size.Width;
             }
             if (e.KeyCode == Keys.Space)
-                Functions.DoExitWin(Win32.EWX_SHUTDOWN);
+                Components.Functions.DoExitWin(Win32.EWX_SHUTDOWN);
         }
 
         private void TimerClose_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            Functions.DoExitWin(Win32.EWX_SHUTDOWN);
+            Components.Functions.DoExitWin(Win32.EWX_SHUTDOWN);
         }
 
         private void 定时关机_Load(object sender, EventArgs e)
@@ -87,14 +87,7 @@ namespace MulTools.Forms
 
         private void CbJS_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbJS.Checked)
-            {
-                dtp.Value = DateTime.Now.Date;
-            }
-            else
-            {
-                dtp.Value = DateTime.Now;
-            }
+            dtp.Value = cbJS.Checked ? DateTime.Now.Date : DateTime.Now;
         }
     }
 }

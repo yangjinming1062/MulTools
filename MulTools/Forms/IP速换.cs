@@ -1,5 +1,5 @@
 ﻿using MulTools.Components.Models;
-using MulTools.Components.Function;
+using MulTools.Components.Class;
 using System;
 using System.Collections.Generic;
 using System.Management;
@@ -17,9 +17,7 @@ namespace MulTools.Forms
             InitializeComponent();
         }
 
-        #region 变量
         private XmlHelper xmlHelper;
-        #endregion
 
         #region Function
         private bool Valid()
@@ -120,10 +118,7 @@ namespace MulTools.Forms
 
         private void CbAutoWG_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbAutoWG.Checked)
-                txtWG.TabStop = false;
-            else
-                txtWG.TabStop = true;
+            txtWG.TabStop = cbAutoWG.Checked ? false : true;
         }
 
         private void CmbWK_SelectedIndexChanged(object sender, EventArgs e)
@@ -277,8 +272,8 @@ namespace MulTools.Forms
             //DialogResult ds = MessageBox.Show("会将当前全部连接修改为配置信息，如果同时连接了 WIFI和有线 请断开不需要配置的！，了解后继续", "注意", MessageBoxButtons.OKCancel);
             //if (ds != DialogResult.OK)
             //    return;
-            ManagementBaseObject inPar = null;
-            ManagementBaseObject outPar = null;
+            ManagementBaseObject inPar;
+            ManagementBaseObject outPar;
             ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
             ManagementObjectCollection moc = mc.GetInstances();
             foreach (ManagementObject mo in moc)

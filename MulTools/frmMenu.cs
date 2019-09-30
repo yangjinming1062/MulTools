@@ -35,11 +35,7 @@ namespace MulTools
             if (frm == null)
             {
                 if (WindowState == FormWindowState.Minimized)
-                {
-                    Show();
-                    WindowState = FormWindowState.Normal;
-                    Activate();
-                }
+                    ActiveWindow();
                 else
                 {
                     WindowState = FormWindowState.Minimized;
@@ -47,11 +43,14 @@ namespace MulTools
                 }
             }
             else
-            {
-                frm.WindowState = FormWindowState.Normal;
-                frm.Show();
-                frm.Activate();
-            }
+                ActiveWindow();
+        }
+
+        private void ActiveWindow()
+        {
+            Show();
+            WindowState = FormWindowState.Normal;
+            Activate();
         }
     }
 }

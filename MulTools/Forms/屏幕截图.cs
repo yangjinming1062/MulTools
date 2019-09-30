@@ -1,4 +1,6 @@
-﻿using MulTools.Components.Function;
+﻿using MulTools.Components;
+using MulTools.Components.Class;
+using MulTools.Properties;
 using System;
 using System.Drawing;
 using System.IO;
@@ -18,26 +20,25 @@ namespace MulTools.Forms
         private bool inDraw = false;
         private bool mouseClick = false;
         private Bitmap bitmap;
-        private Point start = new Point();// 屏笔起始点
-        private Point end = new Point();// 屏笔结束点
+        private Point start;// 屏笔起始点
+        private Point end;// 屏笔结束点
         private readonly MouseHook mouseHook = new MouseHook();// 鼠标钩子
         private readonly KeyboardHook keyboardHook = new KeyboardHook();// 键盘钩子
-        private System.Timers.Timer timerPic = null;
+        private System.Timers.Timer timerPic;
         private string CombineTempPath;
         #endregion
 
         private Point GetPoint(Point point)
         {
             Point a = Functions.GetRated(point);
-            Point r = new Point(a.X - Location.X - picBox.Location.X, a.Y - Location.Y - picBox.Location.Y);
-            return r;
+            return new Point(a.X - Location.X - picBox.Location.X, a.Y - Location.Y - picBox.Location.Y);
         }
 
         private void PicToGif()
         {
             string fileName = string.Format("{0}/{1}.gif", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
             //Delay time is one hundredths (1/100) of a second between frames;
-            AnimatedGif.AnimatedGifCreator gif = AnimatedGif.AnimatedGif.Create(fileName, 100);//这里因为timer设置的100ms这里对应就写的10
+            AnimatedGif.AnimatedGifCreator gif = AnimatedGif.AnimatedGif.Create(fileName, Settings.Default.GifFrameTime);//这里因为timer设置的100ms这里对应就写的10
             DirectoryInfo dirInfo = new DirectoryInfo(CombineTempPath);
             foreach (FileSystemInfo imgFile in dirInfo.GetFileSystemInfos())
             {
@@ -46,13 +47,14 @@ namespace MulTools.Forms
                 img.Dispose();
             }
             gif.Dispose();
-            Functions.DeleteDir(CombineTempPath);
+            if (Settings.Default.DelGitTempPic)
+                Functions.DeleteDir(CombineTempPath);
         }
 
         private void PicToLong()
         {
-            string fileName = string.Format("{0}/L{1}.bmp", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
-            Functions.PyFunc(string.Format("{0} {1}", CombineTempPath, fileName));//因为用了numpy打包的话exe有240多MB，这里就直接用py了
+            string fileName = string.Format("{0}/L{1}.", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss") + Settings.Default.PicType);
+            Functions.PyFunc(string.Format("{0} {1} {2}", CombineTempPath, fileName, Settings.Default.PicType));//因为用了numpy打包的话exe有240多MB，这里就直接用py了
         }
 
         private void 屏幕截图_Load(object sender, EventArgs e)
@@ -71,11 +73,41 @@ namespace MulTools.Forms
             timerPic = new System.Timers.Timer();
             timerPic.Elapsed += TimerPic_Elapsed;
             NoneBorderHelper.Set(this, panelTop);
+
+            menu_GIFframetime.Text = Settings.Default.GifFrameTime.ToString();
+            menu_txtGiftime.Text = Settings.Default.GifInterval.ToString();
+            menu_txtLongtime.Text = Settings.Default.LongInterval.ToString();
+            menu_cmbGIF.Text = Settings.Default.DelGitTempPic ? "是" : "否";
+            menu_cmbLong.Text = Settings.Default.DelLongTempPic ? "是" : "否";
+            menu_cmbPicType.Text = Settings.Default.PicType;
+            menu_cmbPath.Text = string.IsNullOrEmpty(Settings.Default.SavePath) ? "否" : "是";
+        }
+
+        private void 屏幕截图_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Settings.Default.GifFrameTime = Convert.ToInt32(menu_GIFframetime.Text);
+            Settings.Default.GifInterval = Convert.ToInt32(menu_txtGiftime.Text);
+            Settings.Default.LongInterval = Convert.ToInt32(menu_txtLongtime.Text);
+            Settings.Default.DelGitTempPic = menu_cmbGIF.Text.Equals("是");
+            Settings.Default.DelLongTempPic = menu_cmbLong.Text.Equals("是");
+            Settings.Default.PicType = menu_cmbPicType.Text;
+            Settings.Default.SavePath = menu_cmbPath.Text == "是" ? txtPath.Text : "";
         }
 
         private void TimerPic_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             BtJPG_Click(null, null);
+        }
+
+        private void BtSavePath_Click(object sender, EventArgs e)
+        {
+            if (DirPathDg.ShowDialog() == DialogResult.OK)
+                txtPath.Text = DirPathDg.SelectedPath;
+        }
+
+        private void btCLose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         #region 监视鼠标键盘
@@ -141,9 +173,6 @@ namespace MulTools.Forms
         #endregion
 
         #region 画笔相关
-        /// <summary>
-        /// 点击颜色按钮事件
-        /// </summary>
         private void Bt_Click(object sender, EventArgs e)
         {
             Button bt = sender as Button;
@@ -179,7 +208,8 @@ namespace MulTools.Forms
             {
                 gp.CopyFromScreen(Functions.GetRated(Location.X + picBox.Location.X) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)),
                     Functions.GetRated(Location.Y + picBox.Location.Y) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)), 0, 0, new Size(w, h));
-                bt.Save(string.Format("{0}/{1}.bmp", timerPic.Enabled ? CombineTempPath : txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss")));
+                bt.Save(string.Format("{0}/{1}.", timerPic.Enabled ? CombineTempPath : txtPath.Text, 
+                    DateTime.Now.ToString("yyMMdd_HHmmss")) + Settings.Default.PicType);
                 bt.Dispose();
             }
         }
@@ -192,7 +222,7 @@ namespace MulTools.Forms
                 btGif.Text = "停止";
                 CombineTempPath = Path.Combine(txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
                 Directory.CreateDirectory(CombineTempPath);
-                timerPic.Interval = 150;
+                timerPic.Interval = Settings.Default.GifInterval;
                 timerPic.Start();
             }
             else
@@ -212,7 +242,7 @@ namespace MulTools.Forms
                 btLong.Text = "停止";
                 CombineTempPath = Path.Combine(txtPath.Text, "长图");
                 Directory.CreateDirectory(CombineTempPath);
-                timerPic.Interval = 300;
+                timerPic.Interval = Settings.Default.LongInterval;
                 timerPic.Start();
             }
             else
@@ -230,7 +260,8 @@ namespace MulTools.Forms
         private void bgWorkerLong_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             PicToLong();
-            Functions.DeleteDir(CombineTempPath);
+            if (Settings.Default.DelLongTempPic)
+                Functions.DeleteDir(CombineTempPath);
         }
 
         private void bgWorkerLong_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -238,17 +269,6 @@ namespace MulTools.Forms
             lbBar.Visible = false;
         }
         #endregion
-
-        private void BtSavePath_Click(object sender, EventArgs e)
-        {
-            if (DirPathDg.ShowDialog() == DialogResult.OK)
-                txtPath.Text = DirPathDg.SelectedPath;
-        }
-
-        private void btCLose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
     }
 }
  
