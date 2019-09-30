@@ -36,9 +36,9 @@
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
             this.屏幕截图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.窗体监控ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tbPanel = new System.Windows.Forms.TableLayoutPanel();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.窗体监控ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,44 +57,51 @@
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
-            this.menuStrip.Size = new System.Drawing.Size(124, 244);
+            this.menuStrip.Size = new System.Drawing.Size(72, 244);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "功能菜单";
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(115, 21);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(63, 21);
             this.toolStripMenuItem1.Text = "文件操作";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.MenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(115, 21);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(63, 21);
             this.toolStripMenuItem2.Text = "定时关机";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.MenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(115, 21);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(63, 21);
             this.toolStripMenuItem3.Text = "进程专杀";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.MenuItem_Click);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(115, 21);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(63, 21);
             this.toolStripMenuItem5.Text = "IP速换";
             this.toolStripMenuItem5.Click += new System.EventHandler(this.MenuItem_Click);
             // 
             // 屏幕截图ToolStripMenuItem
             // 
             this.屏幕截图ToolStripMenuItem.Name = "屏幕截图ToolStripMenuItem";
-            this.屏幕截图ToolStripMenuItem.Size = new System.Drawing.Size(115, 21);
+            this.屏幕截图ToolStripMenuItem.Size = new System.Drawing.Size(63, 21);
             this.屏幕截图ToolStripMenuItem.Text = "屏幕截图";
             this.屏幕截图ToolStripMenuItem.Click += new System.EventHandler(this.MenuItem_Click);
+            // 
+            // 窗体监控ToolStripMenuItem
+            // 
+            this.窗体监控ToolStripMenuItem.Name = "窗体监控ToolStripMenuItem";
+            this.窗体监控ToolStripMenuItem.Size = new System.Drawing.Size(63, 21);
+            this.窗体监控ToolStripMenuItem.Text = "窗体监控";
+            this.窗体监控ToolStripMenuItem.Click += new System.EventHandler(this.MenuItem_Click);
             // 
             // tbPanel
             // 
@@ -103,14 +110,14 @@
             this.tbPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tbPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tbPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbPanel.Location = new System.Drawing.Point(124, 0);
+            this.tbPanel.Location = new System.Drawing.Point(72, 0);
             this.tbPanel.Name = "tbPanel";
             this.tbPanel.RowCount = 4;
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tbPanel.Size = new System.Drawing.Size(187, 244);
+            this.tbPanel.Size = new System.Drawing.Size(239, 244);
             this.tbPanel.TabIndex = 1;
             // 
             // notifyIcon
@@ -118,14 +125,8 @@
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "MulTools";
             this.notifyIcon.Visible = true;
-            this.notifyIcon.Click += new System.EventHandler(this.NotifyIcon1_Click);
-            // 
-            // 窗体监控ToolStripMenuItem
-            // 
-            this.窗体监控ToolStripMenuItem.Name = "窗体监控ToolStripMenuItem";
-            this.窗体监控ToolStripMenuItem.Size = new System.Drawing.Size(115, 21);
-            this.窗体监控ToolStripMenuItem.Text = "窗体监控";
-            this.窗体监控ToolStripMenuItem.Click += new System.EventHandler(this.MenuItem_Click);
+            this.notifyIcon.Click += new System.EventHandler(this.NotifyIcon_Click);
+            this.notifyIcon.DoubleClick += new System.EventHandler(this.NotifyIcon_DoubleClick);
             // 
             // frmMenu
             // 

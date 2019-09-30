@@ -30,7 +30,12 @@ namespace MulTools
                 catch { }
         }
 
-        private void NotifyIcon1_Click(object sender, EventArgs e)
+        private void NotifyIcon_DoubleClick(object sender, EventArgs e)
+        {
+            ActiveWindow();
+        }
+
+        private void NotifyIcon_Click(object sender, EventArgs e)
         {
             if (frm == null)
             {
