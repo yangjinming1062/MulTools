@@ -154,11 +154,11 @@ namespace MulTools.Components
         /// <param name="func">待执行方法名</param>
         /// <param name="args">方法参数,每个参数以空格隔开</param>
         /// <returns></returns>
-        public static string PyFunc(string args, string path = "long.py")
+        public static string BuildLongPic(string args)
         {
             Process pyProcess = new Process();
-            pyProcess.StartInfo.FileName = "python"; //这样来调用python，需要将python加入Path环境变量内
-            pyProcess.StartInfo.Arguments = string.Format("{0} {1}", path, args);
+            pyProcess.StartInfo.FileName = "long.exe"; //这样来调用python，需要将python加入Path环境变量内
+            pyProcess.StartInfo.Arguments = args;
             pyProcess.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
             pyProcess.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
             pyProcess.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息

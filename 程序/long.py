@@ -7,7 +7,7 @@ import sys
 '''
 将两张有重叠的图片拼接成一张长图，目标效果：123+234 →1234
 '''
-def FindBorder(imgA,imgB,windowMove = 1):
+def FindBorder(imgA,imgB,similar,low,heigh):
     '''
     对比发现两张图片的结合处应该在哪，imgA为主图，从imgB中查找不同的部分进行拼接
     windowMove：窗口每次移动的距离，基本就是1也没什么好调整的了
@@ -28,29 +28,28 @@ def FindBorder(imgA,imgB,windowMove = 1):
             return -1
 
     length = min(a.shape[0],b.shape[0])
-    for i in range(1,length,windowMove):#从1开始是因为0的情况在上面已经判断过了
+    for i in range(1,length,1):#从1开始是因为0的情况在上面已经判断过了
         B = b[:length-i]#B图从下往上缩小范围
         A = a[-B.shape[0]:]#A图对应的从上往下缩小范围
         #if not (A - B).any():#AB对齐，找到了重合区，返回此时的分界位(这种需要的匹配度太强了，查一点点颜色就完蛋了)
         C = A - B
         CS = stats.mode(C.reshape(-1,3))
-        if not CS[0][0].any() and (CS[1][0][0] > 0.85*C.reshape(-1,3).shape[0]):#模糊之前也得保证超过8成的像素点无差异
-            C[(C <50) | (C>200)] = 0
-            if C.max() == 0:#增加一点模糊话，针对单个像素点颜色
+        if not CS[0][0].any() and (CS[1][0][0] > float(similar)*C.reshape(-1,3).shape[0]):#模糊之前也得保证超过8成的像素点无差异
+            C[(C <int(low)) | (C>int(heigh))] = 0
+            if C.max() == 0:#增加一点模糊化，针对单个像素点颜色
                 return b.shape[0] - B.shape[0]
     
     return b.shape[0]#到最后都没有重合则首尾相接
 
 
-def CombinePic(imgA,imgB,fileName = 'LongPic.bmp'):
+def CombinePic(imgA,imgB,fileName,similar,low,heigh):
     '''
     以A为主，在A的下面拼接上B图和A图不重合的部分，达到长图的目的
     '''
     a = Image.open(imgA).convert('RGB')
     b = Image.open(imgB).convert('RGB')
-    b_heigth = FindBorder(a,b)
+    b_heigth = FindBorder(a,b,similar,low,heigh)
     if b_heigth is None:
-        print('两张图不同宽，请自行调整')
         return
     if b_heigth == -1:
         a.close()
@@ -68,25 +67,18 @@ def CombinePic(imgA,imgB,fileName = 'LongPic.bmp'):
     img_new.close()
 
 
-def DirCombine(dirPath,fileName = 'temp.jpg',picType = '*'):
-    if type(dirPath) == list:
-        if len(dirPath) == 3:
-            picType = dirPath[2]
-        if len(dirPath) >= 2:
-            fileName = dirPath[1]
-        dirPath = dirPath[0]
+def DirCombine(dirPath,fileName = 'temp.jpg',picType = '*',similar = 0.85,low = 50,heigh = 200):
     fileList = glob(path.join(dirPath,"*.%s"%picType))#这里应该保证图片按顺序排列好
     if len(fileList) < 2:
-        print(path.join(dirPath,"*.%s"%picType))
-        print('不需要拼接')
         return
-    CombinePic(fileList[0],fileList[1],fileName)#先拿出来前两张生成初始目标图
+    CombinePic(fileList[0],fileList[1],fileName,similar,low,heigh)#先拿出来前两张生成初始目标图
     for img in fileList[2:]:#一张张追加长度
-        CombinePic(fileName,img,fileName)
+        CombinePic(fileName,img,fileName,similar,low,heigh)
 
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        DirCombine(sys.argv[1:])
+        eval('DirCombine'+str(tuple(sys.argv[1:])))
     else:
         DirCombine("屏幕截图")
+    print('拼接完成')

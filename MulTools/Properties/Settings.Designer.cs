@@ -130,5 +130,41 @@ namespace MulTools.Properties {
                 this["K_SpanTime"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.85")]
+        public double LongPicSimilar {
+            get {
+                return ((double)(this["LongPicSimilar"]));
+            }
+            set {
+                this["LongPicSimilar"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int LongPicLow {
+            get {
+                return ((int)(this["LongPicLow"]));
+            }
+            set {
+                this["LongPicLow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public int LongPicHeigh {
+            get {
+                return ((int)(this["LongPicHeigh"]));
+            }
+            set {
+                this["LongPicHeigh"] = value;
+            }
+        }
     }
 }

@@ -29,5 +29,14 @@
     <Setting Name="K_SpanTime" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1000</Value>
     </Setting>
+    <Setting Name="LongPicSimilar" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.85</Value>
+    </Setting>
+    <Setting Name="LongPicLow" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="LongPicHeigh" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

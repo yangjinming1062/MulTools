@@ -53,8 +53,15 @@ namespace MulTools.Forms
 
         private void PicToLong()
         {
-            string fileName = string.Format("{0}/L{1}.", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss") + Settings.Default.PicType);
-            Functions.PyFunc(string.Format("{0} {1} {2}", CombineTempPath, fileName, Settings.Default.PicType));//因为用了numpy打包的话exe有240多MB，这里就直接用py了
+            string fileName = string.Format("{0}/L{1}.", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
+            //6个参数，分别是待处理文件夹，长图名称，待处理文件类型，相似度参数，最小值上限，最大值下限；后四个有默认值可以不修改
+            string res = Functions.BuildLongPic(string.Format("{0} {1}.{2} {3} {4} {5} {6}", CombineTempPath, fileName, Settings.Default.PicType,
+                Settings.Default.PicType, Settings.Default.LongPicSimilar.ToString(), Settings.Default.LongPicLow.ToString(), Settings.Default.LongPicHeigh.ToString()));
+            if (res.Equals("拼接完成"))
+            {
+                MessageBox.Show("图片合成出现错误，请联系作者本人");
+                BtLong_Click(null, null);
+            }
         }
 
         private void 屏幕截图_Load(object sender, EventArgs e)
@@ -81,6 +88,9 @@ namespace MulTools.Forms
             menu_cmbLong.Text = Settings.Default.DelLongTempPic ? "是" : "否";
             menu_cmbPicType.Text = Settings.Default.PicType;
             menu_cmbPath.Text = string.IsNullOrEmpty(Settings.Default.SavePath) ? "否" : "是";
+            txtSimilar.Text = Settings.Default.LongPicSimilar.ToString();
+            txtLow.Text = Settings.Default.LongPicLow.ToString();
+            txtHeigh.Text = Settings.Default.LongPicHeigh.ToString();
         }
 
         private void 屏幕截图_FormClosed(object sender, FormClosedEventArgs e)
@@ -92,6 +102,9 @@ namespace MulTools.Forms
             Settings.Default.DelLongTempPic = menu_cmbLong.Text.Equals("是");
             Settings.Default.PicType = menu_cmbPicType.Text;
             Settings.Default.SavePath = menu_cmbPath.Text == "是" ? txtPath.Text : "";
+            Settings.Default.LongPicSimilar = Convert.ToDouble(txtSimilar.Text);
+            Settings.Default.LongPicLow = Convert.ToInt32(txtLow.Text);
+            Settings.Default.LongPicHeigh = Convert.ToInt32(txtHeigh.Text);
         }
 
         private void TimerPic_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -240,7 +253,7 @@ namespace MulTools.Forms
             {
                 btLong.BackColor = Color.RoyalBlue;
                 btLong.Text = "停止";
-                CombineTempPath = Path.Combine(txtPath.Text, "长图");
+                CombineTempPath = Path.Combine(txtPath.Text, DateTime.Now.ToString("MMddHHmm"));
                 Directory.CreateDirectory(CombineTempPath);
                 timerPic.Interval = Settings.Default.LongInterval;
                 timerPic.Start();
