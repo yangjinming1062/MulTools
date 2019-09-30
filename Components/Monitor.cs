@@ -227,7 +227,11 @@ namespace MulTools.Components
                 if (ClickThroughEnabled)//Disable click-through
                     ClickThroughEnabled = false;
                 else
+                {
+                    if (taskIcon != null)
+                        taskIcon.Dispose();
                     this.Dispose();
+                }
             }
         }
         #endregion
