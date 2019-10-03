@@ -148,17 +148,33 @@ namespace MulTools.Components
 
         #region 创建进程
         /// <summary>
-        /// 执行Py中的方法
+        /// 调用exe
         /// </summary>
-        /// <param name="path">文件相对或绝对路径</param>
-        /// <param name="func">待执行方法名</param>
-        /// <param name="args">方法参数,每个参数以空格隔开</param>
+        /// <param name="exeName">程序名称</param>
+        /// <param name="args">启动参数,每个参数以空格隔开</param>
         /// <returns></returns>
-        public static string BuildLongPic(string args)
+        public static string SubProcess(string exeName,string args)
         {
             Process pyProcess = new Process();
-            pyProcess.StartInfo.FileName = "long.exe"; //这样来调用python，需要将python加入Path环境变量内
+            pyProcess.StartInfo.FileName = string.Format("{0}.exe", exeName);
             pyProcess.StartInfo.Arguments = args;
+            pyProcess.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
+            pyProcess.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
+            pyProcess.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息
+            pyProcess.StartInfo.RedirectStandardError = true;//重定向标准错误输出
+            pyProcess.StartInfo.CreateNoWindow = true;//不显示程序窗口
+            pyProcess.Start();//启动程序
+            pyProcess.StandardInput.AutoFlush = true;
+            string output = pyProcess.StandardOutput.ReadToEnd();
+            pyProcess.Close();
+            return output;
+        }
+
+        public static string UsePython(string path, string args)
+        {
+            Process pyProcess = new Process();
+            pyProcess.StartInfo.FileName = "Python";
+            pyProcess.StartInfo.Arguments = path + " " + args;
             pyProcess.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
             pyProcess.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
             pyProcess.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息
