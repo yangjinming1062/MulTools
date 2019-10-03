@@ -64,18 +64,18 @@ namespace MulTools.Forms
             Top = Screen.PrimaryScreen.WorkingArea.Height - Size.Height;
             Left = Screen.PrimaryScreen.WorkingArea.Width - Size.Width;
             TopMost = true;
-            timerKill = new System.Timers.Timer(Properties.Settings.Default.K_SpanTime);
+            timerKill = new System.Timers.Timer(Properties.Settings.Default.K_查杀间隔);
             timerKill.Elapsed += TimerKill_Elapsed;
             txtName.Focus();
-            txtDefaultName.Text = Properties.Settings.Default.K_DefaultProcess;
-            txtName.Text = Properties.Settings.Default.K_DefaultProcess;
-            txtSpantime.Text = Properties.Settings.Default.K_SpanTime.ToString();
+            txtDefaultName.Text = Properties.Settings.Default.K_默认进程;
+            txtName.Text = Properties.Settings.Default.K_默认进程;
+            txtSpantime.Text = Properties.Settings.Default.K_查杀间隔.ToString();
         }
 
         private void 进程专杀_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Properties.Settings.Default.K_DefaultProcess = txtDefaultName.Text;
-            Properties.Settings.Default.K_SpanTime = Convert.ToInt32(txtSpantime.Text);
+            Properties.Settings.Default.K_默认进程 = txtDefaultName.Text;
+            Properties.Settings.Default.K_查杀间隔 = Convert.ToInt32(txtSpantime.Text);
         }
 
         private void TimerKill_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
