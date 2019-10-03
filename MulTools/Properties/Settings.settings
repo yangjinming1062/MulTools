@@ -2,41 +2,47 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MulTools.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="GifFrameTime" Type="System.Int32" Scope="User">
+    <Setting Name="Gif帧间隔" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
-    <Setting Name="GifInterval" Type="System.Int32" Scope="User">
+    <Setting Name="Gif截图间隔" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
-    <Setting Name="LongInterval" Type="System.Int32" Scope="User">
+    <Setting Name="Long截图间隔" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">300</Value>
     </Setting>
-    <Setting Name="DelLongTempPic" Type="System.Boolean" Scope="User">
+    <Setting Name="Is删除长图临时文件" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="DelGitTempPic" Type="System.Boolean" Scope="User">
+    <Setting Name="Is删除GIF临时文件" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="SavePath" Type="System.String" Scope="User">
+    <Setting Name="默认保存路径" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="PicType" Type="System.String" Scope="User">
+    <Setting Name="截图文件类型" Type="System.String" Scope="User">
       <Value Profile="(Default)">bmp</Value>
     </Setting>
-    <Setting Name="K_DefaultProcess" Type="System.String" Scope="User">
+    <Setting Name="K_默认进程" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="K_SpanTime" Type="System.Int32" Scope="User">
+    <Setting Name="K_查杀间隔" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1000</Value>
     </Setting>
-    <Setting Name="LongPicSimilar" Type="System.Double" Scope="User">
+    <Setting Name="Long相似度" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.85</Value>
     </Setting>
-    <Setting Name="LongPicLow" Type="System.Int32" Scope="User">
+    <Setting Name="Long下限值" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">50</Value>
     </Setting>
-    <Setting Name="LongPicHeigh" Type="System.Int32" Scope="User">
+    <Setting Name="Long上限值" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="Long合成方向" Type="System.String" Scope="User">
+      <Value Profile="(Default)">V</Value>
+    </Setting>
+    <Setting Name="Long实时合成" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -26,144 +26,168 @@ namespace MulTools.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int GifFrameTime {
+        public int Gif帧间隔 {
             get {
-                return ((int)(this["GifFrameTime"]));
+                return ((int)(this["Gif帧间隔"]));
             }
             set {
-                this["GifFrameTime"] = value;
+                this["Gif帧间隔"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("100")]
-        public int GifInterval {
+        public int Gif截图间隔 {
             get {
-                return ((int)(this["GifInterval"]));
+                return ((int)(this["Gif截图间隔"]));
             }
             set {
-                this["GifInterval"] = value;
+                this["Gif截图间隔"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("300")]
-        public int LongInterval {
+        public int Long截图间隔 {
             get {
-                return ((int)(this["LongInterval"]));
+                return ((int)(this["Long截图间隔"]));
             }
             set {
-                this["LongInterval"] = value;
+                this["Long截图间隔"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool DelLongTempPic {
+        public bool Is删除长图临时文件 {
             get {
-                return ((bool)(this["DelLongTempPic"]));
+                return ((bool)(this["Is删除长图临时文件"]));
             }
             set {
-                this["DelLongTempPic"] = value;
+                this["Is删除长图临时文件"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool DelGitTempPic {
+        public bool Is删除GIF临时文件 {
             get {
-                return ((bool)(this["DelGitTempPic"]));
+                return ((bool)(this["Is删除GIF临时文件"]));
             }
             set {
-                this["DelGitTempPic"] = value;
+                this["Is删除GIF临时文件"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SavePath {
+        public string 默认保存路径 {
             get {
-                return ((string)(this["SavePath"]));
+                return ((string)(this["默认保存路径"]));
             }
             set {
-                this["SavePath"] = value;
+                this["默认保存路径"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("bmp")]
-        public string PicType {
+        public string 截图文件类型 {
             get {
-                return ((string)(this["PicType"]));
+                return ((string)(this["截图文件类型"]));
             }
             set {
-                this["PicType"] = value;
+                this["截图文件类型"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string K_DefaultProcess {
+        public string K_默认进程 {
             get {
-                return ((string)(this["K_DefaultProcess"]));
+                return ((string)(this["K_默认进程"]));
             }
             set {
-                this["K_DefaultProcess"] = value;
+                this["K_默认进程"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1000")]
-        public int K_SpanTime {
+        public int K_查杀间隔 {
             get {
-                return ((int)(this["K_SpanTime"]));
+                return ((int)(this["K_查杀间隔"]));
             }
             set {
-                this["K_SpanTime"] = value;
+                this["K_查杀间隔"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.85")]
-        public double LongPicSimilar {
+        public double Long相似度 {
             get {
-                return ((double)(this["LongPicSimilar"]));
+                return ((double)(this["Long相似度"]));
             }
             set {
-                this["LongPicSimilar"] = value;
+                this["Long相似度"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("50")]
-        public int LongPicLow {
+        public int Long下限值 {
             get {
-                return ((int)(this["LongPicLow"]));
+                return ((int)(this["Long下限值"]));
             }
             set {
-                this["LongPicLow"] = value;
+                this["Long下限值"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("200")]
-        public int LongPicHeigh {
+        public int Long上限值 {
             get {
-                return ((int)(this["LongPicHeigh"]));
+                return ((int)(this["Long上限值"]));
             }
             set {
-                this["LongPicHeigh"] = value;
+                this["Long上限值"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("V")]
+        public string Long合成方向 {
+            get {
+                return ((string)(this["Long合成方向"]));
+            }
+            set {
+                this["Long合成方向"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Long实时合成 {
+            get {
+                return ((bool)(this["Long实时合成"]));
+            }
+            set {
+                this["Long实时合成"] = value;
             }
         }
     }
