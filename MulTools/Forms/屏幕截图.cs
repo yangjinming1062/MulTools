@@ -2,6 +2,7 @@
 using MulTools.Components.Class;
 using MulTools.Properties;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -38,7 +39,7 @@ namespace MulTools.Forms
         {
             string fileName = string.Format("{0}/{1}.gif", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
             //Delay time is one hundredths (1/100) of a second between frames;
-            AnimatedGif.AnimatedGifCreator gif = AnimatedGif.AnimatedGif.Create(fileName, Settings.Default.GifFrameTime);//这里因为timer设置的100ms这里对应就写的10
+            AnimatedGif.AnimatedGifCreator gif = AnimatedGif.AnimatedGif.Create(fileName, Settings.Default.Gif帧间隔);
             DirectoryInfo dirInfo = new DirectoryInfo(CombineTempPath);
             foreach (FileSystemInfo imgFile in dirInfo.GetFileSystemInfos())
             {
@@ -47,20 +48,53 @@ namespace MulTools.Forms
                 img.Dispose();
             }
             gif.Dispose();
-            if (Settings.Default.DelGitTempPic)
+            if (Settings.Default.Is删除GIF临时文件)
                 Functions.DeleteDir(CombineTempPath);
         }
 
         private void PicToLong()
         {
-            string fileName = string.Format("{0}/L{1}", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
-            //6个参数，分别是待处理文件夹，长图名称，待处理文件类型，相似度参数，最小值上限，最大值下限；后四个有默认值可以不修改
-            string res = Functions.BuildLongPic(string.Format("{0} {1}.{2} {3} {4} {5} {6}", CombineTempPath, fileName, Settings.Default.PicType,
-                Settings.Default.PicType, Settings.Default.LongPicSimilar.ToString(), Settings.Default.LongPicLow.ToString(), Settings.Default.LongPicHeigh.ToString()));
-            if (res.Equals("拼接完成"))
+            Settings Ss = Settings.Default;
+            string fileName = string.Format("{0}/L{1}.", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss")) + Ss.截图文件类型;
+            string combineArgs = string.Format("{0} {1} {2} {3}", Ss.Long相似度.ToString(), Ss.Long下限值.ToString(), Ss.Long上限值.ToString(), Ss.Long合成方向);
+            string argsTemplate = Ss.Long实时合成 ? "CombinePic {0} {1} {2} {3}" : "DirCombine {0} {1} {2} {3}";
+            string strResult;
+            if (Ss.Long实时合成)
             {
-                MessageBox.Show("图片合成出现错误，请联系作者本人");
-                BtLong_Click(null, null);
+                fileList = new List<string>();
+                while (btLong.Text == "停止" || fileQueue.Count > 0)//不停止或者队列没空不出循环
+                {
+                    InLongWork = true;
+                    if (fileQueue.Count > 0)
+                    {
+                        if (fileList.Count < 2)//不足两个则补足两个
+                            fileList.Add(fileQueue.Dequeue());
+                        else//到两个之后则末位替换
+                            fileList[1] = fileQueue.Dequeue();
+                        if (fileList.Count == 2)
+                        {
+                            strResult = Functions.UsePython("CaptureLongScreen.py", string.Format(argsTemplate, fileList[0], fileList[1], fileName, combineArgs));
+                            //string res = Functions.SubProcess("CaptureLongScreen", string.Format(argsTemplate, fileList[0], fileList[1], fileName, combineArgs));
+                            if (!strResult.Contains("拼接完成"))
+                            {
+                                MessageBox.Show("图片合成出现错误，请联系作者本人\n" + strResult);
+                                BtLong_Click(null, null);
+                                return;
+                            }
+                            fileList[0] = fileName;
+                        }
+                    }
+                }
+                InLongWork = false;
+            }
+            else
+            {
+                strResult = Functions.SubProcess("CaptureLongScreen", string.Format(argsTemplate, CombineTempPath, fileName, Ss.截图文件类型, combineArgs));
+                if (!strResult.Contains("拼接完成"))
+                {
+                    MessageBox.Show("图片合成出现错误，请联系作者本人");
+                    BtLong_Click(null, null);
+                }
             }
         }
 
@@ -80,37 +114,9 @@ namespace MulTools.Forms
             timerPic = new System.Timers.Timer();
             timerPic.Elapsed += TimerPic_Elapsed;
             NoneBorderHelper.Set(this, panelTop);
-
-            menu_GIFframetime.Text = Settings.Default.GifFrameTime.ToString();
-            menu_txtGiftime.Text = Settings.Default.GifInterval.ToString();
-            menu_txtLongtime.Text = Settings.Default.LongInterval.ToString();
-            menu_cmbGIF.Text = Settings.Default.DelGitTempPic ? "是" : "否";
-            menu_cmbLong.Text = Settings.Default.DelLongTempPic ? "是" : "否";
-            menu_cmbPicType.Text = Settings.Default.PicType;
-            menu_cmbPath.Text = string.IsNullOrEmpty(Settings.Default.SavePath) ? "否" : "是";
-            txtSimilar.Text = Settings.Default.LongPicSimilar.ToString();
-            txtLow.Text = Settings.Default.LongPicLow.ToString();
-            txtHeigh.Text = Settings.Default.LongPicHeigh.ToString();
         }
 
-        private void 屏幕截图_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Settings.Default.GifFrameTime = Convert.ToInt32(menu_GIFframetime.Text);
-            Settings.Default.GifInterval = Convert.ToInt32(menu_txtGiftime.Text);
-            Settings.Default.LongInterval = Convert.ToInt32(menu_txtLongtime.Text);
-            Settings.Default.DelGitTempPic = menu_cmbGIF.Text.Equals("是");
-            Settings.Default.DelLongTempPic = menu_cmbLong.Text.Equals("是");
-            Settings.Default.PicType = menu_cmbPicType.Text;
-            Settings.Default.SavePath = menu_cmbPath.Text == "是" ? txtPath.Text : "";
-            Settings.Default.LongPicSimilar = Convert.ToDouble(txtSimilar.Text);
-            Settings.Default.LongPicLow = Convert.ToInt32(txtLow.Text);
-            Settings.Default.LongPicHeigh = Convert.ToInt32(txtHeigh.Text);
-        }
-
-        private void TimerPic_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            BtJPG_Click(null, null);
-        }
+        private void TimerPic_Elapsed(object sender, System.Timers.ElapsedEventArgs e) => BtJPG_Click(null, null);
 
         private void BtSavePath_Click(object sender, EventArgs e)
         {
@@ -118,10 +124,7 @@ namespace MulTools.Forms
                 txtPath.Text = DirPathDg.SelectedPath;
         }
 
-        private void btCLose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        private void BtCLose_Click(object sender, EventArgs e) => Close();
 
         #region 监视鼠标键盘
         private void KeyboardHook_KeyDown(object sender, KeyEventArgs e)
@@ -149,10 +152,7 @@ namespace MulTools.Forms
             }
         }
 
-        private void MouseHook_MouseWheel(object sender, MouseEventArgs e)
-        {
-            scPen.Width += e.Delta / 100;
-        }
+        private void MouseHook_MouseWheel(object sender, MouseEventArgs e) => scPen.Width += e.Delta / 100;
 
         private void MouseHook_MouseUp(object sender, MouseEventArgs e)
         {
@@ -175,7 +175,7 @@ namespace MulTools.Forms
             if (inDraw && mouseClick)
             {
                 end = GetPoint(e.Location);//记录结束位置
-                Graphics g = System.Drawing.Graphics.FromImage(bitmap);//创建画板
+                Graphics g = Graphics.FromImage(bitmap);//创建画板
                 g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 g.DrawLine(scPen, start, end);//画线
                 start = end;//将结束位置再次作为开始位置
@@ -186,11 +186,7 @@ namespace MulTools.Forms
         #endregion
 
         #region 画笔相关
-        private void Bt_Click(object sender, EventArgs e)
-        {
-            Button bt = sender as Button;
-            scPen.Color = bt.BackColor;
-        }
+        private void Bt_Click(object sender, EventArgs e) => scPen.Color = ((Button)sender).BackColor;
 
         private void BtPen_Click(object sender, EventArgs e)
         {
@@ -221,8 +217,7 @@ namespace MulTools.Forms
             {
                 gp.CopyFromScreen(Functions.GetRated(Location.X + picBox.Location.X) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)),
                     Functions.GetRated(Location.Y + picBox.Location.Y) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)), 0, 0, new Size(w, h));
-                bt.Save(string.Format("{0}/{1}.", timerPic.Enabled ? CombineTempPath : txtPath.Text, 
-                    DateTime.Now.ToString("yyMMdd_HHmmss")) + Settings.Default.PicType);
+                bt.Save(string.Format("{0}/{1}.", timerPic.Enabled ? CombineTempPath : txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss")) + Settings.Default.截图文件类型);
                 bt.Dispose();
             }
         }
@@ -235,7 +230,7 @@ namespace MulTools.Forms
                 btGif.Text = "停止";
                 CombineTempPath = Path.Combine(txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss"));
                 Directory.CreateDirectory(CombineTempPath);
-                timerPic.Interval = Settings.Default.GifInterval;
+                timerPic.Interval = Settings.Default.Gif截图间隔;
                 timerPic.Start();
             }
             else
@@ -253,34 +248,96 @@ namespace MulTools.Forms
             {
                 btLong.BackColor = Color.RoyalBlue;
                 btLong.Text = "停止";
-                CombineTempPath = Path.Combine(txtPath.Text, DateTime.Now.ToString("MMddHHmm"));
+                CombineTempPath = Path.Combine(txtPath.Text, DateTime.Now.ToString("MMddHHmmss"));
                 Directory.CreateDirectory(CombineTempPath);
-                timerPic.Interval = Settings.Default.LongInterval;
+                timerPic.Interval = Settings.Default.Long截图间隔;
+                if (Settings.Default.Long实时合成)
+                {
+                    FileSystemWatcher LongfileWatcher = new FileSystemWatcher();
+                    LongfileWatcher.Path = CombineTempPath;
+                    LongfileWatcher.EnableRaisingEvents = true;
+                    LongfileWatcher.SynchronizingObject = this;
+                    LongfileWatcher.Created += new FileSystemEventHandler(LongfileWatcher_Created);
+                    fileQueue = new Queue<string>();
+                    bgWorkerLong.RunWorkerAsync();
+                }
                 timerPic.Start();
             }
             else
             {
                 timerPic.Stop();
                 btLong.BackColor = Color.Aquamarine;
-                btLong.Text = "长图";
-                lbBar.Visible = true;
-                bgWorkerLong.RunWorkerAsync();
+                ChangeBtLongText("长图");//有的时候来自Bgworker的异常，从其他线程提前终止
+                if (!Settings.Default.Long实时合成)
+                {
+                    lbBar.Visible = true;
+                    bgWorkerLong.RunWorkerAsync();
+                }
+                else if(InLongWork)//实时合成但是没合成完也要阻挡其他操作
+                    lbBar.Visible = true;
             }
+        }
+
+        private delegate void DGChangeBtLongText(string txt);
+        private void ChangeBtLongText(string txt)
+        {
+            if (btLong.InvokeRequired)
+                Invoke(new DGChangeBtLongText(ChangeBtLongText), new object[] { txt });
+            else
+                btLong.Text = txt;
         }
         #endregion
 
-        #region BackGroundWorker事件
-        private void bgWorkerLong_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        #region BackGroundWorker
+        private void BgWorkerLong_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             PicToLong();
-            if (Settings.Default.DelLongTempPic)
+            if (Settings.Default.Is删除长图临时文件)
                 Functions.DeleteDir(CombineTempPath);
         }
 
-        private void bgWorkerLong_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        private void BgWorkerLong_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e) => lbBar.Visible = false;
+        #endregion
+
+        #region 参数设置
+        private void SettingMenu_Closed(object sender, ToolStripDropDownClosedEventArgs e)
         {
-            lbBar.Visible = false;
+            Settings.Default.Gif帧间隔 = Convert.ToInt32(menu_GIFframetime.Text);
+            Settings.Default.Gif截图间隔 = Convert.ToInt32(menu_txtGiftime.Text);
+            Settings.Default.Long截图间隔 = Convert.ToInt32(menu_txtLongtime.Text);
+            Settings.Default.Is删除GIF临时文件 = menu_cmbGIF.Text.Equals("是");
+            Settings.Default.Is删除长图临时文件 = menu_cmbLong.Text.Equals("是");
+            Settings.Default.截图文件类型 = menu_cmbPicType.Text;
+            Settings.Default.默认保存路径 = menu_cmbPath.Text == "是" ? txtPath.Text : "";
+            Settings.Default.Long相似度 = Convert.ToDouble(txtSimilar.Text);
+            Settings.Default.Long下限值 = Convert.ToInt32(txtLow.Text);
+            Settings.Default.Long上限值 = Convert.ToInt32(txtHeigh.Text);
+            Settings.Default.Long合成方向 = menu_cmbLongType.Text.Equals("垂直") ? "V" : "H";
+            Settings.Default.Long实时合成 = menu_cmbRealTime.Text.Equals("是");
         }
+
+        private void SettingMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            menu_GIFframetime.Text = Settings.Default.Gif帧间隔.ToString();
+            menu_txtGiftime.Text = Settings.Default.Gif截图间隔.ToString();
+            menu_txtLongtime.Text = Settings.Default.Long截图间隔.ToString();
+            menu_cmbGIF.Text = Settings.Default.Is删除GIF临时文件 ? "是" : "否";
+            menu_cmbLong.Text = Settings.Default.Is删除长图临时文件 ? "是" : "否";
+            menu_cmbPicType.Text = Settings.Default.截图文件类型;
+            menu_cmbPath.Text = string.IsNullOrEmpty(Settings.Default.默认保存路径) ? "否" : "是";
+            menu_cmbLongType.Text = Settings.Default.Long合成方向 == "V" ? "垂直" : "水平";
+            txtSimilar.Text = Settings.Default.Long相似度.ToString();
+            txtLow.Text = Settings.Default.Long下限值.ToString();
+            txtHeigh.Text = Settings.Default.Long上限值.ToString();
+            menu_cmbRealTime.Text = Settings.Default.Long实时合成 ? "是" : "否";
+        }
+        #endregion
+
+        #region 实时合成长图
+        private Queue<string> fileQueue;
+        private List<string> fileList;
+        private bool InLongWork = false;
+        private void LongfileWatcher_Created(object sender, FileSystemEventArgs e) => fileQueue.Enqueue(e.FullPath);
         #endregion
     }
 }

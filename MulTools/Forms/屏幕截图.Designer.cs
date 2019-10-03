@@ -17,6 +17,12 @@
             {
                 components.Dispose();
             }
+            if (scPen != null)
+                scPen.Dispose();
+            if (timerPic != null)
+                timerPic.Dispose();
+            if (bitmap != null)
+                bitmap.Dispose();
             base.Dispose(disposing);
         }
 
@@ -31,7 +37,9 @@
             this.components = new System.ComponentModel.Container();
             this.panelTop = new System.Windows.Forms.Panel();
             this.settingMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.长图拼接类型ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_cmbLongType = new System.Windows.Forms.ToolStripComboBox();
+            this.截图文件类型ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_cmbPicType = new System.Windows.Forms.ToolStripComboBox();
             this.删除临时图片长图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_cmbLong = new System.Windows.Forms.ToolStripComboBox();
@@ -43,15 +51,16 @@
             this.menu_txtGiftime = new System.Windows.Forms.ToolStripTextBox();
             this.长图捕获间隔ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_txtLongtime = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.长截图合成参数ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.txtSimilar = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.txtLow = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.txtHeigh = new System.Windows.Forms.ToolStripTextBox();
+            this.长图实时合成ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_cmbRealTime = new System.Windows.Forms.ToolStripComboBox();
             this.永久记录当前保存路径ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_cmbPath = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.btCLose = new System.Windows.Forms.Button();
             this.lbBar = new System.Windows.Forms.Label();
             this.button18 = new System.Windows.Forms.Button();
@@ -130,25 +139,47 @@
             // settingMenu
             // 
             this.settingMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1,
+            this.长图拼接类型ToolStripMenuItem,
+            this.截图文件类型ToolStripMenuItem,
             this.删除临时图片长图ToolStripMenuItem,
             this.删除临时图片动图ToolStripMenuItem,
             this.动图帧间隔ToolStripMenuItem,
             this.动图捕获间隔ToolStripMenuItem,
             this.长图捕获间隔ToolStripMenuItem,
-            this.toolStripMenuItem3,
-            this.永久记录当前保存路径ToolStripMenuItem,
-            this.toolStripMenuItem2});
+            this.长截图合成参数ToolStripMenuItem,
+            this.长图实时合成ToolStripMenuItem,
+            this.永久记录当前保存路径ToolStripMenuItem});
             this.settingMenu.Name = "settingMenu";
             this.settingMenu.Size = new System.Drawing.Size(197, 224);
+            this.settingMenu.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.SettingMenu_Closed);
+            this.settingMenu.Opening += new System.ComponentModel.CancelEventHandler(this.SettingMenu_Opening);
             // 
-            // toolStripMenuItem1
+            // 长图拼接类型ToolStripMenuItem
             // 
-            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.长图拼接类型ToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
+            this.长图拼接类型ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_cmbLongType});
+            this.长图拼接类型ToolStripMenuItem.Name = "长图拼接类型ToolStripMenuItem";
+            this.长图拼接类型ToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.长图拼接类型ToolStripMenuItem.Text = "长图拼接类型";
+            // 
+            // menu_cmbLongType
+            // 
+            this.menu_cmbLongType.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_cmbLongType.Items.AddRange(new object[] {
+            "垂直",
+            "水平"});
+            this.menu_cmbLongType.Name = "menu_cmbLongType";
+            this.menu_cmbLongType.Size = new System.Drawing.Size(75, 25);
+            this.menu_cmbLongType.Text = "垂直";
+            // 
+            // 截图文件类型ToolStripMenuItem
+            // 
+            this.截图文件类型ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_cmbPicType});
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(196, 22);
-            this.toolStripMenuItem1.Text = "截图文件类型";
+            this.截图文件类型ToolStripMenuItem.Name = "截图文件类型ToolStripMenuItem";
+            this.截图文件类型ToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.截图文件类型ToolStripMenuItem.Text = "截图文件类型";
             // 
             // menu_cmbPicType
             // 
@@ -241,17 +272,17 @@
             this.menu_txtLongtime.Size = new System.Drawing.Size(60, 23);
             this.menu_txtLongtime.Text = "300";
             // 
-            // toolStripMenuItem3
+            // 长截图合成参数ToolStripMenuItem
             // 
-            this.toolStripMenuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.长截图合成参数ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.txtSimilar,
             this.toolStripSeparator1,
             this.txtLow,
             this.toolStripSeparator2,
             this.txtHeigh});
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(196, 22);
-            this.toolStripMenuItem3.Text = "长截图合成参数";
+            this.长截图合成参数ToolStripMenuItem.Name = "长截图合成参数ToolStripMenuItem";
+            this.长截图合成参数ToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.长截图合成参数ToolStripMenuItem.Text = "长截图合成参数";
             // 
             // txtSimilar
             // 
@@ -287,6 +318,24 @@
             this.txtHeigh.Text = "200";
             this.txtHeigh.ToolTipText = "同上，RGB差值高于该值认为相同（取值范围0~255）";
             // 
+            // 长图实时合成ToolStripMenuItem
+            // 
+            this.长图实时合成ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_cmbRealTime});
+            this.长图实时合成ToolStripMenuItem.Name = "长图实时合成ToolStripMenuItem";
+            this.长图实时合成ToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.长图实时合成ToolStripMenuItem.Text = "长图实时合成";
+            // 
+            // menu_cmbRealTime
+            // 
+            this.menu_cmbRealTime.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_cmbRealTime.Items.AddRange(new object[] {
+            "是",
+            "否"});
+            this.menu_cmbRealTime.Name = "menu_cmbRealTime";
+            this.menu_cmbRealTime.Size = new System.Drawing.Size(75, 25);
+            this.menu_cmbRealTime.Text = "是";
+            // 
             // 永久记录当前保存路径ToolStripMenuItem
             // 
             this.永久记录当前保存路径ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -305,14 +354,6 @@
             this.menu_cmbPath.Size = new System.Drawing.Size(75, 25);
             this.menu_cmbPath.Text = "否";
             // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.BackColor = System.Drawing.SystemColors.Info;
-            this.toolStripMenuItem2.ForeColor = System.Drawing.Color.Red;
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(196, 22);
-            this.toolStripMenuItem2.Text = "*以上修改重启生效*";
-            // 
             // btCLose
             // 
             this.btCLose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -328,7 +369,7 @@
             this.btCLose.TabIndex = 24;
             this.btCLose.Text = "X";
             this.btCLose.UseVisualStyleBackColor = false;
-            this.btCLose.Click += new System.EventHandler(this.btCLose_Click);
+            this.btCLose.Click += new System.EventHandler(this.BtCLose_Click);
             // 
             // lbBar
             // 
@@ -709,8 +750,8 @@
             // 
             // bgWorkerLong
             // 
-            this.bgWorkerLong.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorkerLong_DoWork);
-            this.bgWorkerLong.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorkerLong_RunWorkerCompleted);
+            this.bgWorkerLong.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BgWorkerLong_DoWork);
+            this.bgWorkerLong.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BgWorkerLong_RunWorkerCompleted);
             // 
             // 屏幕截图
             // 
@@ -733,7 +774,6 @@
             this.Text = "屏幕截图";
             this.TopMost = true;
             this.TransparencyKey = System.Drawing.Color.White;
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.屏幕截图_FormClosed);
             this.Load += new System.EventHandler(this.屏幕截图_Load);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
@@ -792,14 +832,17 @@
         private System.Windows.Forms.ToolStripTextBox menu_txtLongtime;
         private System.Windows.Forms.ToolStripMenuItem 永久记录当前保存路径ToolStripMenuItem;
         private System.Windows.Forms.ToolStripComboBox menu_cmbPath;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem 截图文件类型ToolStripMenuItem;
         private System.Windows.Forms.ToolStripComboBox menu_cmbPicType;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem 长截图合成参数ToolStripMenuItem;
         private System.Windows.Forms.ToolStripTextBox txtSimilar;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripTextBox txtLow;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripTextBox txtHeigh;
+        private System.Windows.Forms.ToolStripMenuItem 长图拼接类型ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripComboBox menu_cmbLongType;
+        private System.Windows.Forms.ToolStripMenuItem 长图实时合成ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripComboBox menu_cmbRealTime;
     }
 }
