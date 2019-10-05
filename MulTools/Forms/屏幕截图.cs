@@ -57,7 +57,7 @@ namespace MulTools.Forms
             Settings Ss = Settings.Default;
             string fileName = string.Format("{0}/L{1}.", txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss")) + Ss.截图文件类型;
             string combineArgs = string.Format("{0} {1} {2} {3}", Ss.Long相似度.ToString(), Ss.Long下限值.ToString(), Ss.Long上限值.ToString(), Ss.Long合成方向);
-            string argsTemplate = Ss.Long实时合成 ? "CombinePic {0} {1} {2} {3}" : "DirCombine {0} {1} {2} {3}";
+            string argsTemplate = Ss.Long实时合成 ? "PicCombine {0} {1} {2} {3}" : "DirCombine {0} {1} {2} {3}";
             string strResult;
             if (Ss.Long实时合成)
             {
@@ -73,8 +73,8 @@ namespace MulTools.Forms
                             fileList[1] = fileQueue.Dequeue();
                         if (fileList.Count == 2)
                         {
-                            strResult = Functions.UsePython("CaptureLongScreen.py", string.Format(argsTemplate, fileList[0], fileList[1], fileName, combineArgs));
-                            //string res = Functions.SubProcess("CaptureLongScreen", string.Format(argsTemplate, fileList[0], fileList[1], fileName, combineArgs));
+                            //strResult = Functions.UsePython("PictureCombiner.py", string.Format(argsTemplate, fileList[0], fileList[1], fileName, combineArgs));
+                            strResult = Functions.SubProcess("PictureCombiner", string.Format(argsTemplate, fileList[0], fileList[1], fileName, combineArgs));
                             if (!strResult.Contains("拼接完成"))
                             {
                                 MessageBox.Show("图片合成出现错误，请联系作者本人\n" + strResult);
@@ -89,6 +89,7 @@ namespace MulTools.Forms
             }
             else
             {
+                //strResult = Functions.UsePython("CaptureLongScreen.py", string.Format(argsTemplate, CombineTempPath, fileName, Ss.截图文件类型, combineArgs));
                 strResult = Functions.SubProcess("CaptureLongScreen", string.Format(argsTemplate, CombineTempPath, fileName, Ss.截图文件类型, combineArgs));
                 if (!strResult.Contains("拼接完成"))
                 {
