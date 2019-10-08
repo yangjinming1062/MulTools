@@ -116,10 +116,7 @@ namespace MulTools.Forms
             }
         }
 
-        private void CbAutoWG_CheckedChanged(object sender, EventArgs e)
-        {
-            txtWG.TabStop = cbAutoWG.Checked ? false : true;
-        }
+        private void CbAutoWG_CheckedChanged(object sender, EventArgs e) => txtWG.TabStop = cbAutoWG.Checked ? false : true;
 
         private void CmbWK_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -256,7 +253,7 @@ namespace MulTools.Forms
                     Tag = obj
                 };
                 tvIP.Nodes.Add(node);
-                xmlHelper.AppendNode(obj);
+                xmlHelper.AppendNode(obj, "IP");
             }
             #endregion
             RefreshTree();

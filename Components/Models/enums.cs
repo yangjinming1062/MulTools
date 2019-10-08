@@ -54,6 +54,14 @@ namespace MulTools.Components
         Transparent = 0x20
     }
 
+    [Flags]
+    public enum SendMessageTimeoutFlags : uint
+    {
+        AbortIfHung = 2,
+        Block = 1,
+        Normal = 0
+    }
+
     public enum ClassLong
     {
         Icon = -14,

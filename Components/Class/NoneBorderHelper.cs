@@ -37,9 +37,9 @@ namespace MulTools.Components.Class
         //改变窗体大小，SC_SIZE+下面的值
         private const int LEFT = 0x0001;//光标在窗体左边缘
         private const int RIGHT = 0x0002;//右边缘
-        private const int UP = 0x0003;//上边缘
-        private const int LEFTUP = 0x0004;//左上角
-        private const int RIGHTUP = 0x0005;//右上角
+        private const int TOP = 0x0003;//上边缘
+        private const int LEFTTOP = 0x0004;//左上角
+        private const int RIGHTTOP = 0x0005;//右上角
         private const int BOTTOM = 0x0006;//下边缘
         private const int LEFTBOTTOM = 0x0007;//左下角
         private const int RIGHTBOTTOM = 0x0008;//右下角
@@ -63,15 +63,21 @@ namespace MulTools.Components.Class
                 {
                     int direction;
                     if (e.Location.X < feelSize && e.Location.Y < feelSize)
-                        direction = LEFTUP;
+                        direction = LEFTTOP;
                     else if (e.Location.X > panel.Width - feelSize && e.Location.Y < feelSize)
-                        direction = RIGHTUP;
+                        direction = RIGHTTOP;
                     else if (e.Location.X < feelSize && e.Location.Y >= feelSize)
                         direction = LEFT;
                     else if (e.Location.X > panel.Width - feelSize && e.Location.Y >= feelSize)
                         direction = RIGHT;
                     else if (e.Location.Y < feelSize)
-                        direction = UP;
+                        direction = TOP;
+                    else if (e.Location.Y > panel.Height - feelSize)
+                        direction = BOTTOM;
+                    else if (e.Location.X < feelSize && e.Location.Y > panel.Height - feelSize)
+                        direction = LEFTBOTTOM;
+                    else if (e.Location.X > panel.Width - feelSize && e.Location.Y > panel.Height - feelSize)
+                        direction = RIGHTBOTTOM;
                     else
                     {
                         mouseOff = new Point(-e.X, -e.Y); //得到变量的值
@@ -86,7 +92,7 @@ namespace MulTools.Components.Class
 
         private static void Panel_MouseUp(object sender, MouseEventArgs e)
         {
-            if (InClick)
+            if (e.Button == MouseButtons.Left && InClick)
                 InClick = false;//释放鼠标后标注为false
         }
 
@@ -109,6 +115,12 @@ namespace MulTools.Components.Class
                 panel.Cursor = Cursors.SizeWE;
             else if (e.Location.Y < feelSize)
                 panel.Cursor = Cursors.SizeNS;
+            else if (e.Location.Y > panel.Height - feelSize)
+                panel.Cursor = Cursors.SizeNS;
+            else if (e.Location.X < feelSize && e.Location.Y > panel.Height - feelSize)
+                panel.Cursor = Cursors.SizeNESW;
+            else if (e.Location.X > panel.Width - feelSize && e.Location.Y > panel.Height - feelSize)
+                panel.Cursor = Cursors.SizeNWSE;
             else
                 panel.Cursor = Cursors.Default;
         }

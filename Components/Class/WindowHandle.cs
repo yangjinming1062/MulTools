@@ -16,28 +16,17 @@ namespace MulTools.Components.Class
         /// </summary>
         public IntPtr Handle { get; }
 
-        string _title;
-
         /// <summary>
         /// Creates a new WindowHandle instance. The handle pointer must be valid, the title
         /// may be null or empty and will be updated as requested.
         /// </summary>
-		public WindowHandle(IntPtr p, string title)
+		public WindowHandle(IntPtr p, string title = null)
         {
             Handle = p;
             _title = title;
         }
 
-        /// <summary>
-        /// Creates a new WindowHandle instance. Additional features of the handle will be queried as needed.
-        /// </summary>
-        /// <param name="p"></param>
-        public WindowHandle(IntPtr p)
-        {
-            Handle = p;
-            _title = null;
-        }
-
+        private string _title;
         public string Title
         {
             get
@@ -56,11 +45,10 @@ namespace MulTools.Components.Class
             {
                 if (!_iconFetched)
                 {
-                    //Fetch icon from window
-                    IntPtr hIcon;
+                    IntPtr hIcon;//Fetch icon from window
 
                     if (MessagingMethods.SendMessageTimeout(Handle, WM.GETICON, new IntPtr(2), new IntPtr(0),
-                        MessagingMethods.SendMessageTimeoutFlags.AbortIfHung | MessagingMethods.SendMessageTimeoutFlags.Block, 500, out hIcon) == IntPtr.Zero)
+                        SendMessageTimeoutFlags.AbortIfHung | SendMessageTimeoutFlags.Block, 500, out hIcon) == IntPtr.Zero)
                     {
                         hIcon = IntPtr.Zero;
                     }
@@ -76,14 +64,12 @@ namespace MulTools.Components.Class
                             _icon = Icon.FromHandle(hIcon);
                     }
                 }
-
                 _iconFetched = true;
                 return _icon;
             }
         }
 
         string _class = null;
-
         /// <summary>
         /// Gets the window's class name.
         /// </summary>
@@ -127,20 +113,12 @@ namespace MulTools.Components.Class
             if (ReferenceEquals(obj, this))
                 return true;
 
-            System.Windows.Forms.IWin32Window win = obj as System.Windows.Forms.IWin32Window;
-            if (win == null)
-                return false;
-
-            return (Handle.Equals(win.Handle));
+            return !(obj is System.Windows.Forms.IWin32Window win) ? false : Handle.Equals(win.Handle);
         }
 
         public override int GetHashCode() => Handle.GetHashCode();
         #endregion
 
-        /// <summary>
-        /// Creates a new windowHandle instance from a given IntPtr handle.
-        /// </summary>
-        /// <param name="handle">Handle value.</param>
         public static WindowHandle FromHandle(IntPtr handle) => new WindowHandle(handle, null);
     }
 }

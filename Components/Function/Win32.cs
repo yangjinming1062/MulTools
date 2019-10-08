@@ -292,7 +292,6 @@ namespace MulTools.Components.Function
         public const int GETTEXT = 0x000D;
         public const int GETTEXTLENGTH = 0x000E;
     }
-
     /// <summary>
     /// Native Win32 sizing codes (used by WM_SIZING message).
     /// </summary>
@@ -318,17 +317,8 @@ namespace MulTools.Components.Function
     /// </summary>
     public static class MessagingMethods
     {
-
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
         public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-
-        [Flags]
-        public enum SendMessageTimeoutFlags : uint
-        {
-            AbortIfHung = 2,
-            Block = 1,
-            Normal = 0
-        }
 
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessageTimeout(IntPtr hwnd, uint message, IntPtr wparam, IntPtr lparam, SendMessageTimeoutFlags flags, uint timeout, out IntPtr result);

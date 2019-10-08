@@ -30,9 +30,7 @@ namespace MulTools.Components
         public void Initialize(Monitor form)
         {
             Form = form;
-
-            //Register message pump processors
-            Register(new WindowKeeper(), form);
+            Register(new WindowKeeper(), form);//Register message pump processors
         }
 
         /// <summary>
@@ -47,7 +45,6 @@ namespace MulTools.Components
                 if (processor.Process(ref msg))
                     return true;
             }
-
             return false;
         }
 
@@ -55,12 +52,7 @@ namespace MulTools.Components
         /// Get the instance of a registered message pump processor.
         /// Throws if instance not found.
         /// </summary>
-        public T Get<T>()
-        {
-            return (T)_processors[typeof(T)];
-        }
-
-        #region IDisposable Members
+        public T Get<T>() => (T)_processors[typeof(T)];
 
         public void Dispose()
         {
@@ -70,6 +62,5 @@ namespace MulTools.Components
             }
             _processors.Clear();
         }
-        #endregion
     }
 }

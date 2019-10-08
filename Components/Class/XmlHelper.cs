@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
+using System.Reflection;
 
 namespace MulTools.Components.Class
 {
@@ -26,13 +27,9 @@ namespace MulTools.Components.Class
         /// 实例化XmlHelper对象
         /// </summary>
         /// <param name="xmlFilePath">Xml文件的相对路径</param>
-        public XmlHelper(string xmlFilePath)
-        {
-            _filePath = GetMapPath(xmlFilePath);//获取XML文件的绝对路径
-        }
+        public XmlHelper(string xmlFilePath) => _filePath = GetMapPath(xmlFilePath);//获取XML文件的绝对路径
         #endregion
 
-        #region 创建XML的根节点
         /// <summary>
         /// 创建XML的根节点
         /// </summary>
@@ -45,7 +42,6 @@ namespace MulTools.Components.Class
             }
             _element = _xml.DocumentElement;//为XML的根节点赋值
         }
-        #endregion
 
         #region 获取指定XPath表达式的节点对象
         /// <summary>
@@ -90,61 +86,51 @@ namespace MulTools.Components.Class
         }
         #endregion
 
-        #region 新增节点
         /// <summary>
         /// 新增节点
         /// </summary>
-        /// <param name="xPath">xPath</param>
-        /// <param name="elementName">节点名称</param>
-        /// <param name="dict">节点属性</param>
-        public void AppendNode(Components.Models.IP obj)
+        public void AppendNode<T>(T obj, string title = "IP")
         {
             CreateXMLElement();
             //XmlNode node = _xml.SelectSingleNode(xPath);//"/Root/Rules"
-            XmlElement element = _xml.CreateElement("IP");//titles
-            //设置属性
-            element.SetAttribute("NAME", obj.Name);
-            element.SetAttribute("IPDZ", obj.IPDZ);
-            element.SetAttribute("ZWYM", obj.ZWYM);
-            element.SetAttribute("MRWG", obj.MRWG);
-            element.SetAttribute("FDNS", obj.FDNS);
-            element.SetAttribute("SDNS", obj.SDNS);
-
+            XmlElement element = _xml.CreateElement(title);
+            PropertyInfo[] propertys = obj.GetType().GetProperties();
+            string str_value;
+            foreach (PropertyInfo pi in propertys)
+            {
+                str_value = pi.GetValue(obj, null) == null ? string.Empty : pi.GetValue(obj, null).ToString();
+                element.SetAttribute(pi.Name, str_value);//设置属性
+            }
             _element.AppendChild(element);
             _xml.Save(_filePath);//保存文件
         }
-        #endregion
 
-        #region 修改节点及属性
         /// <summary>
         /// 修改节点及属性
         /// </summary>
-        /// <param name="xPath">xPath</param>
-        /// <param name="dict">节点属性</param>
-        public void UpdateNode(string xPath, string Name, Components.Models.IP obj)
+        public void UpdateNode<T>(string xPath, string Name, T obj)
         {
             CreateXMLElement();
             //XmlElement element = (XmlElement)_xml.SelectSingleNode(xPath);
             XmlNodeList list = _element.SelectNodes(xPath);
+            PropertyInfo[] propertys = obj.GetType().GetProperties();
+            string str_value;
             foreach (XmlNode xml in list)
             {
                 XmlElement element = (XmlElement)xml;
                 if (element.GetAttribute("NAME") == Name)
                 {
-                    element.SetAttribute("NAME", obj.Name);
-                    element.SetAttribute("IPDZ", obj.IPDZ);
-                    element.SetAttribute("ZWYM", obj.ZWYM);
-                    element.SetAttribute("MRWG", obj.MRWG);
-                    element.SetAttribute("FDNS", obj.FDNS);
-                    element.SetAttribute("SDNS", obj.SDNS);
+                    foreach (PropertyInfo pi in propertys)
+                    {
+                        str_value = pi.GetValue(obj, null) == null ? string.Empty : pi.GetValue(obj, null).ToString();
+                        element.SetAttribute(pi.Name, str_value);//设置属性
+                    }
                     break;
                 }
             }
             _xml.Save(_filePath);//保存文件
         }
-        #endregion
 
-        #region 删除节点
         /// <summary>
         /// 删除指定XPath表达式的节点
         /// </summary>
@@ -154,7 +140,6 @@ namespace MulTools.Components.Class
         public void RemoveNode(string xpath, string xmlAttributeName, string AttributeValue)
         {
             CreateXMLElement();
-
             XmlNodeList xNodes = _element.SelectNodes(xpath);
             for (int i = xNodes.Count - 1; i >= 0; i--)
             {
@@ -167,9 +152,7 @@ namespace MulTools.Components.Class
             }
             _xml.Save(_filePath);
         }
-        #endregion //删除节点
 
-        #region 保存XML文件
         /// <summary>
         /// 保存XML文件
         /// </summary>        
@@ -178,22 +161,12 @@ namespace MulTools.Components.Class
             CreateXMLElement();//创建XML的根节点
             _xml.Save(_filePath);//保存XML文件
         }
-        #endregion //保存XML文件
 
-        #region 获得文件路径
         /// <summary>
-        /// 获得文件路径
+        /// 任意相对或者绝对路径，返回一个可以进行操作的路径
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public string GetMapPath(string path)
-        {
-            path = path.Replace("/", "\\");
-            if (path.StartsWith("\\"))
-                path = path.Substring(path.IndexOf('\\', 1)).TrimStart('\\');
-
-            return System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-        }
-        #endregion
+        public string GetMapPath(string path) => File.Exists(path) ? path : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
     }
 }
