@@ -21,7 +21,10 @@ namespace MulTools.Components
         /// 是否生成文件的MD5
         /// </summary>
         public bool NeedMD5 = false;
-
+        /// <summary>
+        /// 存文件类型，然后根据文件类型在最下方显示勾选框
+        /// </summary>
+        Hashtable hsType;
         private string _targetDIrPath = string.Empty;
         /// <summary>
         /// 移动文件的目标文件夹属性
@@ -37,14 +40,30 @@ namespace MulTools.Components
             }
         }
 
-        public List<ListViewItem> lsFile = new List<ListViewItem>();
+        private List<ListViewItem> lsFile = new List<ListViewItem>();
+
+        public void BuildList()
+        {
+            if (Directory.Exists(txtDirpath.Text))
+            {
+                pgBar.Visible = true;
+                btBrowse.Enabled = false;
+                fileLV.Items.Clear();
+                lsFile.Clear();
+                tbPanel.Controls.Clear();
+                bgWorker.RunWorkerAsync();
+                CurrentDirEvent?.Invoke(txtDirpath.Text);//及时向主form传递最新的文件夹路径
+            }
+            else
+                CurrentDirEvent?.Invoke(string.Empty);//及时向主form传递最新的文件夹路径
+        }
         /// <summary>
         /// 生成文件列表
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="hsType"></param>
         /// <returns></returns>
-        private bool BuildList(string filePath, ref Hashtable hsType)
+        private bool BuildList(string filePath)
         {
             if (string.IsNullOrEmpty(filePath))
                 return false;
@@ -57,7 +76,7 @@ namespace MulTools.Components
                     if (file.Attributes == FileAttributes.Directory || string.IsNullOrEmpty(file.Extension))
                     {
                         if (cbDG.Checked)
-                            BuildList(file.FullName, ref hsType);
+                            BuildList(file.FullName);
                         else
                         {
                             lsItem[(int)Cols.文件名] = file.Name;
@@ -83,10 +102,8 @@ namespace MulTools.Components
                         th.Start();
                     }
 
-                    ListViewItem item = new ListViewItem(lsItem)
-                    {
-                        Name = file.FullName
-                    };
+                    ListViewItem item = new ListViewItem(lsItem);
+                    item.Name = file.FullName;
                     lsItem = new string[3];
                     lsFile.Add(item);
                 }
@@ -111,6 +128,27 @@ namespace MulTools.Components
             }
             res = sb.ToString();
             return res;
+        }
+
+        private void BuildTablePanel()
+        {
+            if (hsType != null)
+            {
+                tbPanel.RowCount = Convert.ToInt32(Convert.ToDecimal(hsType.Count / tbPanel.ColumnCount));
+                int index = 0;
+                foreach (string type in hsType.Keys)
+                {
+                    CheckBox cb = new CheckBox
+                    {
+                        Text = type,
+                        Checked = true,
+                        ForeColor = Color.Red
+                    };
+                    cb.CheckedChanged += Cb_CheckedChanged;
+                    tbPanel.Controls.Add(cb, index % tbPanel.ColumnCount, index / tbPanel.ColumnCount);
+                    index += 1;
+                }
+            }
         }
 
         #region 按钮事件
@@ -152,7 +190,7 @@ namespace MulTools.Components
                     }
                 }
             }
-            TxtDirpath_TextChanged(null, null);
+            BuildList();
         }
 
         private void BtReName_Click(object sender, EventArgs e)
@@ -173,12 +211,15 @@ namespace MulTools.Components
                     MessageBox.Show(ex.Message);
                 }
             }
-            TxtDirpath_TextChanged(null, null);
+            BuildList();
         }
         #endregion
 
         #region 多线程，委托,事件
         private delegate void DGtbPanelAdd(Control control, int c, int r);
+        /// <summary>
+        /// 如果跨线程操作则需要用此方法添加控件，暂时不需要但是也保留
+        /// </summary>
         private void tbPanelAdd(Control control, int c, int r)
         {
             if (tbPanel.InvokeRequired)
@@ -194,43 +235,27 @@ namespace MulTools.Components
 
         public delegate void CurrentDir(string dirPath);//事件需要的委托
         public event CurrentDir CurrentDirEvent;//事件发布者
+
+        public delegate void FinishOperate();//事件需要的委托
+        public event FinishOperate OperateFinished;//事件发布者
         #endregion
 
         #region BackgroudWorker相关事件
         private void BgWorker_BuildList(object sender, DoWorkEventArgs e)
         {
-            Hashtable hsType = new Hashtable();//存文件类型，然后根据文件类型在最下方显示勾选框
+            hsType = new Hashtable();
             lsFile.Clear();
-            BuildList(txtDirpath.Text, ref hsType);
-
-            #region tablePanel文件类型
-            tbPanel.RowCount = Convert.ToInt32(Convert.ToDecimal(hsType.Count / tbPanel.ColumnCount));
-            int index = 0;
-            foreach (string type in hsType.Keys)
-            {
-                CheckBox cb = new CheckBox
-                {
-                    Text = type,
-                    Checked = true,
-                    ForeColor = Color.Red
-                };
-                cb.CheckedChanged += Cb_CheckedChanged;
-                tbPanelAdd(cb, index % tbPanel.ColumnCount, index / tbPanel.ColumnCount);
-                index += 1;
-            }
-            #endregion
+            BuildList(txtDirpath.Text);
         }
 
-        private void BgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            pgBar.Value = e.ProgressPercentage;
-        }
+        private void BgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) => pgBar.Value = e.ProgressPercentage;
 
         private void BgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             pgBar.Visible = false;
             btBrowse.Enabled = true;
             fileLV.Items.AddRange(lsFile.ToArray());
+            BuildTablePanel();
         }
         #endregion
 
@@ -238,9 +263,7 @@ namespace MulTools.Components
         private void TsmItemOpen_Click(object sender, EventArgs e)
         {
             foreach (ListViewItem file in fileLV.SelectedItems)
-            {
                 System.Diagnostics.Process.Start("Explorer.exe", file.Name);
-            }
         }
 
         private void TsmItemDelete_Click(object sender, EventArgs e)
@@ -266,7 +289,8 @@ namespace MulTools.Components
                 else
                     File.Move(obj.Name, Path.Combine(TargetDirPath, Path.GetFileName(obj.Name)));
             }
-            TxtDirpath_TextChanged(null, null);
+            BuildList();
+            OperateFinished?.Invoke();//通知另一侧可以刷新了
         }
 
         private void TsmItemCopy_Click(object sender, EventArgs e)
@@ -280,19 +304,14 @@ namespace MulTools.Components
                     else
                         File.Copy(obj.Name, Path.Combine(TargetDirPath, Path.GetFileName(obj.Name)));
                 }
-                TxtDirpath_TextChanged(null, null);
+                BuildList();
+                OperateFinished?.Invoke();//通知另一侧可以刷新了
             }
         }
 
-        private void TsmItemReplace_Click(object sender, EventArgs e)
-        {
-            txtSource.Text = fileLV.FocusedItem.SubItems[(int)Cols.文件名].Text;
-        }
+        private void TsmItemReplace_Click(object sender, EventArgs e) => txtSource.Text = fileLV.FocusedItem.SubItems[(int)Cols.文件名].Text;
 
-        private void TsmItemRename_Click(object sender, EventArgs e)
-        {
-            txtReName.Text = fileLV.FocusedItem.SubItems[(int)Cols.文件名].Text;
-        }
+        private void TsmItemRename_Click(object sender, EventArgs e) => txtReName.Text = fileLV.FocusedItem.SubItems[(int)Cols.文件名].Text;
         #endregion
 
         /// <summary>
@@ -300,21 +319,7 @@ namespace MulTools.Components
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void TxtDirpath_TextChanged(object sender, EventArgs e)
-        {
-            if (Directory.Exists(txtDirpath.Text))
-            {
-                pgBar.Visible = true;
-                btBrowse.Enabled = false;
-                fileLV.Items.Clear();
-                lsFile.Clear();
-                tbPanel.Controls.Clear();
-                bgWorker.RunWorkerAsync();
-                CurrentDirEvent?.Invoke(txtDirpath.Text);//及时向主form传递最新的文件夹路径
-            }
-            else
-                CurrentDirEvent?.Invoke(string.Empty);//及时向主form传递最新的文件夹路径
-        }
+        private void TxtDirpath_TextChanged(object sender, EventArgs e) => BuildList();
         /// <summary>
         /// 文件扩展类型变动
         /// </summary>
@@ -344,10 +349,7 @@ namespace MulTools.Components
             }
         }
 
-        private void CbDG_CheckedChanged(object sender, EventArgs e)
-        {
-            TxtDirpath_TextChanged(null, null);
-        }
+        private void CbDG_CheckedChanged(object sender, EventArgs e) => BuildList();
 
         private void FileLV_DoubleClick(object sender, EventArgs e)
         {
@@ -355,9 +357,16 @@ namespace MulTools.Components
                 txtDirpath.Text = ((ListView)(sender)).FocusedItem.Name;
         }
 
-        private void fileLV_SizeChanged(object sender, EventArgs e)
+        private void FileLV_SizeChanged(object sender, EventArgs e) => cName.Width = fileLV.Width - cMD5.Width - cType.Width - 10;
+
+        private void tbPanel_SizeChanged(object sender, EventArgs e)
         {
-            cName.Width = fileLV.Width - cMD5.Width - cType.Width - 10;
+            tbPanel.Controls.Clear();
+            tbPanel.ColumnCount = tbPanel.Width / 100;
+            tbPanel.ColumnStyles.Clear();
+            for (int i = 0; i < tbPanel.ColumnCount; i++)
+                tbPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100 / tbPanel.ColumnCount));
+            BuildTablePanel();
         }
     }
 }

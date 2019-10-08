@@ -50,28 +50,16 @@ namespace MulTools.Forms
                     }
                 }
                 if (!contains)
+                {
+                    a.Selected = true;
                     a.BackColor = Color.Lime;
+                }
                 else
+                {
+                    a.Selected = false;
                     a.BackColor = Color.White;
+                }
             }
-        }
-
-        private void 文件操作_Load(object sender, EventArgs e)
-        {
-            splitContainer1.SplitterDistance = splitContainer1.Width / 2;
-            uc文件操作L.CurrentDirEvent += Uc文件操作L_CurrentDirEvent;
-            uc文件操作R.CurrentDirEvent += Uc文件操作R_CurrentDirEvent;
-            Components.Class.NoneBorderHelper.Set(this, panelTop);
-        }
-
-        private void Uc文件操作R_CurrentDirEvent(string dirPath)
-        {
-            uc文件操作L.TargetDirPath = dirPath;
-        }
-
-        private void Uc文件操作L_CurrentDirEvent(string dirPath)
-        {
-            uc文件操作R.TargetDirPath = dirPath;
         }
 
         private void RbMD5_CheckedChanged(object sender, EventArgs e)
@@ -80,19 +68,28 @@ namespace MulTools.Forms
             uc文件操作R.NeedMD5 = rbMD5.Checked;
         }
 
-        private void BtClose_Click(object sender, EventArgs e)
+        private void 文件操作_Load(object sender, EventArgs e)
         {
-            Close();
+            splitContainer1.SplitterDistance = splitContainer1.Width / 2;
+            uc文件操作L.CurrentDirEvent += Uc文件操作L_CurrentDirEvent;
+            uc文件操作R.CurrentDirEvent += Uc文件操作R_CurrentDirEvent;
+            uc文件操作L.OperateFinished += Uc文件操作L_OperateFinished;
+            uc文件操作R.OperateFinished += Uc文件操作R_OperateFinished;
+            Components.Class.NoneBorderHelper.Set(this, panelTop);
         }
 
-        private void BtLeft_Click(object sender, EventArgs e)
-        {
-            CompareFile(uc文件操作L, uc文件操作R);
-        }
+        private void Uc文件操作R_OperateFinished() => uc文件操作L.BuildList();
 
-        private void BtRight_Click(object sender, EventArgs e)
-        {
-            CompareFile(uc文件操作R, uc文件操作L);
-        }
+        private void Uc文件操作L_OperateFinished() => uc文件操作R.BuildList();
+
+        private void Uc文件操作R_CurrentDirEvent(string dirPath) => uc文件操作L.TargetDirPath = dirPath;
+
+        private void Uc文件操作L_CurrentDirEvent(string dirPath) => uc文件操作R.TargetDirPath = dirPath;
+
+        private void BtClose_Click(object sender, EventArgs e) => Close();
+
+        private void BtLeft_Click(object sender, EventArgs e) => CompareFile(uc文件操作L, uc文件操作R);
+
+        private void BtRight_Click(object sender, EventArgs e) => CompareFile(uc文件操作R, uc文件操作L);
     }
 }

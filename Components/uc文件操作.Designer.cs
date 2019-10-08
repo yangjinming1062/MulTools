@@ -83,13 +83,14 @@
             this.tbPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tbPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tbPanel.Location = new System.Drawing.Point(0, 345);
-            this.tbPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbPanel.Margin = new System.Windows.Forms.Padding(2);
             this.tbPanel.Name = "tbPanel";
             this.tbPanel.RowCount = 2;
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tbPanel.Size = new System.Drawing.Size(426, 67);
             this.tbPanel.TabIndex = 2;
+            this.tbPanel.SizeChanged += new System.EventHandler(this.tbPanel_SizeChanged);
             // 
             // panelTop
             // 
@@ -102,7 +103,7 @@
             this.panelTop.Controls.Add(this.label1);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 18);
-            this.panelTop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelTop.Margin = new System.Windows.Forms.Padding(2);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(426, 22);
             this.panelTop.TabIndex = 3;
@@ -112,7 +113,7 @@
             this.txtDirpath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDirpath.Location = new System.Drawing.Point(93, 0);
-            this.txtDirpath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtDirpath.Margin = new System.Windows.Forms.Padding(2);
             this.txtDirpath.Name = "txtDirpath";
             this.txtDirpath.Size = new System.Drawing.Size(208, 21);
             this.txtDirpath.TabIndex = 1;
@@ -124,7 +125,7 @@
             this.btOpen.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btOpen.Font = new System.Drawing.Font("楷体", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btOpen.Location = new System.Drawing.Point(384, 0);
-            this.btOpen.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btOpen.Margin = new System.Windows.Forms.Padding(2);
             this.btOpen.Name = "btOpen";
             this.btOpen.Size = new System.Drawing.Size(38, 20);
             this.btOpen.TabIndex = 3;
@@ -138,7 +139,7 @@
             this.btBack.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btBack.Font = new System.Drawing.Font("楷体", 7.8F);
             this.btBack.Location = new System.Drawing.Point(345, 0);
-            this.btBack.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btBack.Margin = new System.Windows.Forms.Padding(2);
             this.btBack.Name = "btBack";
             this.btBack.Size = new System.Drawing.Size(38, 20);
             this.btBack.TabIndex = 3;
@@ -152,7 +153,7 @@
             this.btBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btBrowse.Font = new System.Drawing.Font("楷体", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btBrowse.Location = new System.Drawing.Point(302, 0);
-            this.btBrowse.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btBrowse.Margin = new System.Windows.Forms.Padding(2);
             this.btBrowse.Name = "btBrowse";
             this.btBrowse.Size = new System.Drawing.Size(36, 20);
             this.btBrowse.TabIndex = 2;
@@ -164,7 +165,7 @@
             // 
             this.cbDG.AutoSize = true;
             this.cbDG.Location = new System.Drawing.Point(47, 3);
-            this.cbDG.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbDG.Margin = new System.Windows.Forms.Padding(2);
             this.cbDG.Name = "cbDG";
             this.cbDG.Size = new System.Drawing.Size(48, 16);
             this.cbDG.TabIndex = 4;
@@ -195,7 +196,7 @@
             this.panelBottom.Controls.Add(this.label2);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelBottom.Location = new System.Drawing.Point(0, 289);
-            this.panelBottom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelBottom.Margin = new System.Windows.Forms.Padding(2);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(426, 56);
             this.panelBottom.TabIndex = 4;
@@ -206,7 +207,7 @@
             this.btReName.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btReName.Font = new System.Drawing.Font("楷体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btReName.Location = new System.Drawing.Point(352, 30);
-            this.btReName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btReName.Margin = new System.Windows.Forms.Padding(2);
             this.btReName.Name = "btReName";
             this.btReName.Size = new System.Drawing.Size(72, 18);
             this.btReName.TabIndex = 3;
@@ -220,7 +221,7 @@
             this.btReplace.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btReplace.Font = new System.Drawing.Font("楷体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btReplace.Location = new System.Drawing.Point(352, 5);
-            this.btReplace.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btReplace.Margin = new System.Windows.Forms.Padding(2);
             this.btReplace.Name = "btReplace";
             this.btReplace.Size = new System.Drawing.Size(72, 18);
             this.btReplace.TabIndex = 3;
@@ -232,7 +233,7 @@
             // 
             this.txtTarget.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTarget.Location = new System.Drawing.Point(254, 5);
-            this.txtTarget.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtTarget.Margin = new System.Windows.Forms.Padding(2);
             this.txtTarget.Name = "txtTarget";
             this.txtTarget.Size = new System.Drawing.Size(95, 21);
             this.txtTarget.TabIndex = 2;
@@ -242,7 +243,7 @@
             this.txtReName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtReName.Location = new System.Drawing.Point(123, 30);
-            this.txtReName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtReName.Margin = new System.Windows.Forms.Padding(2);
             this.txtReName.Name = "txtReName";
             this.txtReName.Size = new System.Drawing.Size(225, 21);
             this.txtReName.TabIndex = 1;
@@ -252,7 +253,7 @@
             this.txtSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSource.Location = new System.Drawing.Point(76, 5);
-            this.txtSource.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtSource.Margin = new System.Windows.Forms.Padding(2);
             this.txtSource.Name = "txtSource";
             this.txtSource.Size = new System.Drawing.Size(150, 21);
             this.txtSource.TabIndex = 1;
@@ -303,13 +304,13 @@
             this.fileLV.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.fileLV.HideSelection = false;
             this.fileLV.Location = new System.Drawing.Point(0, 40);
-            this.fileLV.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.fileLV.Margin = new System.Windows.Forms.Padding(2);
             this.fileLV.Name = "fileLV";
             this.fileLV.Size = new System.Drawing.Size(426, 249);
             this.fileLV.TabIndex = 5;
             this.fileLV.UseCompatibleStateImageBehavior = false;
             this.fileLV.View = System.Windows.Forms.View.Details;
-            this.fileLV.SizeChanged += new System.EventHandler(this.fileLV_SizeChanged);
+            this.fileLV.SizeChanged += new System.EventHandler(this.FileLV_SizeChanged);
             this.fileLV.DoubleClick += new System.EventHandler(this.FileLV_DoubleClick);
             // 
             // cName
@@ -391,7 +392,7 @@
             this.pgBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.pgBar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.pgBar.Location = new System.Drawing.Point(0, 0);
-            this.pgBar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pgBar.Margin = new System.Windows.Forms.Padding(2);
             this.pgBar.Name = "pgBar";
             this.pgBar.Size = new System.Drawing.Size(426, 18);
             this.pgBar.Step = 1;
@@ -412,7 +413,7 @@
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.tbPanel);
             this.Controls.Add(this.pgBar);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "uc文件操作";
             this.Size = new System.Drawing.Size(426, 412);
             this.panelTop.ResumeLayout(false);
