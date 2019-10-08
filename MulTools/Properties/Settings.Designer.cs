@@ -190,5 +190,29 @@ namespace MulTools.Properties {
                 this["Long实时合成"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Menu程序多开 {
+            get {
+                return ((bool)(this["Menu程序多开"]));
+            }
+            set {
+                this["Menu程序多开"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Menu功能多开 {
+            get {
+                return ((bool)(this["Menu功能多开"]));
+            }
+            set {
+                this["Menu功能多开"] = value;
+            }
+        }
     }
 }

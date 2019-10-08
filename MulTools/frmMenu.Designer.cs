@@ -30,78 +30,65 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMenu));
-            this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
-            this.屏幕截图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.窗体监控ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmiWJCZ = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmiDSGJ = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmiJCZS = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmiIPSH = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmiPMJT = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmiCTJK = new System.Windows.Forms.ToolStripMenuItem();
             this.tbPanel = new System.Windows.Forms.TableLayoutPanel();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.menuStrip.SuspendLayout();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tmiMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmiSet = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmbSetFunc = new System.Windows.Forms.ToolStripComboBox();
+            this.cmbSetEXE = new System.Windows.Forms.ToolStripComboBox();
+            this.tmiClose = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // menuStrip
+            // tmiWJCZ
             // 
-            this.menuStrip.BackColor = System.Drawing.Color.Lavender;
-            this.menuStrip.Dock = System.Windows.Forms.DockStyle.Left;
-            this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1,
-            this.toolStripMenuItem2,
-            this.toolStripMenuItem3,
-            this.toolStripMenuItem5,
-            this.屏幕截图ToolStripMenuItem,
-            this.窗体监控ToolStripMenuItem});
-            this.menuStrip.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
-            this.menuStrip.Size = new System.Drawing.Size(72, 244);
-            this.menuStrip.TabIndex = 0;
-            this.menuStrip.Text = "功能菜单";
+            this.tmiWJCZ.Name = "tmiWJCZ";
+            this.tmiWJCZ.Size = new System.Drawing.Size(124, 22);
+            this.tmiWJCZ.Text = "文件操作";
+            this.tmiWJCZ.Click += new System.EventHandler(this.MenuItem_Click);
             // 
-            // toolStripMenuItem1
+            // tmiDSGJ
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(63, 21);
-            this.toolStripMenuItem1.Text = "文件操作";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.MenuItem_Click);
+            this.tmiDSGJ.Name = "tmiDSGJ";
+            this.tmiDSGJ.Size = new System.Drawing.Size(124, 22);
+            this.tmiDSGJ.Text = "定时关机";
+            this.tmiDSGJ.Click += new System.EventHandler(this.MenuItem_Click);
             // 
-            // toolStripMenuItem2
+            // tmiJCZS
             // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(63, 21);
-            this.toolStripMenuItem2.Text = "定时关机";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.MenuItem_Click);
+            this.tmiJCZS.Name = "tmiJCZS";
+            this.tmiJCZS.Size = new System.Drawing.Size(124, 22);
+            this.tmiJCZS.Text = "进程专杀";
+            this.tmiJCZS.Click += new System.EventHandler(this.MenuItem_Click);
             // 
-            // toolStripMenuItem3
+            // tmiIPSH
             // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(63, 21);
-            this.toolStripMenuItem3.Text = "进程专杀";
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.MenuItem_Click);
+            this.tmiIPSH.Name = "tmiIPSH";
+            this.tmiIPSH.Size = new System.Drawing.Size(124, 22);
+            this.tmiIPSH.Text = "IP速换";
+            this.tmiIPSH.Click += new System.EventHandler(this.MenuItem_Click);
             // 
-            // toolStripMenuItem5
+            // tmiPMJT
             // 
-            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(63, 21);
-            this.toolStripMenuItem5.Text = "IP速换";
-            this.toolStripMenuItem5.Click += new System.EventHandler(this.MenuItem_Click);
+            this.tmiPMJT.Name = "tmiPMJT";
+            this.tmiPMJT.Size = new System.Drawing.Size(124, 22);
+            this.tmiPMJT.Text = "屏幕截图";
+            this.tmiPMJT.Click += new System.EventHandler(this.MenuItem_Click);
             // 
-            // 屏幕截图ToolStripMenuItem
+            // tmiCTJK
             // 
-            this.屏幕截图ToolStripMenuItem.Name = "屏幕截图ToolStripMenuItem";
-            this.屏幕截图ToolStripMenuItem.Size = new System.Drawing.Size(63, 21);
-            this.屏幕截图ToolStripMenuItem.Text = "屏幕截图";
-            this.屏幕截图ToolStripMenuItem.Click += new System.EventHandler(this.MenuItem_Click);
-            // 
-            // 窗体监控ToolStripMenuItem
-            // 
-            this.窗体监控ToolStripMenuItem.Name = "窗体监控ToolStripMenuItem";
-            this.窗体监控ToolStripMenuItem.Size = new System.Drawing.Size(63, 21);
-            this.窗体监控ToolStripMenuItem.Text = "窗体监控";
-            this.窗体监控ToolStripMenuItem.Click += new System.EventHandler(this.MenuItem_Click);
+            this.tmiCTJK.Name = "tmiCTJK";
+            this.tmiCTJK.Size = new System.Drawing.Size(124, 22);
+            this.tmiCTJK.Text = "窗体监控";
+            this.tmiCTJK.Click += new System.EventHandler(this.MenuItem_Click);
             // 
             // tbPanel
             // 
@@ -110,23 +97,92 @@
             this.tbPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tbPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tbPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbPanel.Location = new System.Drawing.Point(72, 0);
+            this.tbPanel.Location = new System.Drawing.Point(0, 0);
             this.tbPanel.Name = "tbPanel";
             this.tbPanel.RowCount = 4;
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tbPanel.Size = new System.Drawing.Size(239, 244);
+            this.tbPanel.Size = new System.Drawing.Size(311, 244);
             this.tbPanel.TabIndex = 1;
             // 
             // notifyIcon
             // 
+            this.notifyIcon.ContextMenuStrip = this.contextMenuStrip;
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
-            this.notifyIcon.Text = "MulTools";
+            this.notifyIcon.Text = "工具集";
             this.notifyIcon.Visible = true;
-            this.notifyIcon.Click += new System.EventHandler(this.NotifyIcon_Click);
             this.notifyIcon.DoubleClick += new System.EventHandler(this.NotifyIcon_DoubleClick);
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tmiMenu,
+            this.tmiSet,
+            this.tmiClose,
+            this.toolStripSeparator1,
+            this.tmiWJCZ,
+            this.tmiDSGJ,
+            this.tmiJCZS,
+            this.tmiIPSH,
+            this.tmiPMJT,
+            this.tmiCTJK});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(125, 208);
+            this.contextMenuStrip.Text = "功能菜单";
+            // 
+            // tmiMenu
+            // 
+            this.tmiMenu.ForeColor = System.Drawing.Color.LimeGreen;
+            this.tmiMenu.Name = "tmiMenu";
+            this.tmiMenu.Size = new System.Drawing.Size(124, 22);
+            this.tmiMenu.Text = "菜单界面";
+            this.tmiMenu.Click += new System.EventHandler(this.tmiMenu_Click);
+            // 
+            // tmiSet
+            // 
+            this.tmiSet.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmbSetFunc,
+            this.cmbSetEXE});
+            this.tmiSet.Name = "tmiSet";
+            this.tmiSet.Size = new System.Drawing.Size(124, 22);
+            this.tmiSet.Text = "系统设置";
+            this.tmiSet.DropDownClosed += new System.EventHandler(this.tmiSet_DropDownClosed);
+            this.tmiSet.DropDownOpening += new System.EventHandler(this.tmiSet_DropDownOpening);
+            // 
+            // cmbSetFunc
+            // 
+            this.cmbSetFunc.Items.AddRange(new object[] {
+            "是",
+            "否"});
+            this.cmbSetFunc.Name = "cmbSetFunc";
+            this.cmbSetFunc.Size = new System.Drawing.Size(80, 25);
+            this.cmbSetFunc.Text = "是";
+            this.cmbSetFunc.ToolTipText = "是否允许功能多开";
+            // 
+            // cmbSetEXE
+            // 
+            this.cmbSetEXE.Items.AddRange(new object[] {
+            "是",
+            "否"});
+            this.cmbSetEXE.Name = "cmbSetEXE";
+            this.cmbSetEXE.Size = new System.Drawing.Size(80, 25);
+            this.cmbSetEXE.Text = "是";
+            this.cmbSetEXE.ToolTipText = "是否允许程序多开";
+            // 
+            // tmiClose
+            // 
+            this.tmiClose.ForeColor = System.Drawing.Color.Red;
+            this.tmiClose.Name = "tmiClose";
+            this.tmiClose.Size = new System.Drawing.Size(124, 22);
+            this.tmiClose.Text = "退出程序";
+            this.tmiClose.Click += new System.EventHandler(this.tmiClose_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(121, 6);
             // 
             // frmMenu
             // 
@@ -134,32 +190,34 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(311, 244);
             this.Controls.Add(this.tbPanel);
-            this.Controls.Add(this.menuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.MainMenuStrip = this.menuStrip;
             this.Name = "frmMenu";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "功能菜单";
-            this.menuStrip.ResumeLayout(false);
-            this.menuStrip.PerformLayout();
+            this.Load += new System.EventHandler(this.frmMenu_Load);
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem tmiWJCZ;
         private System.Windows.Forms.TableLayoutPanel tbPanel;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem tmiDSGJ;
+        private System.Windows.Forms.ToolStripMenuItem tmiJCZS;
+        private System.Windows.Forms.ToolStripMenuItem tmiIPSH;
         private System.Windows.Forms.NotifyIcon notifyIcon;
-        private System.Windows.Forms.ToolStripMenuItem 屏幕截图ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 窗体监控ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tmiPMJT;
+        private System.Windows.Forms.ToolStripMenuItem tmiCTJK;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem tmiMenu;
+        private System.Windows.Forms.ToolStripMenuItem tmiClose;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem tmiSet;
+        private System.Windows.Forms.ToolStripComboBox cmbSetFunc;
+        private System.Windows.Forms.ToolStripComboBox cmbSetEXE;
     }
 }
 

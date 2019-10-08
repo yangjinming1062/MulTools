@@ -301,7 +301,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "IP速换";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "IP速换";
             this.Load += new System.EventHandler(this.IP速换_Load);
             this.panel.ResumeLayout(false);
