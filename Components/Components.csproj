@@ -33,38 +33,36 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsFormsAero">
       <HintPath>..\程序\WindowsFormsAero.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AspectRatioForm.cs">
+    <Compile Include="Controls\AspectRatioForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Class\WindowHandle.cs" />
-    <Compile Include="Extensions\GeometryExtensions.cs" />
-    <Compile Include="Extensions\ScreenPositionExtensions.cs" />
-    <Compile Include="Extensions\WindowsFormsExtensions.cs" />
+    <Compile Include="Class\Extensions\GeometryExtensions.cs" />
+    <Compile Include="Class\Extensions\ScreenPositionExtensions.cs" />
+    <Compile Include="Class\Extensions\WindowsFormsExtensions.cs" />
     <Compile Include="Function\Functions.cs" />
     <Compile Include="Class\inputHook.cs" />
     <Compile Include="Class\NoneBorderHelper.cs" />
-    <Compile Include="MessagePumpProcessors\BaseMessagePumpProcessor.cs" />
-    <Compile Include="MessagePumpProcessors\MessagePumpManager.cs" />
-    <Compile Include="MessagePumpProcessors\WindowKeeper.cs" />
+    <Compile Include="Class\MessagePumpProcessors\BaseMessagePumpProcessor.cs" />
+    <Compile Include="Class\MessagePumpProcessors\MessagePumpManager.cs" />
+    <Compile Include="Class\MessagePumpProcessors\WindowKeeper.cs" />
     <Compile Include="Class\CloneClickEventArgs.cs" />
     <Compile Include="Models\enums.cs" />
     <Compile Include="Models\IP.cs" />
-    <Compile Include="Monitor.cs">
+    <Compile Include="Controls\Monitor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Monitor.Designer.cs">
+    <Compile Include="Controls\Monitor.Designer.cs">
       <DependentUpon>Monitor.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,30 +73,30 @@
     </Compile>
     <Compile Include="Struct\NPoint.cs" />
     <Compile Include="Struct\NRectangle.cs" />
-    <Compile Include="ThumbnailPanel.cs">
+    <Compile Include="Controls\ThumbnailPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ThumbnailRegion.cs" />
-    <Compile Include="uc文件操作.cs">
+    <Compile Include="Controls\ThumbnailRegion.cs" />
+    <Compile Include="Controls\uc文件操作.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="uc文件操作.Designer.cs">
+    <Compile Include="Controls\uc文件操作.Designer.cs">
       <DependentUpon>uc文件操作.cs</DependentUpon>
     </Compile>
     <Compile Include="Function\Win32.cs" />
     <Compile Include="Class\XmlHelper.cs" />
-    <Compile Include="WindowSeekers\BaseWindowSeeker.cs" />
-    <Compile Include="WindowSeekers\TaskWindowSeeker.cs" />
+    <Compile Include="Class\WindowSeekers\BaseWindowSeeker.cs" />
+    <Compile Include="Class\WindowSeekers\TaskWindowSeeker.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Monitor.resx">
+    <EmbeddedResource Include="Controls\Monitor.resx">
       <DependentUpon>Monitor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="uc文件操作.resx">
+    <EmbeddedResource Include="Controls\uc文件操作.resx">
       <DependentUpon>uc文件操作.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

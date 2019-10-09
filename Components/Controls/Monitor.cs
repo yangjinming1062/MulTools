@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using MulTools.Components.Function;
 using MulTools.Components.Class;
-using MulTools.Components.WindowSeekers;
 
 namespace MulTools.Components
 {

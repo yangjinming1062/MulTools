@@ -267,6 +267,20 @@ namespace MulTools.Components.Function
                 return clientRectangle;
         }
         #endregion
+
+        #region Common methods for Win32 messaging.
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessageTimeout(IntPtr hwnd, uint message, IntPtr wparam, IntPtr lparam, SendMessageTimeoutFlags flags, uint timeout, out IntPtr result);
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+        public static IntPtr MakeLParam(int LoWord, int HiWord) => new IntPtr((HiWord << 16) | (LoWord & 0xffff));
+        #endregion
     }
     /// <summary>
     /// Windows Message codes.
@@ -310,24 +324,6 @@ namespace MulTools.Components.Function
         public const int TRANSPARENT = -1;
         public const int CLIENT = 1;
         public const int CAPTION = 2;
-    }
-
-    /// <summary>
-    /// Common methods for Win32 messaging.
-    /// </summary>
-    public static class MessagingMethods
-    {
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-        public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32.dll")]
-        public static extern IntPtr SendMessageTimeout(IntPtr hwnd, uint message, IntPtr wparam, IntPtr lparam, SendMessageTimeoutFlags flags, uint timeout, out IntPtr result);
-
-        [return: MarshalAs(UnmanagedType.Bool)]
-        [DllImport("user32.dll", SetLastError = false)]
-        public static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-
-        public static IntPtr MakeLParam(int LoWord, int HiWord) => new IntPtr((HiWord << 16) | (LoWord & 0xffff));
     }
 
     public static class HookMethods

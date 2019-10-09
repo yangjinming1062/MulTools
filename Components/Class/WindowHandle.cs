@@ -47,7 +47,7 @@ namespace MulTools.Components.Class
                 {
                     IntPtr hIcon;//Fetch icon from window
 
-                    if (MessagingMethods.SendMessageTimeout(Handle, WM.GETICON, new IntPtr(2), new IntPtr(0),
+                    if (Win32.SendMessageTimeout(Handle, WM.GETICON, new IntPtr(2), new IntPtr(0),
                         SendMessageTimeoutFlags.AbortIfHung | SendMessageTimeoutFlags.Block, 500, out hIcon) == IntPtr.Zero)
                     {
                         hIcon = IntPtr.Zero;

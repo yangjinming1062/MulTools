@@ -2,7 +2,7 @@
 using MulTools.Components.Function;
 using System.Collections.Generic;
 
-namespace MulTools.Components.WindowSeekers
+namespace MulTools.Components
 {
     /// <summary>
     /// Window seeker that attempts to mimic ALT+TAB behavior in filtering windows to show.

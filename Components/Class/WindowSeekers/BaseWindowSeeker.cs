@@ -3,7 +3,7 @@ using MulTools.Components.Function;
 using System;
 using System.Collections.Generic;
 
-namespace MulTools.Components.WindowSeekers
+namespace MulTools.Components
 {
     /// <summary>
     /// Interface for window seekers.
