@@ -45,11 +45,14 @@ namespace MulTools.Components
         private List<ListViewItem> lsFile = new List<ListViewItem>();
 
         #region 方法
+        /// <summary>
+        /// 根据当前选择的文件夹显示文件列表
+        /// </summary>
         public void BuildList()
         {
             if (Directory.Exists(txtDirpath.Text))
             {
-                pgBar.Visible = true;
+                BarVisable(true);
                 btBrowse.Enabled = false;
                 fileLV.Items.Clear();
                 lsFile.Clear();
@@ -93,28 +96,24 @@ namespace MulTools.Components
                             lsItem[(int)Cols.文件类型] = file.Extension;
                         }
 
-                        if (string.IsNullOrEmpty(lsItem[(int)Cols.文件类型]))//目录递归下去不处理就是一行空白，要么显示空目录，要么不显示
+                        if (!string.IsNullOrEmpty(lsItem[(int)Cols.文件类型]))//目录递归下去不处理就是一行空白，要么显示空目录，要么不显示
                         {
-                            continue;//跳过不显示
+                            if (!hsType.ContainsKey(lsItem[(int)Cols.文件类型]))
+                            {
+                                hsType.Add(lsItem[(int)Cols.文件类型], null);
+                            }
+                            if (NeedMD5 && !string.IsNullOrEmpty(lsItem[(int)Cols.文件类型]) && lsItem[(int)Cols.文件类型] != "文件夹" && string.IsNullOrEmpty(lsItem[(int)Cols.MD5]))
+                            {
+                                //lsItem[(int)Cols.MD5] = BulidMD5(file.FullName);
+                                //主要目的是记录带参数的多线程的调用
+                                System.Threading.Thread th = new System.Threading.Thread(() => BulidMD5(file.FullName, ref lsItem[(int)Cols.MD5]));
+                                th.Start();
+                            }
+                            ListViewItem item = new ListViewItem(lsItem);
+                            item.Name = file.FullName;
+                            lsItem = new string[3];
+                            lsFile.Add(item);
                         }
-
-                        if (!hsType.ContainsKey(lsItem[(int)Cols.文件类型]))
-                        {
-                            hsType.Add(lsItem[(int)Cols.文件类型], null);
-                        }
-
-                        if (NeedMD5 && !string.IsNullOrEmpty(lsItem[(int)Cols.文件类型]) && lsItem[(int)Cols.文件类型] != "文件夹" && string.IsNullOrEmpty(lsItem[(int)Cols.MD5]))
-                        {
-                            //lsItem[(int)Cols.MD5] = BulidMD5(file.FullName);
-                            //主要目的是记录带参数的多线程的调用
-                            System.Threading.Thread th = new System.Threading.Thread(() => BulidMD5(file.FullName, ref lsItem[(int)Cols.MD5]));
-                            th.Start();
-                        }
-
-                        ListViewItem item = new ListViewItem(lsItem);
-                        item.Name = file.FullName;
-                        lsItem = new string[3];
-                        lsFile.Add(item);
                     }
                 }
                 catch
@@ -174,39 +173,37 @@ namespace MulTools.Components
                 {
                     pgBar.Maximum = fileLV.SelectedItems.Count;
                     pgBar.Value = 0;
-                    pgBar.Visible = true;
+                    BarVisable(true);
                     for (int i = 0; i < fileLV.SelectedItems.Count; i++)
                     {
                         ListViewItem obj = fileLV.SelectedItems[i] as ListViewItem;
                         if (obj.SubItems[(int)Cols.文件类型].Text == "文件夹")
                         {
                             if (operate.ToLower() == "cut")
-                            {
                                 Functions.CutDir(obj.Name, txtDirpath.Text, TargetDirPath);
-                            }
                             else
-                            {
                                 Functions.CopyDir(obj.Name, txtDirpath.Text, TargetDirPath);
-                            }
                         }
                         else
                         {
                             if (operate.ToLower() == "cut")
-                            {
                                 File.Move(obj.Name, Path.Combine(TargetDirPath, Path.GetFileName(obj.Name)));
-                            }
                             else
-                            {
                                 File.Copy(obj.Name, Path.Combine(TargetDirPath, Path.GetFileName(obj.Name)));
-                            }
                         }
                         pgBar.Value += 1;
                     }
                     BuildList();
-                    pgBar.Visible = false;
+                    BarVisable(false);
                     OperateFinished?.Invoke();//通知另一侧可以刷新了
                 }
             }
+        }
+
+        private void BarVisable(bool value)
+        {
+            panelTop.Visible = !value;
+            pgBar.Visible = value;
         }
         #endregion
 
@@ -244,8 +241,7 @@ namespace MulTools.Components
                 {
                     if (file.SubItems[(int)Cols.文件名].Text.Contains(txtSource.Text))
                     {
-                        NewName = Path.Combine(txtDirpath.Text,
-                            file.SubItems[(int)Cols.文件名].Text.Replace(txtSource.Text, txtTarget.Text) + file.SubItems[(int)Cols.文件类型].Text);
+                        NewName = Path.Combine(txtDirpath.Text,file.SubItems[(int)Cols.文件名].Text.Replace(txtSource.Text, txtTarget.Text) + file.SubItems[(int)Cols.文件类型].Text);
                         try
                         {
                             File.Move(file.Name, NewName);
@@ -295,19 +291,14 @@ namespace MulTools.Components
         #region BackgroudWorker相关事件
         private void BgWorker_BuildList(object sender, DoWorkEventArgs e)
         {
-            hsType = new Hashtable();
-            lsFile.Clear();
+            hsType = new Hashtable();//BuildList会有递归，所以必须写在外面
+            lsFile.Clear();//BuildList会有递归，所以必须写在外面
             BuildList(txtDirpath.Text);
-        }
-
-        private void BgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            pgBar.Value = e.ProgressPercentage;
         }
 
         private void BgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            pgBar.Visible = false;
+            BarVisable(false);
             btBrowse.Enabled = true;
             fileLV.Items.AddRange(lsFile.ToArray());
             BuildTablePanel();
@@ -328,14 +319,9 @@ namespace MulTools.Components
             foreach (ListViewItem obj in fileLV.SelectedItems)
             {
                 if (obj.SubItems[(int)Cols.文件类型].Text == "文件夹")
-                {
                     Functions.DeleteDir(obj.Name);
-                }
                 else
-                {
                     File.Delete(obj.Name);
-                }
-
                 fileLV.Items.Remove(obj);
             }
         }
@@ -349,6 +335,7 @@ namespace MulTools.Components
         private void TsmItemRename_Click(object sender, EventArgs e) => txtReName.Text = fileLV.FocusedItem.SubItems[(int)Cols.文件名].Text;
         #endregion
 
+        #region 事件
         /// <summary>
         /// 关键事件，主要功能入口处
         /// </summary>
@@ -384,9 +371,13 @@ namespace MulTools.Components
                 }
             }
         }
-
+        /// <summary>
+        /// 递归加载状态改变
+        /// </summary>
         private void CbDG_CheckedChanged(object sender, EventArgs e) => BuildList();
-
+        /// <summary>
+        /// 文件列表中文件夹双击进入
+        /// </summary>
         private void FileLV_DoubleClick(object sender, EventArgs e)
         {
             if (((ListView)(sender)).FocusedItem.SubItems[(int)Cols.文件类型].Text == "文件夹")
@@ -394,9 +385,13 @@ namespace MulTools.Components
                 txtDirpath.Text = ((ListView)(sender)).FocusedItem.Name;
             }
         }
-
+        /// <summary>
+        /// 文件列表尺寸改变自动调整显示
+        /// </summary>
         private void FileLV_SizeChanged(object sender, EventArgs e) => cName.Width = fileLV.Width - cMD5.Width - cType.Width - 10;
-
+        /// <summary>
+        /// 文件扩展类型tablePanel尺寸改变重新计算控件排列
+        /// </summary>
         private void tbPanel_SizeChanged(object sender, EventArgs e)
         {
             tbPanel.Controls.Clear();
@@ -408,5 +403,6 @@ namespace MulTools.Components
             }
             BuildTablePanel();
         }
+        #endregion
     }
 }

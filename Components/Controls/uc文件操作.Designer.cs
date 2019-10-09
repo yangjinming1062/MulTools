@@ -68,7 +68,6 @@
             // bgWorker
             // 
             this.bgWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BgWorker_BuildList);
-            this.bgWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.BgWorker_ProgressChanged);
             this.bgWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BgWorker_RunWorkerCompleted);
             // 
             // tbPanel
@@ -102,7 +101,7 @@
             this.panelTop.Controls.Add(this.cbDG);
             this.panelTop.Controls.Add(this.label1);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 18);
+            this.panelTop.Location = new System.Drawing.Point(0, 34);
             this.panelTop.Margin = new System.Windows.Forms.Padding(2);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(426, 22);
@@ -303,10 +302,10 @@
             this.fileLV.GridLines = true;
             this.fileLV.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.fileLV.HideSelection = false;
-            this.fileLV.Location = new System.Drawing.Point(0, 40);
+            this.fileLV.Location = new System.Drawing.Point(0, 56);
             this.fileLV.Margin = new System.Windows.Forms.Padding(2);
             this.fileLV.Name = "fileLV";
-            this.fileLV.Size = new System.Drawing.Size(426, 249);
+            this.fileLV.Size = new System.Drawing.Size(426, 233);
             this.fileLV.TabIndex = 5;
             this.fileLV.UseCompatibleStateImageBehavior = false;
             this.fileLV.View = System.Windows.Forms.View.Details;
@@ -394,7 +393,7 @@
             this.pgBar.Location = new System.Drawing.Point(0, 0);
             this.pgBar.Margin = new System.Windows.Forms.Padding(2);
             this.pgBar.Name = "pgBar";
-            this.pgBar.Size = new System.Drawing.Size(426, 18);
+            this.pgBar.Size = new System.Drawing.Size(426, 34);
             this.pgBar.Step = 1;
             this.pgBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.pgBar.TabIndex = 6;

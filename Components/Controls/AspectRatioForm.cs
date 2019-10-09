@@ -15,13 +15,7 @@ namespace MulTools.Components
     public class AspectRatioForm : WindowsFormsAero.AeroForm
     {
         bool _keepAspectRatio = true;
-        /// <summary>
-        /// Gets or sets whether the form should keep its aspect ratio.
-        /// </summary>
-        /// <remarks>
-        /// Refreshes the window's size if set to true.
-        /// </remarks>
-        [Description("Enables fixed aspect ratio for this form."), Category("Appearance"), DefaultValue(true)]
+        [Description("Gets or sets whether the form should keep its aspect ratio."), Category("Appearance"), DefaultValue(true)]
         public bool KeepAspectRatio
         {
             get => _keepAspectRatio;
@@ -34,9 +28,6 @@ namespace MulTools.Components
         }
 
         double _aspectRatio = 1.0;
-        /// <summary>
-        /// Gets or sets the form's aspect ratio that will be kept automatically when resizing.
-        /// </summary>
         [Description("Determines this form's fixed aspect ratio."), Category("Appearance"), DefaultValue(1.0)]
         public double AspectRatio
         {
@@ -51,9 +42,6 @@ namespace MulTools.Components
         }
 
         Padding _extraPadding;
-        /// <summary>
-        /// Gets or sets some additional internal padding of the form that is ignored when keeping the aspect ratio.
-        /// </summary>
         [Description("Sets some padding inside the form's client area that is ignored when keeping the aspect ratio."), Category("Appearance")]
         public Padding ExtraPadding
         {
@@ -255,13 +243,11 @@ namespace MulTools.Components
                 CommonIcon = CommonIcon.Stop,
                 IsExpanded = false
             };
-
             if (!string.IsNullOrEmpty(errorMessage))
             {
                 dlg.ExpandedInformation = "错误：" + errorMessage;
                 dlg.ExpandedControlText = "详细错误";
             }
-
             dlg.Show(this);
         }
     }
