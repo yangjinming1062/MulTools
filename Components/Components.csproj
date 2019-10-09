@@ -57,7 +57,8 @@
     <Compile Include="Class\MessagePumpProcessors\MessagePumpManager.cs" />
     <Compile Include="Class\MessagePumpProcessors\WindowKeeper.cs" />
     <Compile Include="Class\CloneClickEventArgs.cs" />
-    <Compile Include="Models\enums.cs" />
+    <Compile Include="Class\EnumsAndClasses.cs" />
+    <Compile Include="Struct\TokPriv1Luid.cs" />
     <Compile Include="Models\IP.cs" />
     <Compile Include="Controls\Monitor.cs">
       <SubType>Form</SubType>

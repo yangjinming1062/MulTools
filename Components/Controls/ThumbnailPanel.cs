@@ -3,8 +3,8 @@ using System.Windows.Forms;
 using WindowsFormsAero.Dwm;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
-using MulTools.Components.Function;
 using MulTools.Components.Class;
+using MulTools.Components.Enums;
 
 namespace MulTools.Components
 {

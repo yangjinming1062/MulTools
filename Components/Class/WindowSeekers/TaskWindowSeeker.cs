@@ -1,4 +1,5 @@
 ﻿using MulTools.Components.Class;
+using MulTools.Components.Enums;
 using MulTools.Components.Function;
 using System.Collections.Generic;
 

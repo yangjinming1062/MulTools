@@ -1,4 +1,5 @@
 ﻿using MulTools.Components;
+using MulTools.Components.Enums;
 using System;
 using System.Drawing;
 using System.IO;

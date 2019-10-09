@@ -21,7 +21,7 @@ namespace MulTools.Components
         public static void PrivilegesUp(string Privilege)
         {
             bool ToF;
-            Win32.TokPriv1Luid tp;
+            Struct.TokPriv1Luid tp;
             tp.PrivilegeCount = 1;
             tp.Luid = 0;
             tp.Attr = Win32.SE_PRIVILEGE_ENABLED;
@@ -37,7 +37,7 @@ namespace MulTools.Components
         public static void DoExitWin(int flg)
         {
             bool ok;
-            Win32.TokPriv1Luid tp;
+            Struct.TokPriv1Luid tp;
             tp.PrivilegeCount = 1;
             tp.Luid = 0;
             tp.Attr = Win32.SE_PRIVILEGE_ENABLED;
@@ -46,7 +46,7 @@ namespace MulTools.Components
             IntPtr htok = IntPtr.Zero;
 
             ok = Win32.OpenProcessToken(hproc, Win32.TOKEN_ADJUST_PRIVILEGES | Win32.TOKEN_QUERY, ref htok);//获得进程访问令牌的句柄
-            ok = Win32.LookupPrivilegeValue(null, Win32.SE_SHUTDOWN_NAME, ref tp.Luid);//修改进程权限
+            ok = Win32.LookupPrivilegeValue(null, Enums.WPrivilege.SE_SHUTDOWN_NAME, ref tp.Luid);//修改进程权限
             ok = Win32.AdjustTokenPrivileges(htok, false, ref tp, 0, IntPtr.Zero, IntPtr.Zero);//通知系统修改进程权限
             ok = Win32.ExitWindowsEx(flg, 0);
         }

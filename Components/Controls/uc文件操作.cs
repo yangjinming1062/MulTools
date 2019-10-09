@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MulTools.Components.Enums;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +19,7 @@ namespace MulTools.Components
             InitializeComponent();
         }
 
+        #region 属性，变量
         /// <summary>
         /// 是否生成文件的MD5
         /// </summary>
@@ -42,7 +44,11 @@ namespace MulTools.Components
         /// 存文件类型，然后根据文件类型在最下方显示勾选框
         /// </summary>
         private Hashtable hsType;
+        /// <summary>
+        /// 当前路径的文件列表
+        /// </summary>
         private List<ListViewItem> lsFile = new List<ListViewItem>();
+        #endregion
 
         #region 方法
         /// <summary>
@@ -218,10 +224,11 @@ namespace MulTools.Components
 
         private void BtBack_Click(object sender, EventArgs e)
         {
-            if (txtDirpath.Text.LastIndexOf("\\") > 1)
+            try
             {
-                txtDirpath.Text = txtDirpath.Text.Substring(0, txtDirpath.Text.LastIndexOf("\\"));
+                txtDirpath.Text = Directory.GetParent(txtDirpath.Text).FullName;
             }
+            catch { }
         }
 
         private void BtOpen_Click(object sender, EventArgs e)
@@ -282,10 +289,10 @@ namespace MulTools.Components
         private delegate void DGfileItems(string items);
 
         public delegate void CurrentDir(string dirPath);//事件需要的委托
-        public event CurrentDir CurrentDirEvent;//事件发布者
+        public event CurrentDir CurrentDirEvent;//通知调用窗体当前操作的文件夹
 
         public delegate void FinishOperate();//事件需要的委托
-        public event FinishOperate OperateFinished;//事件发布者
+        public event FinishOperate OperateFinished;//通知调用方文件操作已经完成
         #endregion
 
         #region BackgroudWorker相关事件

@@ -1,4 +1,5 @@
-﻿using MulTools.Components.Function;
+﻿using MulTools.Components.Enums;
+using MulTools.Components.Function;
 using System;
 using System.Drawing;
 using System.Text;

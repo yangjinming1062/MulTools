@@ -1,4 +1,5 @@
-﻿using MulTools.Components.Function;
+﻿using MulTools.Components.Enums;
+using MulTools.Components.Function;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -64,12 +65,12 @@ namespace MulTools.Forms
                 Left = Screen.PrimaryScreen.WorkingArea.Width - Size.Width;
             }
             if (e.KeyCode == Keys.Space)
-                Components.Functions.DoExitWin(Win32.EWX_SHUTDOWN);
+                Components.Functions.DoExitWin(EWX.EWX_SHUTDOWN);
         }
 
         private void TimerClose_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            Components.Functions.DoExitWin(Win32.EWX_SHUTDOWN);
+            Components.Functions.DoExitWin(EWX.EWX_SHUTDOWN);
         }
 
         private void 定时关机_Load(object sender, EventArgs e)

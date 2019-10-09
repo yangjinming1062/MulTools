@@ -14,7 +14,7 @@ namespace MulTools.Components.Struct
             Bottom = bottom;
         }
 
-        public NRectangle(System.Drawing.Rectangle rect)
+        public NRectangle(Rectangle rect)
         {
             Left = rect.X;
             Top = rect.Y;
@@ -30,9 +30,9 @@ namespace MulTools.Components.Struct
         public int Width => Right - Left;
         public int Height => Bottom - Top;
 
-        public System.Drawing.Rectangle ToRectangle() => new System.Drawing.Rectangle(Left, Top, Right - Left, Bottom - Top);
+        public Rectangle ToRectangle() => new Rectangle(Left, Top, Right - Left, Bottom - Top);
 
-        public System.Drawing.Size Size => new System.Drawing.Size(Width, Height);
+        public Size Size => new Size(Width, Height);
 
         public override string ToString() => string.Format("{{{0},{1},{2},{3}}}", Left, Top, Right, Bottom);
     }
