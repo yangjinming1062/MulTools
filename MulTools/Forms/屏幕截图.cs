@@ -50,6 +50,8 @@ namespace MulTools.Forms
             gif.Dispose();
             if (Settings.Default.Is删除GIF临时文件)
                 Functions.DeleteDir(CombineTempPath);
+            if (Settings.Default.Pic截图同步到剪切板)
+                Clipboard.SetImage(new Bitmap(fileName));
         }
 
         private void PicToLong()
@@ -97,6 +99,8 @@ namespace MulTools.Forms
                     BtLong_Click(null, null);
                 }
             }
+            if (Ss.Pic截图同步到剪切板)
+                Clipboard.SetImage(new Bitmap(fileName));
         }
 
         private void 屏幕截图_Load(object sender, EventArgs e)
@@ -126,6 +130,12 @@ namespace MulTools.Forms
         }
 
         private void BtCLose_Click(object sender, EventArgs e) => Close();
+
+        private void txtPath_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter && Directory.Exists(txtPath.Text))//从友好性出发，增加直接打开存图片的文件夹的方法
+                System.Diagnostics.Process.Start("Explorer.exe", txtPath.Text);
+        }
 
         #region 监视鼠标键盘
         private void KeyboardHook_KeyDown(object sender, KeyEventArgs e)
@@ -219,6 +229,8 @@ namespace MulTools.Forms
                 gp.CopyFromScreen(Functions.GetRated(Location.X + picBox.Location.X) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)),
                     Functions.GetRated(Location.Y + picBox.Location.Y) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)), 0, 0, new Size(w, h));
                 bt.Save(string.Format("{0}/{1}.", timerPic.Enabled ? CombineTempPath : txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss")) + Settings.Default.截图文件类型);
+                if (Settings.Default.Pic截图同步到剪切板)
+                    Clipboard.SetImage(bt);
                 bt.Dispose();
             }
         }
@@ -315,6 +327,7 @@ namespace MulTools.Forms
             Settings.Default.Long上限值 = Convert.ToInt32(txtHeigh.Text);
             Settings.Default.Long合成方向 = menu_cmbLongType.Text.Equals("垂直") ? "V" : "H";
             Settings.Default.Long实时合成 = menu_cmbRealTime.Text.Equals("是");
+            Settings.Default.Pic截图同步到剪切板 = menu_cmbClipboard.Text.Equals("是");
         }
 
         private void SettingMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
@@ -331,6 +344,7 @@ namespace MulTools.Forms
             txtLow.Text = Settings.Default.Long下限值.ToString();
             txtHeigh.Text = Settings.Default.Long上限值.ToString();
             menu_cmbRealTime.Text = Settings.Default.Long实时合成 ? "是" : "否";
+            menu_cmbClipboard.Text = Settings.Default.Pic截图同步到剪切板 ? "是" : "否";
         }
         #endregion
 

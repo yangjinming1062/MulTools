@@ -214,5 +214,17 @@ namespace MulTools.Properties {
                 this["Menu功能多开"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Pic截图同步到剪切板 {
+            get {
+                return ((bool)(this["Pic截图同步到剪切板"]));
+            }
+            set {
+                this["Pic截图同步到剪切板"] = value;
+            }
+        }
     }
 }

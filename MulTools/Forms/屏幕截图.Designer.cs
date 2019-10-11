@@ -37,6 +37,8 @@
             this.components = new System.ComponentModel.Container();
             this.panelTop = new System.Windows.Forms.Panel();
             this.settingMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_cmbClipboard = new System.Windows.Forms.ToolStripComboBox();
             this.长图拼接类型ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_cmbLongType = new System.Windows.Forms.ToolStripComboBox();
             this.截图文件类型ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -139,6 +141,7 @@
             // settingMenu
             // 
             this.settingMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
             this.长图拼接类型ToolStripMenuItem,
             this.截图文件类型ToolStripMenuItem,
             this.删除临时图片长图ToolStripMenuItem,
@@ -150,9 +153,27 @@
             this.长图实时合成ToolStripMenuItem,
             this.永久记录当前保存路径ToolStripMenuItem});
             this.settingMenu.Name = "settingMenu";
-            this.settingMenu.Size = new System.Drawing.Size(197, 224);
+            this.settingMenu.Size = new System.Drawing.Size(197, 246);
             this.settingMenu.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.SettingMenu_Closed);
             this.settingMenu.Opening += new System.ComponentModel.CancelEventHandler(this.SettingMenu_Opening);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_cmbClipboard});
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(196, 22);
+            this.toolStripMenuItem1.Text = "截图同步至剪切板";
+            // 
+            // menu_cmbClipboard
+            // 
+            this.menu_cmbClipboard.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_cmbClipboard.Items.AddRange(new object[] {
+            "是",
+            "否"});
+            this.menu_cmbClipboard.Name = "menu_cmbClipboard";
+            this.menu_cmbClipboard.Size = new System.Drawing.Size(75, 25);
+            this.menu_cmbClipboard.Text = "是";
             // 
             // 长图拼接类型ToolStripMenuItem
             // 
@@ -238,6 +259,7 @@
             // menu_GIFframetime
             // 
             this.menu_GIFframetime.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_GIFframetime.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.menu_GIFframetime.Name = "menu_GIFframetime";
             this.menu_GIFframetime.Size = new System.Drawing.Size(60, 23);
             this.menu_GIFframetime.Text = "10";
@@ -253,6 +275,7 @@
             // menu_txtGiftime
             // 
             this.menu_txtGiftime.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_txtGiftime.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.menu_txtGiftime.Name = "menu_txtGiftime";
             this.menu_txtGiftime.Size = new System.Drawing.Size(60, 23);
             this.menu_txtGiftime.Text = "100";
@@ -268,6 +291,7 @@
             // menu_txtLongtime
             // 
             this.menu_txtLongtime.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_txtLongtime.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.menu_txtLongtime.Name = "menu_txtLongtime";
             this.menu_txtLongtime.Size = new System.Drawing.Size(60, 23);
             this.menu_txtLongtime.Text = "300";
@@ -287,6 +311,7 @@
             // txtSimilar
             // 
             this.txtSimilar.BackColor = System.Drawing.SystemColors.Info;
+            this.txtSimilar.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.txtSimilar.Name = "txtSimilar";
             this.txtSimilar.Size = new System.Drawing.Size(60, 23);
             this.txtSimilar.Text = "0.85";
@@ -300,6 +325,7 @@
             // txtLow
             // 
             this.txtLow.BackColor = System.Drawing.SystemColors.Info;
+            this.txtLow.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.txtLow.Name = "txtLow";
             this.txtLow.Size = new System.Drawing.Size(60, 23);
             this.txtLow.Text = "50";
@@ -313,6 +339,7 @@
             // txtHeigh
             // 
             this.txtHeigh.BackColor = System.Drawing.SystemColors.Info;
+            this.txtHeigh.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.txtHeigh.Name = "txtHeigh";
             this.txtHeigh.Size = new System.Drawing.Size(60, 23);
             this.txtHeigh.Text = "200";
@@ -609,6 +636,7 @@
             this.txtPath.Size = new System.Drawing.Size(118, 21);
             this.txtPath.TabIndex = 2;
             this.txtPath.TabStop = false;
+            this.txtPath.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPath_KeyDown);
             // 
             // btSavePath
             // 
@@ -844,5 +872,7 @@
         private System.Windows.Forms.ToolStripComboBox menu_cmbLongType;
         private System.Windows.Forms.ToolStripMenuItem 长图实时合成ToolStripMenuItem;
         private System.Windows.Forms.ToolStripComboBox menu_cmbRealTime;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripComboBox menu_cmbClipboard;
     }
 }
