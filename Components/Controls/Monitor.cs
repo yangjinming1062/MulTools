@@ -471,7 +471,7 @@ namespace MulTools.Components
         private void Opacity_Click(object sender, EventArgs e)
         {
             if (this.Visible)
-                this.Opacity = (double)((ToolStripMenuItem)sender).Tag;
+                this.Opacity = Convert.ToDouble(((ToolStripMenuItem)sender).Tag);
         }
 
         private void Close_Click(object sender, EventArgs e)
