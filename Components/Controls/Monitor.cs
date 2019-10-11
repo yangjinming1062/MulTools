@@ -73,10 +73,7 @@ namespace MulTools.Components
             this.SetThumbnail(w, null);
         }
 
-        void TaskIcon_doubleclick(object sender, EventArgs e)
-        {
-            ClickThroughEnabled = false;
-        }
+        void TaskIcon_doubleclick(object sender, EventArgs e) => ClickThroughEnabled = false;//强制取消点击穿透
 
         #region Event override
         protected override void OnHandleCreated(EventArgs e)
@@ -436,24 +433,14 @@ namespace MulTools.Components
             Point menuPosition = MousePosition;
             if (position.HasValue)
                 menuPosition = position.Value;
-
             MenuStrip.Show(menuPosition);
         }
 
-        private void IsShowBorder_Click(object sender, EventArgs e)
-        {
-            IsBorderVisible = !IsBorderVisible;
-        }
+        private void IsShowBorder_Click(object sender, EventArgs e) => IsBorderVisible = !IsBorderVisible;
 
-        private void MenuStrip_Opening(object sender, CancelEventArgs e)
-        {
-            menuitem_IsShowBorder.Checked = IsBorderVisible;
-        }
+        private void MenuStrip_Opening(object sender, CancelEventArgs e) => menuitem_IsShowBorder.Checked = IsBorderVisible;
 
-        private void ClickThrough_Click(object sender, EventArgs e)
-        {
-            ClickThroughEnabled = true;
-        }
+        private void ClickThrough_Click(object sender, EventArgs e) => ClickThroughEnabled = !ClickThroughEnabled;
 
         private void PositionLock_Click(object sender, EventArgs e)
         {
@@ -468,16 +455,9 @@ namespace MulTools.Components
             }
         }
 
-        private void Opacity_Click(object sender, EventArgs e)
-        {
-            if (this.Visible)
-                this.Opacity = Convert.ToDouble(((ToolStripMenuItem)sender).Tag);
-        }
+        private void Opacity_Click(object sender, EventArgs e) => this.Opacity = this.Visible ? Convert.ToDouble(((ToolStripMenuItem)sender).Tag) : this.Opacity;
 
-        private void Close_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        private void Close_Click(object sender, EventArgs e) => Close();
 
         private void SelectWindows_DropDownOpening(object sender, EventArgs e)
         {
