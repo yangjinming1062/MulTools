@@ -71,7 +71,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "定时关机";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.定时关机_FormClosed);
             this.Load += new System.EventHandler(this.定时关机_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

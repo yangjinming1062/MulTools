@@ -1,4 +1,5 @@
-﻿using MulTools.Components.Enums;
+﻿using MulTools.Components.Class;
+using MulTools.Components.Enums;
 using MulTools.Components.Function;
 using System;
 using System.Drawing;
@@ -14,33 +15,7 @@ namespace MulTools.Forms
         }
 
         private System.Timers.Timer timerClose = null;
-        /// <summary>
-        /// 实现热键功能
-        /// </summary>
-        /// <param name="m"></param>
-        protected override void WndProc(ref Message m)
-        {
-            if (m.Msg == Win32.WM_HOTKEY)
-            {
-                switch (m.WParam.ToInt32())
-                {
-                    case 1062:
-                        Opacity = (Opacity + 0.1) % 1;
-                        break;
-                    case 1063:
-                        if (Opacity < 1)
-                            Opacity = 1;
-                        else
-                            Opacity = 0;
-                        break;
-                    case 1064:
-                        if (Opacity > 0.5)
-                            Close();
-                        break;
-                }
-            }
-            base.WndProc(ref m);
-        }
+        private KeyboardHook keyboardHook = new KeyboardHook();// 键盘钩子
 
         private void Dtp_KeyDown(object sender, KeyEventArgs e)
         {
@@ -63,32 +38,31 @@ namespace MulTools.Forms
                 timerClose.Start();
                 Top = Screen.PrimaryScreen.WorkingArea.Height - Size.Height;
                 Left = Screen.PrimaryScreen.WorkingArea.Width - Size.Width;
+                Opacity = 0;
             }
             if (e.KeyCode == Keys.Space)
                 Components.Functions.DoExitWin(EWX.EWX_SHUTDOWN);
         }
 
-        private void TimerClose_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            Components.Functions.DoExitWin(EWX.EWX_SHUTDOWN);
-        }
+        private void TimerClose_Elapsed(object sender, System.Timers.ElapsedEventArgs e) => Components.Functions.DoExitWin(EWX.EWX_SHUTDOWN);
 
         private void 定时关机_Load(object sender, EventArgs e)
         {
             StartPosition = FormStartPosition.CenterParent;
-            Win32.RegisterHotKey(Handle, 1062, 0x0004, Keys.J);
-            Win32.RegisterHotKey(Handle, 1063, 0x0004, Keys.G);
-            Win32.RegisterHotKey(Handle, 1064, 0, Keys.Escape);
+            keyboardHook.KeyDown += KeyboardHook_KeyDown;
+            keyboardHook.Start();
         }
 
-        private void 定时关机_FormClosed(object sender, FormClosedEventArgs e)
+        private void KeyboardHook_KeyDown(object sender, KeyEventArgs e)
         {
-            Win32.UnregisterHotKey(Handle, 100);//释放热键
+            if (e.Alt && e.KeyCode == Keys.G)
+                Opacity = (Opacity + 0.1) % 1;
+            if (e.Alt && e.KeyCode == Keys.J)
+                Opacity = Opacity < 1 ? 1 : 0;
+            if (e.KeyCode == Keys.Escape && Opacity > 0.5)
+                Close();
         }
 
-        private void CbJS_CheckedChanged(object sender, EventArgs e)
-        {
-            dtp.Value = cbJS.Checked ? DateTime.Now.Date : DateTime.Now;
-        }
+        private void CbJS_CheckedChanged(object sender, EventArgs e) => dtp.Value = cbJS.Checked ? DateTime.Now.Date : DateTime.Now;
     }
 }

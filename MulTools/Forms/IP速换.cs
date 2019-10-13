@@ -7,6 +7,7 @@ using System.Net;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO;
+using System.Reflection;
 
 namespace MulTools.Forms
 {
@@ -51,19 +52,14 @@ namespace MulTools.Forms
             tvIP.Nodes.Clear();
             foreach (XmlNode xml in xmlNodes)
             {
-                TreeNode tvNode = new TreeNode();
-                IP iP = new IP
+                IP iP = new IP();
+                PropertyInfo[] propertys = iP.GetType().GetProperties();
+                foreach (PropertyInfo pi in propertys)
                 {
-                    IPDZ = xml.Attributes[(int)IPenum.IPDZ].InnerText,
-                    ZWYM = xml.Attributes[(int)IPenum.ZWYM].InnerText,
-                    MRWG = xml.Attributes[(int)IPenum.MRWG].InnerText,
-                    FDNS = xml.Attributes[(int)IPenum.FDNS].InnerText,
-                    SDNS = xml.Attributes[(int)IPenum.SDNS].InnerText,
-                    Name = xml.Attributes[(int)IPenum.NAME].InnerText
-                };
-                tvNode.Text = iP.Name;
-                tvNode.Tag = iP;
-                tvIP.Nodes.Add(tvNode);
+                    pi.SetValue(iP, xml.Attributes[pi.Name].Value);
+                }
+                tvIP.Nodes.Add(iP.Name, iP.Name);//添加具有Key的树节点
+                tvIP.Nodes.Find(iP.Name,false)[0].Tag = iP;
             }
             #endregion
 
@@ -80,6 +76,28 @@ namespace MulTools.Forms
             //}
             #endregion
             tvIP.ExpandAll();
+        }
+
+        private void GetText(IP obj, string Name = null)
+        {
+            obj.IPDZ = txtIP.Text;
+            obj.ZWYM = txtYM.Text;
+            obj.MRWG = txtWG.Text;
+            obj.FDNS = txtFDNS.Text;
+            obj.SDNS = txtSDNS.Text;
+            if (!string.IsNullOrEmpty(Name))
+                obj.Name = Name;
+        }
+
+        private void SetText(IP obj,bool NoName = false)
+        {
+            txtIP.Text = obj.IPDZ;
+            txtYM.Text = obj.ZWYM;
+            txtWG.Text = obj.MRWG;
+            txtFDNS.Text = obj.FDNS;
+            txtSDNS.Text = obj.SDNS;
+            if (!NoName)
+                txtName.Text = obj.Name;
         }
         #endregion
 
@@ -104,13 +122,7 @@ namespace MulTools.Forms
         {
             if (tvIP.SelectedNode != null && tvIP.SelectedNode.Tag != null)
             {
-                IP obj = tvIP.SelectedNode.Tag as IP;
-                txtIP.Text = obj.IPDZ;
-                txtYM.Text = obj.ZWYM;
-                txtWG.Text = obj.MRWG;
-                txtFDNS.Text = obj.FDNS;
-                txtSDNS.Text = obj.SDNS;
-                txtName.Text = obj.Name;
+                SetText(tvIP.SelectedNode.Tag as IP);
                 //cmbWK.Visible = false;
                 cmbWK.SelectedIndexChanged -= new EventHandler(CmbWK_SelectedIndexChanged);
             }
@@ -118,15 +130,7 @@ namespace MulTools.Forms
 
         private void CbAutoWG_CheckedChanged(object sender, EventArgs e) => txtWG.TabStop = cbAutoWG.Checked ? false : true;
 
-        private void CmbWK_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            IP obj = cmbWK.SelectedItem as IP;
-            txtIP.Text = obj.IPDZ;
-            txtYM.Text = obj.ZWYM;
-            txtWG.Text = obj.MRWG;
-            txtFDNS.Text = obj.FDNS;
-            txtSDNS.Text = obj.SDNS;
-        }
+        private void CmbWK_SelectedIndexChanged(object sender, EventArgs e) => SetText(cmbWK.SelectedItem as IP, true);
 
         private void TxtIP_Leave(object sender, EventArgs e)
         {
@@ -136,8 +140,8 @@ namespace MulTools.Forms
 
         private void BtDelete_Click(object sender, EventArgs e)
         {
-            xmlHelper.RemoveNode("IP", "NAME", txtName.Text);
-            RefreshTree();
+            if (xmlHelper.RemoveNode("IP", "Name", txtName.Text))
+                tvIP.Nodes.RemoveByKey(txtName.Text);
         }
 
         private void BtRead_Click(object sender, EventArgs e)
@@ -166,15 +170,8 @@ namespace MulTools.Forms
                         if ((nic["DNSServerSearchOrder"] as string[]).Length > 1)
                             txtSDNS.Text = (nic["DNSServerSearchOrder"] as string[])[1];
                     }
-                    IP obj = new IP
-                    {
-                        IPDZ = txtIP.Text,
-                        ZWYM = txtYM.Text,
-                        MRWG = txtWG.Text,
-                        FDNS = txtFDNS.Text,
-                        SDNS = txtSDNS.Text,
-                        Name = nic.Properties["Description"].Value.ToString()//网卡
-                    };
+                    IP obj = new IP();
+                    GetText(obj, nic.Properties["Description"].Value.ToString());
                     cmbWK.Items.Add(obj);
                     cmbWK.DisplayMember = "Name";
                 }
@@ -201,58 +198,33 @@ namespace MulTools.Forms
                 return;
             }
             #region 修改xml
-            bool IsHaved = false;//是否已经是现有的配置名称，是的话更新现有信息，否的话新增节点
+            IP obj = null;//是否已经是现有的配置名称，是的话更新现有信息，否的话新增节点
             if (tvIP.SelectedNode != null && tvIP.SelectedNode.Text != txtName.Text)
             {
                 DialogResult ds = MessageBox.Show("选择是则修改所选配置为新名称，选择否则保留旧配置新增配置", "修改选择的配置信息", MessageBoxButtons.YesNo);
                 if (ds == DialogResult.Yes)
                 {
-                    IP obj = tvIP.SelectedNode.Tag as IP;
-                    obj.IPDZ = txtIP.Text;
-                    obj.ZWYM = txtYM.Text;
-                    obj.MRWG = txtWG.Text;
-                    obj.FDNS = txtFDNS.Text;
-                    obj.SDNS = txtSDNS.Text;
-                    obj.Name = txtName.Text;
+                    obj = tvIP.SelectedNode.Tag as IP;
+                    GetText(obj, txtName.Text);
                     xmlHelper.UpdateNode("IP", tvIP.SelectedNode.Text, obj);
                     tvIP.SelectedNode.Text = obj.Name;
-                    IsHaved = true;
                 }
             }
             else
             {
-                foreach (TreeNode node in tvIP.Nodes)
+                TreeNode[] nodes = tvIP.Nodes.Find(txtName.Text, false);
+                if (nodes.Length > 0)
                 {
-                    if (node.Text == txtName.Text)
-                    {
-                        IsHaved = true;
-                        IP obj = node.Tag as IP;
-                        obj.IPDZ = txtIP.Text;
-                        obj.ZWYM = txtYM.Text;
-                        obj.MRWG = txtWG.Text;
-                        obj.FDNS = txtFDNS.Text;
-                        obj.SDNS = txtSDNS.Text;
-                        xmlHelper.UpdateNode("IP", node.Text, obj);
-                    }
+                    obj = nodes[0].Tag as IP;
+                    GetText(obj);
+                    xmlHelper.UpdateNode("IP", obj.Name, obj);
                 }
             }
-            if (!IsHaved)
+            if (obj == null)
             {
-                IP obj = new IP
-                {
-                    IPDZ = txtIP.Text,
-                    ZWYM = txtYM.Text,
-                    MRWG = txtWG.Text,
-                    FDNS = txtFDNS.Text,
-                    SDNS = txtSDNS.Text,
-                    Name = txtName.Text
-                };
-                TreeNode node = new TreeNode
-                {
-                    Text = obj.Name,
-                    Tag = obj
-                };
-                tvIP.Nodes.Add(node);
+                obj = new IP();
+                GetText(obj, txtName.Text);
+                tvIP.Nodes.Add(new TreeNode { Text = obj.Name, Tag = obj });
                 xmlHelper.AppendNode(obj, "IP");
             }
             #endregion
@@ -263,51 +235,42 @@ namespace MulTools.Forms
 
         private void BtApply_Click(object sender, EventArgs e)
         {
-            if (!Valid())
-                return;
-            #region 修改网络参数
-            //DialogResult ds = MessageBox.Show("会将当前全部连接修改为配置信息，如果同时连接了 WIFI和有线 请断开不需要配置的！，了解后继续", "注意", MessageBoxButtons.OKCancel);
-            //if (ds != DialogResult.OK)
-            //    return;
-            ManagementBaseObject inPar;
-            ManagementBaseObject outPar;
-            ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
-            ManagementObjectCollection moc = mc.GetInstances();
-            foreach (ManagementObject mo in moc)
+            if (Valid())
             {
-                if (!(bool)mo["IPEnabled"])
-                    continue;
-                if (mo.Properties["Description"].Value.ToString() == cmbWK.Text)
+                #region 修改网络参数
+                //DialogResult ds = MessageBox.Show("会将当前全部连接修改为配置信息，如果同时连接了 WIFI和有线 请断开不需要配置的！，了解后继续", "注意", MessageBoxButtons.OKCancel);
+                //if (ds != DialogResult.OK)
+                //    return;
+                ManagementBaseObject inPar;
+                ManagementBaseObject outPar;
+                ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
+                ManagementObjectCollection moc = mc.GetInstances();
+                foreach (ManagementObject mo in moc)
                 {
-                    inPar = mo.GetMethodParameters("EnableStatic");//设置ip地址和子网掩码
-                    inPar["IPAddress"] = new string[] { txtIP.Text };// 1.备用 2.IP
+                    if (!(bool)mo["IPEnabled"])
+                        continue;
+                    if (mo.Properties["Description"].Value.ToString() == cmbWK.Text)
+                    {
+                        inPar = mo.GetMethodParameters("EnableStatic");//设置ip地址和子网掩码
+                        inPar["IPAddress"] = new string[] { txtIP.Text };// 1.备用 2.IP
 
-                    inPar["SubnetMask"] = new string[] { txtYM.Text };
-                    outPar = mo.InvokeMethod("EnableStatic", inPar, null);
+                        inPar["SubnetMask"] = new string[] { txtYM.Text };
+                        outPar = mo.InvokeMethod("EnableStatic", inPar, null);
 
-                    inPar = mo.GetMethodParameters("SetGateways");//设置网关地址
-                    inPar["DefaultIPGateway"] = new string[] { txtWG.Text }; // 1.网关;2.备用网关
-                    outPar = mo.InvokeMethod("SetGateways", inPar, null);
+                        inPar = mo.GetMethodParameters("SetGateways");//设置网关地址
+                        inPar["DefaultIPGateway"] = new string[] { txtWG.Text }; // 1.网关;2.备用网关
+                        outPar = mo.InvokeMethod("SetGateways", inPar, null);
 
-                    inPar = mo.GetMethodParameters("SetDNSServerSearchOrder");//设置DNS
-                    inPar["DNSServerSearchOrder"] = new string[] { txtFDNS.Text, txtSDNS.Text }; // 1.DNS 2.备用DNS
-                    outPar = mo.InvokeMethod("SetDNSServerSearchOrder", inPar, null);
-                    MessageBox.Show(text: "应用成功！");
-                    break;
+                        inPar = mo.GetMethodParameters("SetDNSServerSearchOrder");//设置DNS
+                        inPar["DNSServerSearchOrder"] = new string[] { txtFDNS.Text, txtSDNS.Text }; // 1.DNS 2.备用DNS
+                        outPar = mo.InvokeMethod("SetDNSServerSearchOrder", inPar, null);
+                        MessageBox.Show(text: "应用成功！");
+                        break;
+                    }
                 }
+                #endregion
             }
-            #endregion
         }
         #endregion
-    }
-
-    internal enum IPenum
-    {
-        NAME = 0,
-        IPDZ = 1,
-        ZWYM = 2,
-        MRWG = 3,
-        FDNS = 4,
-        SDNS = 5
     }
 }

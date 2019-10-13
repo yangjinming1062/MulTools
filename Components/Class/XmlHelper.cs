@@ -118,7 +118,7 @@ namespace MulTools.Components.Class
             foreach (XmlNode xml in list)
             {
                 XmlElement element = (XmlElement)xml;
-                if (element.GetAttribute("NAME") == Name)
+                if (element.GetAttribute("Name") == Name)
                 {
                     foreach (PropertyInfo pi in propertys)
                     {
@@ -137,9 +137,10 @@ namespace MulTools.Components.Class
         /// <param name="xpath">XPath表达式</param>
         /// <param name="xmlAttributeName">要删除包含xmlAttributeName属性的节点的名称</param>
         /// <param name="AttributeValue">要删除包含xmlAttributeName属性的节点值</param>
-        public void RemoveNode(string xpath, string xmlAttributeName, string AttributeValue)
+        public bool RemoveNode(string xpath, string xmlAttributeName, string AttributeValue)
         {
             CreateXMLElement();
+            bool IsDel = false;
             XmlNodeList xNodes = _element.SelectNodes(xpath);
             for (int i = xNodes.Count - 1; i >= 0; i--)
             {
@@ -147,10 +148,12 @@ namespace MulTools.Components.Class
                 if (xe.GetAttribute(xmlAttributeName) == AttributeValue)
                 {
                     xNodes[i].ParentNode.RemoveChild(xNodes[i]);
+                    IsDel = true;
                     break;
                 }
             }
             _xml.Save(_filePath);
+            return IsDel;
         }
 
         /// <summary>
