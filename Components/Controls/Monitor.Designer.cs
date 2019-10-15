@@ -33,6 +33,7 @@
             this.MenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuitem_Select = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitem_IsShowBorder = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItem_Region = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitem_ClickThrough = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitem_PositionLock = new System.Windows.Forms.ToolStripMenuItem();
             this.PosLockNUll = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,7 +47,8 @@
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuItem_minimize = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitem_Close = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -56,13 +58,15 @@
             this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuitem_Select,
             this.menuitem_IsShowBorder,
+            this.menuItem_Region,
             this.menuitem_ClickThrough,
             this.menuitem_PositionLock,
             this.menuitem_Opacity,
-            this.toolStripSeparator1,
+            this.tsSeparator1,
+            this.menuItem_minimize,
             this.menuitem_Close});
             this.MenuStrip.Name = "MenuStrip";
-            this.MenuStrip.Size = new System.Drawing.Size(125, 142);
+            this.MenuStrip.Size = new System.Drawing.Size(125, 186);
             this.MenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.MenuStrip_Opening);
             // 
             // menuitem_Select
@@ -79,8 +83,18 @@
             this.menuitem_IsShowBorder.Text = "显示边框";
             this.menuitem_IsShowBorder.Click += new System.EventHandler(this.IsShowBorder_Click);
             // 
+            // menuItem_Region
+            // 
+            this.menuItem_Region.Enabled = false;
+            this.menuItem_Region.Image = global::MulTools.Components.Properties.Resources.regions;
+            this.menuItem_Region.Name = "menuItem_Region";
+            this.menuItem_Region.Size = new System.Drawing.Size(124, 22);
+            this.menuItem_Region.Text = "选择区域";
+            this.menuItem_Region.Click += new System.EventHandler(this.Region_Click);
+            // 
             // menuitem_ClickThrough
             // 
+            this.menuitem_ClickThrough.Enabled = false;
             this.menuitem_ClickThrough.Name = "menuitem_ClickThrough";
             this.menuitem_ClickThrough.Size = new System.Drawing.Size(124, 22);
             this.menuitem_ClickThrough.Text = "点击穿透";
@@ -163,7 +177,7 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(108, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem1.Tag = "1";
             this.toolStripMenuItem1.Text = "100%";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.Opacity_Click);
@@ -171,7 +185,7 @@
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(108, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem2.Tag = "0.75";
             this.toolStripMenuItem2.Text = "75%";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.Opacity_Click);
@@ -179,7 +193,7 @@
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(108, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem3.Tag = "0.5";
             this.toolStripMenuItem3.Text = "50%";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.Opacity_Click);
@@ -187,15 +201,22 @@
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(108, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem4.Tag = "0.25";
             this.toolStripMenuItem4.Text = "25%";
             this.toolStripMenuItem4.Click += new System.EventHandler(this.Opacity_Click);
             // 
-            // toolStripSeparator1
+            // tsSeparator1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(121, 6);
+            this.tsSeparator1.Name = "tsSeparator1";
+            this.tsSeparator1.Size = new System.Drawing.Size(121, 6);
+            // 
+            // menuItem_minimize
+            // 
+            this.menuItem_minimize.Name = "menuItem_minimize";
+            this.menuItem_minimize.Size = new System.Drawing.Size(124, 22);
+            this.menuItem_minimize.Text = "最小化";
+            this.menuItem_minimize.Click += new System.EventHandler(this.Minimize_Click);
             // 
             // menuitem_Close
             // 
@@ -208,7 +229,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(501, 371);
+            this.ClientSize = new System.Drawing.Size(509, 379);
             this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.HideCaption = true;
@@ -233,7 +254,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuitem_ClickThrough;
         private System.Windows.Forms.ToolStripMenuItem menuitem_PositionLock;
         private System.Windows.Forms.ToolStripMenuItem menuitem_Opacity;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator tsSeparator1;
         private System.Windows.Forms.ToolStripMenuItem menuitem_Close;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
@@ -245,5 +266,7 @@
         private System.Windows.Forms.ToolStripMenuItem PosLockC;
         private System.Windows.Forms.ToolStripMenuItem PosLockBL;
         private System.Windows.Forms.ToolStripMenuItem PosLockBR;
+        private System.Windows.Forms.ToolStripMenuItem menuItem_Region;
+        private System.Windows.Forms.ToolStripMenuItem menuItem_minimize;
     }
 }

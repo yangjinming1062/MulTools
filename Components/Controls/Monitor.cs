@@ -105,6 +105,7 @@ namespace MulTools.Components
         protected override void OnMove(EventArgs e)
         {
             base.OnMove(e);
+            AdjustSidePanelLocation();
         }
 
         protected override void OnResizeEnd(EventArgs e)
@@ -365,6 +366,125 @@ namespace MulTools.Components
         }
         #endregion
 
+        #region 选择区域
+        //SidePanel _currentSidePanel = null;
+        SidePanelContainer _sidePanelContainer = null;
+
+        /// <summary>
+        /// Opens a new side panel.
+        /// </summary>
+        /// <param name="panel">The side panel to embed.</param>
+        public void SetSidePanel(SidePanel panel)
+        {
+            if (IsSidePanelOpen)
+            {
+                CloseSidePanel();
+            }
+
+            _sidePanelContainer = new SidePanelContainer(this);
+            _sidePanelContainer.SetSidePanel(panel);
+            _sidePanelContainer.Location = ComputeSidePanelLocation(_sidePanelContainer);
+            _sidePanelContainer.Show(this);
+        }
+
+        /// <summary>
+        /// Closes the current side panel.
+        /// </summary>
+        public void CloseSidePanel()
+        {
+            if (_sidePanelContainer == null || _sidePanelContainer.IsDisposed)
+            {
+                _sidePanelContainer = null;
+                return;
+            }
+
+            _sidePanelContainer.Hide();
+            _sidePanelContainer.FreeSidePanel();
+        }
+
+        /// <summary>
+        /// Gets whether a side panel is currently shown.
+        /// </summary>
+        public bool IsSidePanelOpen
+        {
+            get
+            {
+                if (_sidePanelContainer == null)
+                    return false;
+                if (_sidePanelContainer.IsDisposed)
+                {
+                    _sidePanelContainer = null;
+                    return false;
+                }
+
+                return _sidePanelContainer.Visible;
+            }
+        }
+
+        protected void AdjustSidePanelLocation()
+        {
+            if (!IsSidePanelOpen)
+                return;
+
+            _sidePanelContainer.Location = ComputeSidePanelLocation(_sidePanelContainer);
+        }
+
+        private Point ComputeSidePanelLocation(Form sidePanel)
+        {
+            var screen = Screen.FromControl(this);
+            return (Location.X + Width + sidePanel.Width > screen.WorkingArea.Right) ? 
+                new Point(Location.X - sidePanel.Width, Location.Y) : new Point(Location.X + Width, Location.Y);
+        }
+
+        /// <summary>
+        /// Gets or sets the region displayed of the current thumbnail.
+        /// </summary>
+        public ThumbnailRegion SelectedThumbnailRegion
+        {
+            get
+            {
+                if (!ThumbnailPanel.IsShowingThumbnail || !ThumbnailPanel.ConstrainToRegion)
+                    return null;
+                return ThumbnailPanel.SelectedRegion;
+            }
+            set
+            {
+                if (!ThumbnailPanel.IsShowingThumbnail)
+                    return;
+
+                ThumbnailPanel.SelectedRegion = value;
+                SetAspectRatio(ThumbnailPanel.ThumbnailPixelSize, true);
+                FixPositionAndSize();
+            }
+        }
+
+        const int FixMargin = 10;
+        /// <summary>
+        /// Fixes the form's position and size, ensuring it is fully displayed in the current screen.
+        /// </summary>
+        private void FixPositionAndSize()
+        {
+            var screen = Screen.FromControl(this);
+
+            if (Width > screen.WorkingArea.Width)
+            {
+                Width = screen.WorkingArea.Width - FixMargin;
+            }
+            if (Height > screen.WorkingArea.Height)
+            {
+                Height = screen.WorkingArea.Height - FixMargin;
+            }
+            if (Location.X + Width > screen.WorkingArea.Right)
+            {
+                Location = new Point(screen.WorkingArea.Right - Width - FixMargin, Location.Y);
+            }
+            if (Location.Y + Height > screen.WorkingArea.Bottom)
+            {
+                Location = new Point(Location.X, screen.WorkingArea.Bottom - Height - FixMargin);
+            }
+        }
+        #endregion
+
         #region 显示边框
         readonly FormBorderStyle DefaultBorderStyle; // = FormBorderStyle.Sizable; // FormBorderStyle.SizableToolWindow;
 
@@ -439,7 +559,13 @@ namespace MulTools.Components
 
         private void IsShowBorder_Click(object sender, EventArgs e) => IsBorderVisible = !IsBorderVisible;
 
-        private void MenuStrip_Opening(object sender, CancelEventArgs e) => menuitem_IsShowBorder.Checked = IsBorderVisible;
+        private void MenuStrip_Opening(object sender, CancelEventArgs e)
+        {
+            bool showing = ThumbnailPanel.IsShowingThumbnail;
+            menuitem_IsShowBorder.Checked = IsBorderVisible;
+            menuItem_Region.Enabled = showing;
+            menuitem_ClickThrough.Enabled = showing;
+        }
 
         private void ClickThrough_Click(object sender, EventArgs e) => ClickThroughEnabled = !ClickThroughEnabled;
 
@@ -459,6 +585,35 @@ namespace MulTools.Components
         private void Opacity_Click(object sender, EventArgs e) => this.Opacity = this.Visible ? Convert.ToDouble(((ToolStripMenuItem)sender).Tag) : this.Opacity;
 
         private void Close_Click(object sender, EventArgs e) => Close();
+
+        private void Region_Click(object sender, EventArgs e) => SetSidePanel(new RegionPanel());
+
+        private void Minimize_Click(object sender, EventArgs e)
+        {
+            if (menuItem_minimize.Text == "最小化")
+            {
+                WindowState = FormWindowState.Minimized;
+                MenuItemVisable(false);
+                menuItem_minimize.Text = "恢复显示";
+            }
+            else
+            {
+                menuItem_minimize.Text = "最小化";
+                MenuItemVisable(true);
+                WindowState = FormWindowState.Normal;
+            }
+        }
+
+        private void MenuItemVisable(bool visable)
+        {
+            menuitem_Select.Visible = visable;
+            menuitem_IsShowBorder.Visible = visable;
+            menuitem_Opacity.Visible = visable;
+            menuitem_PositionLock.Visible = visable;
+            menuItem_Region.Visible = visable;
+            menuitem_ClickThrough.Visible = visable;
+            tsSeparator1.Visible = visable;
+        }
 
         private void SelectWindows_DropDownOpening(object sender, EventArgs e)
         {

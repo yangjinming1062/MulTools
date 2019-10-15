@@ -50,6 +50,21 @@
     <Compile Include="Class\Extensions\GeometryExtensions.cs" />
     <Compile Include="Class\Extensions\ScreenPositionExtensions.cs" />
     <Compile Include="Class\Extensions\WindowsFormsExtensions.cs" />
+    <Compile Include="Controls\SidedPanels\RegionPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SidedPanels\RegionPanel.Designer.cs">
+      <DependentUpon>RegionPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SidedPanels\SidePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SidedPanels\SidePanelContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\SidedPanels\SidePanelContainer.Designer.cs">
+      <DependentUpon>SidePanelContainer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Function\Functions.cs" />
     <Compile Include="Class\inputHook.cs" />
     <Compile Include="Class\NoneBorderHelper.cs" />
@@ -93,6 +108,9 @@
     <EmbeddedResource Include="Controls\Monitor.resx">
       <DependentUpon>Monitor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SidedPanels\RegionPanel.resx">
+      <DependentUpon>RegionPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -118,6 +136,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\pos_topright.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\regions.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
