@@ -13,26 +13,8 @@ namespace MulTools
             InitializeComponent();
         }
 
-        private Form _frm;
-        private Form CurrentForm
-        {
-            get { return _frm; }
-            set
-            {
-                _frm = value;
-                if (!Settings.Default.Menu功能多开)
-                {
-                    for (int i = 4; i < contextMenuStrip.Items.Count; i++)
-                    {
-                        contextMenuStrip.Items[i].Enabled = value == null;
-                    }
-                    foreach(Button bt in tbPanel.Controls)
-                    {
-                        bt.Enabled = value == null;
-                    }
-                }
-            }
-        }
+        private Form LastFuncForm { get; set; }
+
         /// <summary>
         /// 按钮点击事件（所有按钮都绑定此事件）
         /// </summary>
@@ -41,21 +23,35 @@ namespace MulTools
         private void MenuItem_Click(object sender, EventArgs e)
         {
             string name = sender.GetType() == typeof(Button) ? ((Button)sender).Text : ((ToolStripItem)sender).Text;
-            CurrentForm = frmFactory.GetForm(name);
-            Visible = false;
-            DialogResult ds = CurrentForm.ShowDialog();
-            if (ds == DialogResult.Cancel || ds == DialogResult.No)
-                try
-                {
-                    CurrentForm = null;
-                    Visible = true;
-                }
-                catch { }
+            LastFuncForm = frmFactory.GetForm(name);
+            if (Settings.Default.Menu功能多开)
+            {
+                
+                Visible = false;
+                DialogResult ds = LastFuncForm.ShowDialog();
+                if (ds == DialogResult.Cancel || ds == DialogResult.No)
+                    try
+                    {
+                        LastFuncForm = null;
+                        Visible = true;
+                    }
+                    catch { }
+            }
+            else
+            {
+                Application.Run(LastFuncForm);
+            }
         }
 
         private void NotifyIcon_DoubleClick(object sender, EventArgs e)
         {
-            if (CurrentForm == null)
+            if (Application.OpenForms.Count > 1 && LastFuncForm != null)
+            {
+                LastFuncForm.Show();
+                LastFuncForm.WindowState = FormWindowState.Normal;
+                LastFuncForm.Activate();
+            }
+            else
             {
                 if (WindowState == FormWindowState.Minimized)
                     ActiveWindow();
@@ -64,12 +60,6 @@ namespace MulTools
                     WindowState = FormWindowState.Minimized;
                     Hide();
                 }
-            }
-            else
-            {
-                CurrentForm.Show();
-                CurrentForm.WindowState = FormWindowState.Normal;
-                CurrentForm.Activate();
             }
         }
 
@@ -95,21 +85,23 @@ namespace MulTools
 
         private void tmiMenu_Click(object sender, EventArgs e)
         {
-            if (CurrentForm == null)
-                ActiveWindow();
-            else
+            if (Application.OpenForms.Count > 1 && LastFuncForm != null)
             {
                 if(MessageBox.Show("当前有已经打开的功能界面，选择 是 关闭并进入菜单界面，选择 否 激活功能界面", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    CurrentForm.Close();
-                    CurrentForm = null;
+                    LastFuncForm.Close();
+                    LastFuncForm = null;
                 }
                 else
                 {
-                    CurrentForm.Show();
-                    CurrentForm.WindowState = FormWindowState.Normal;
-                    CurrentForm.Activate();
+                    LastFuncForm.Show();
+                    LastFuncForm.WindowState = FormWindowState.Normal;
+                    LastFuncForm.Activate();
                 }
+            }
+            else
+            {
+                ActiveWindow();
             }
         }
 
@@ -129,6 +121,17 @@ namespace MulTools
                 {
                     if (f.Name != "frmMenu")
                         f.Close();
+                }
+            }
+            if (Application.OpenForms.Count > 1 && cmbSetFunc.Text.Equals("是") != Settings.Default.Menu功能多开)
+            {
+                for (int i = 4; i < contextMenuStrip.Items.Count; i++)
+                {
+                    contextMenuStrip.Items[i].Enabled = Settings.Default.Menu功能多开;
+                }
+                foreach (Button bt in tbPanel.Controls)
+                {
+                    bt.Enabled = Settings.Default.Menu功能多开;
                 }
             }
             Settings.Default.Menu功能多开 = cmbSetFunc.Text.Equals("是");
