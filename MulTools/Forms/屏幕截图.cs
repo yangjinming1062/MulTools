@@ -151,7 +151,7 @@ namespace MulTools.Forms
 
             if (e.KeyCode == Keys.Escape)
             {
-                if (inDraw)
+                if (inDraw && Settings.Default.h画笔穿透)
                 {
                     bitmap = new Bitmap(picBox.Width, picBox.Height);
                     picBox.Image = bitmap;
