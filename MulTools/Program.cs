@@ -15,14 +15,14 @@ namespace MulTools
         {
             if(!Properties.Settings.Default.Menu程序多开)
             {
-                int id = Process.GetCurrentProcess().Id;
+                Process current = Process.GetCurrentProcess();
                 //防止程序被改名，按文件的名称去查找
-                Process[] pro = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Application.ExecutablePath));
+                Process[] pro = Process.GetProcessesByName(current.ProcessName);
                 try
                 {
                     foreach (Process temp in pro)
                     {
-                        if (temp.Id != id)
+                        if (temp.Id != current.Id)
                             temp.Kill();
                     }
                 }

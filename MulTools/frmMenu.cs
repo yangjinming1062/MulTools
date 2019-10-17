@@ -18,28 +18,20 @@ namespace MulTools
         /// <summary>
         /// 按钮点击事件（所有按钮都绑定此事件）
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void MenuItem_Click(object sender, EventArgs e)
         {
             string name = sender.GetType() == typeof(Button) ? ((Button)sender).Text : ((ToolStripItem)sender).Text;
             LastFuncForm = frmFactory.GetForm(name);
-            if (Settings.Default.Menu功能多开)
+            Visible = false;
+            DialogResult ds = LastFuncForm.ShowDialog();
+            if (ds == DialogResult.Cancel || ds == DialogResult.No)
             {
-                
-                Visible = false;
-                DialogResult ds = LastFuncForm.ShowDialog();
-                if (ds == DialogResult.Cancel || ds == DialogResult.No)
-                    try
-                    {
-                        LastFuncForm = null;
-                        Visible = true;
-                    }
-                    catch { }
-            }
-            else
-            {
-                Application.Run(LastFuncForm);
+                try
+                {
+                    LastFuncForm = null;
+                    Visible = true;
+                }
+                catch { }
             }
         }
 
