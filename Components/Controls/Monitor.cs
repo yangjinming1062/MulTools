@@ -314,8 +314,8 @@ namespace MulTools.Components
                     TopMost = false;
                     this.Activate();
                     TopMost = true;
-                    menuitem_ClickThrough.Checked = value;
                 }
+                menuitem_ClickThrough.Checked = value;
                 _clickThrough = value;
             }
         }
