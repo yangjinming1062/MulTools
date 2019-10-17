@@ -63,6 +63,8 @@
             this.menu_cmbRealTime = new System.Windows.Forms.ToolStripComboBox();
             this.永久记录当前保存路径ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_cmbPath = new System.Windows.Forms.ToolStripComboBox();
+            this.画笔穿透ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_cmbThrough = new System.Windows.Forms.ToolStripComboBox();
             this.btCLose = new System.Windows.Forms.Button();
             this.lbBar = new System.Windows.Forms.Label();
             this.button18 = new System.Windows.Forms.Button();
@@ -140,6 +142,7 @@
             // 
             // settingMenu
             // 
+            this.settingMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.settingMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
             this.长图拼接类型ToolStripMenuItem,
@@ -151,9 +154,10 @@
             this.长图捕获间隔ToolStripMenuItem,
             this.长截图合成参数ToolStripMenuItem,
             this.长图实时合成ToolStripMenuItem,
-            this.永久记录当前保存路径ToolStripMenuItem});
+            this.永久记录当前保存路径ToolStripMenuItem,
+            this.画笔穿透ToolStripMenuItem});
             this.settingMenu.Name = "settingMenu";
-            this.settingMenu.Size = new System.Drawing.Size(197, 246);
+            this.settingMenu.Size = new System.Drawing.Size(197, 268);
             this.settingMenu.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.SettingMenu_Closed);
             this.settingMenu.Opening += new System.ComponentModel.CancelEventHandler(this.SettingMenu_Opening);
             // 
@@ -168,6 +172,7 @@
             // menu_cmbClipboard
             // 
             this.menu_cmbClipboard.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_cmbClipboard.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.menu_cmbClipboard.Items.AddRange(new object[] {
             "是",
             "否"});
@@ -187,6 +192,7 @@
             // menu_cmbLongType
             // 
             this.menu_cmbLongType.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_cmbLongType.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.menu_cmbLongType.Items.AddRange(new object[] {
             "垂直",
             "水平"});
@@ -205,6 +211,7 @@
             // menu_cmbPicType
             // 
             this.menu_cmbPicType.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_cmbPicType.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.menu_cmbPicType.Items.AddRange(new object[] {
             "bmp",
             "jpg"});
@@ -223,6 +230,7 @@
             // menu_cmbLong
             // 
             this.menu_cmbLong.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_cmbLong.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.menu_cmbLong.Items.AddRange(new object[] {
             "是",
             "否"});
@@ -241,6 +249,7 @@
             // menu_cmbGIF
             // 
             this.menu_cmbGIF.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_cmbGIF.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.menu_cmbGIF.Items.AddRange(new object[] {
             "是",
             "否"});
@@ -356,6 +365,7 @@
             // menu_cmbRealTime
             // 
             this.menu_cmbRealTime.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_cmbRealTime.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.menu_cmbRealTime.Items.AddRange(new object[] {
             "是",
             "否"});
@@ -374,12 +384,31 @@
             // menu_cmbPath
             // 
             this.menu_cmbPath.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_cmbPath.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
             this.menu_cmbPath.Items.AddRange(new object[] {
             "是",
             "否"});
             this.menu_cmbPath.Name = "menu_cmbPath";
             this.menu_cmbPath.Size = new System.Drawing.Size(75, 25);
             this.menu_cmbPath.Text = "否";
+            // 
+            // 画笔穿透ToolStripMenuItem
+            // 
+            this.画笔穿透ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_cmbThrough});
+            this.画笔穿透ToolStripMenuItem.Name = "画笔穿透ToolStripMenuItem";
+            this.画笔穿透ToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.画笔穿透ToolStripMenuItem.Text = "画笔穿透";
+            // 
+            // menu_cmbThrough
+            // 
+            this.menu_cmbThrough.BackColor = System.Drawing.SystemColors.Info;
+            this.menu_cmbThrough.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
+            this.menu_cmbThrough.Items.AddRange(new object[] {
+            "是",
+            "否"});
+            this.menu_cmbThrough.Name = "menu_cmbThrough";
+            this.menu_cmbThrough.Size = new System.Drawing.Size(75, 25);
             // 
             // btCLose
             // 
@@ -729,6 +758,7 @@
             this.picBox.Margin = new System.Windows.Forms.Padding(2);
             this.picBox.Name = "picBox";
             this.picBox.Size = new System.Drawing.Size(589, 328);
+            this.picBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picBox.TabIndex = 1;
             this.picBox.TabStop = false;
             // 
@@ -801,7 +831,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "屏幕截图";
             this.TopMost = true;
-            this.TransparencyKey = System.Drawing.Color.White;
+            this.TransparencyKey = System.Drawing.Color.Transparent;
             this.Load += new System.EventHandler(this.屏幕截图_Load);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
@@ -874,5 +904,7 @@
         private System.Windows.Forms.ToolStripComboBox menu_cmbRealTime;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripComboBox menu_cmbClipboard;
+        private System.Windows.Forms.ToolStripMenuItem 画笔穿透ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripComboBox menu_cmbThrough;
     }
 }

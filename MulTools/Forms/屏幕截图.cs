@@ -206,33 +206,78 @@ namespace MulTools.Forms
                 inDraw = true;
                 btPen.Text = "关闭画笔";
                 mouseHook.Start();
+                PrepareToDraw(true);
             }
             else
             {
                 inDraw = false;
                 btPen.Text = "启动画笔";
                 mouseHook.Stop();
+                PrepareToDraw(false);
             }
-            bitmap = new Bitmap(picBox.Width, picBox.Height);
-            picBox.Image = bitmap;
+        }
+
+        private void PrepareToDraw(bool begin)
+        {
+            if (Settings.Default.h画笔穿透)
+            {
+                bitmap = new Bitmap(picBox.Width, picBox.Height);
+                picBox.Image = bitmap;
+            }
+            else if(begin)
+            {
+                bitmap = GetWindow(true);
+                picBox.Image = bitmap;
+                TransparencyKey = Color.Peru;
+            }
+            else
+            {
+                bitmap = new Bitmap(picBox.Width, picBox.Height);
+                picBox.Image = bitmap;
+                TransparencyKey = Color.Transparent;
+            }
         }
         #endregion
 
         #region 截图按钮
-        private void BtJPG_Click(object sender, EventArgs e)
+        private Bitmap GetWindow(bool containBorder = false)
         {
-            int w = Functions.GetRated(picBox.Width) - Convert.ToInt16(Math.Ceiling(2 * Functions.Rate)) - 1;
-            int h = Functions.GetRated(picBox.Height) - Convert.ToInt16(Math.Ceiling(2 * Functions.Rate)) - 1;
+            int w, h;
+            if (containBorder)
+            {
+                w = Functions.GetRated(picBox.Width);
+                h = Functions.GetRated(picBox.Height);
+            }
+            else
+            {
+                w = Functions.GetRated(picBox.Width) - Convert.ToInt16(Math.Ceiling(2 * Functions.Rate)) - 1;
+                h = Functions.GetRated(picBox.Height) - Convert.ToInt16(Math.Ceiling(2 * Functions.Rate)) - 1;
+            }
             Bitmap bt = new Bitmap(w, h);
             using (Graphics gp = Graphics.FromImage(bt))
             {
-                gp.CopyFromScreen(Functions.GetRated(Location.X + picBox.Location.X) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)),
-                    Functions.GetRated(Location.Y + picBox.Location.Y) + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)), 0, 0, new Size(w, h));
-                bt.Save(string.Format("{0}/{1}.", timerPic.Enabled ? CombineTempPath : txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss")) + Settings.Default.截图文件类型);
-                if (Settings.Default.Pic截图同步到剪切板)
-                    Clipboard.SetImage(bt);
-                bt.Dispose();
+                int W = Functions.GetRated(Location.X + picBox.Location.X);
+                int H = Functions.GetRated(Location.Y + picBox.Location.Y);
+                if (containBorder)
+                {
+                    gp.CopyFromScreen(W, H, 0, 0, new Size(w, h));
+                }
+                else
+                {
+                    gp.CopyFromScreen(W + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)),
+                        H + Convert.ToInt16(Math.Ceiling(1 * Functions.Rate)), 0, 0, new Size(w, h));
+                }
             }
+            return bt;
+        }
+
+        private void BtJPG_Click(object sender, EventArgs e)
+        {
+            Bitmap bt = GetWindow();
+            bt.Save(string.Format("{0}/{1}.", timerPic.Enabled ? CombineTempPath : txtPath.Text, DateTime.Now.ToString("yyMMdd_HHmmss")) + Settings.Default.截图文件类型);
+            if (Settings.Default.Pic截图同步到剪切板)
+                Clipboard.SetImage(bt);
+            bt.Dispose();
         }
 
         private void BtGif_Click(object sender, EventArgs e)
@@ -328,6 +373,7 @@ namespace MulTools.Forms
             Settings.Default.Long合成方向 = menu_cmbLongType.Text.Equals("垂直") ? "V" : "H";
             Settings.Default.Long实时合成 = menu_cmbRealTime.Text.Equals("是");
             Settings.Default.Pic截图同步到剪切板 = menu_cmbClipboard.Text.Equals("是");
+            Settings.Default.h画笔穿透 = menu_cmbThrough.Text.Equals("是");
         }
 
         private void SettingMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
@@ -345,6 +391,7 @@ namespace MulTools.Forms
             txtHeigh.Text = Settings.Default.Long上限值.ToString();
             menu_cmbRealTime.Text = Settings.Default.Long实时合成 ? "是" : "否";
             menu_cmbClipboard.Text = Settings.Default.Pic截图同步到剪切板 ? "是" : "否";
+            menu_cmbThrough.Text = Settings.Default.h画笔穿透 ? "是" : "否";
         }
         #endregion
 

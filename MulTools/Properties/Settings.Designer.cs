@@ -226,5 +226,17 @@ namespace MulTools.Properties {
                 this["Pic截图同步到剪切板"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool h画笔穿透 {
+            get {
+                return ((bool)(this["h画笔穿透"]));
+            }
+            set {
+                this["h画笔穿透"] = value;
+            }
+        }
     }
 }

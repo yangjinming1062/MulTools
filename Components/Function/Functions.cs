@@ -51,6 +51,21 @@ namespace MulTools.Components
             ok = Win32.ExitWindowsEx(flg, 0);
         }
 
+        /// <summary>
+        /// 获取控件相对屏幕的位置
+        /// </summary>
+        public static Point LocationOnClient(System.Windows.Forms.Control c)
+        {
+            Point retval = new Point(0, 0);
+            do
+            {
+                retval.Offset(c.Location);
+                c = c.Parent;
+            }
+            while (c != null);
+            return retval;
+        }
+
         #region Oracle
         /// <summary>
         /// 分页绑定  --大量数据一次性查询卡顿，分页查
