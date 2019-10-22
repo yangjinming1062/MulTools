@@ -46,6 +46,7 @@
       <HintPath>..\程序\AnimatedGif.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\程序\System.Drawing.Common.dll</HintPath>
@@ -85,6 +86,12 @@
     <Compile Include="Forms\文件操作.Designer.cs">
       <DependentUpon>文件操作.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\算法测试.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\算法测试.Designer.cs">
+      <DependentUpon>算法测试.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\进程专杀.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +104,7 @@
     <Compile Include="frmMenu.Designer.cs">
       <DependentUpon>frmMenu.cs</DependentUpon>
     </Compile>
+    <Compile Include="Function\Algorithms.cs" />
     <Compile Include="Function\frmFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,6 +119,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\文件操作.resx">
       <DependentUpon>文件操作.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\算法测试.resx">
+      <DependentUpon>算法测试.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\进程专杀.resx">
       <DependentUpon>进程专杀.cs</DependentUpon>

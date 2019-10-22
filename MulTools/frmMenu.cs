@@ -64,7 +64,7 @@ namespace MulTools
 
         private void frmMenu_Load(object sender, EventArgs e)
         {
-            List<string> frmName = new List<string>() { "进程专杀", "定时关机", "文件操作", "IP速换", "屏幕截图", "窗体监控" };
+            List<string> frmName = new List<string>() { "进程专杀", "定时关机", "文件操作", "IP速换", "屏幕截图", "窗体监控","算法测试" };
             for (int i = 0; i < frmName.Count; i++)
             {
                 Button bt = new Button();

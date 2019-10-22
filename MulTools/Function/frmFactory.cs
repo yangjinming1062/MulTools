@@ -1,4 +1,4 @@
-﻿using MulTools.Forms;
+﻿using System;
 using System.Windows.Forms;
 
 namespace MulTools.Function
@@ -7,15 +7,11 @@ namespace MulTools.Function
     {
         public static Form GetForm(string name)
         {
-            Form frm = null;
+            Form frm;
             switch (name)
             {
-                case "进程专杀": frm = new 进程专杀(); break;
-                case "定时关机": frm = new 定时关机(); break;
-                case "文件操作": frm = new 文件操作(); break;
-                case "IP速换": frm = new IP速换(); break;
-                case "屏幕截图": frm = new 屏幕截图(); break;
-                case "窗体监控": frm = new MulTools.Components.Monitor(); break;
+                case "窗体监控": frm = new Components.Monitor(); break;
+                default: frm = (Form)Activator.CreateInstance(Type.GetType("MulTools.Forms." + name)); break;
             }
             return frm;
         }
