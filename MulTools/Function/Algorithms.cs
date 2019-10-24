@@ -18,8 +18,10 @@ namespace MulTools.Function
             if (root >= length) return;
 
             int largest = root;
-            int left = root * 2 ;
-            int right = root * 2 + 1;
+            int left = root * 2 +1;
+            int right = root * 2 + 2;
+            MaxHeapify(nums, length, left);//递归的先处理两个子堆
+            MaxHeapify(nums, length, right);
 
             if (left < length && nums[left] > nums[largest])
                 largest = left;
@@ -31,7 +33,6 @@ namespace MulTools.Function
                 int t = nums[root];
                 nums[root] = nums[largest];
                 nums[largest] = t;
-                MaxHeapify(nums, length, largest);
             }
         }
 
