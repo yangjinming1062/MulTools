@@ -15,24 +15,16 @@ namespace MulTools.Function
         /// <param name="root">当前根</param>
         public static void MaxHeapify(List<int> nums, int length, int root)
         {
-            if (root >= length)
-            {
-                return;
-            }
+            if (root >= length) return;
 
             int largest = root;
-            int left = root * 2 + 1;
-            int right = root * 2 + 2;
+            int left = root * 2 ;
+            int right = root * 2 + 1;
 
             if (left < length && nums[left] > nums[largest])
-            {
                 largest = left;
-            }
-
             if (right < length && nums[right] > nums[largest])
-            {
                 largest = right;
-            }
 
             if (largest != root)
             {
@@ -59,7 +51,7 @@ namespace MulTools.Function
                 {
                     while (i < right && nums[i] < middle) { i++; };
                     while (j > 0 && nums[j] > middle) { j--; };
-                    if (i == j) break;
+                    if (i >= j) break;
                     int temp = nums[i];
                     nums[i] = nums[j];
                     nums[j] = temp;
