@@ -134,7 +134,7 @@ namespace MulTools.Forms
 
         private void TxtIP_Leave(object sender, EventArgs e)
         {
-            if (cbAutoWG.Checked)
+            if (cbAutoWG.Checked && string.IsNullOrEmpty(txtWG.Text))
                 txtWG.Text = txtIP.Text.Substring(0, txtIP.Text.LastIndexOf('.')) + ".1";
         }
 
