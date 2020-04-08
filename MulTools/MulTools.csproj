@@ -6,4 +6,20 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Resources\Open.png" />
+    <None Remove="Resources\Wait.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>Dlls\System.Windows.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Open.png" />
+    <Resource Include="Resources\Wait.png" />
+  </ItemGroup>
+
 </Project>
