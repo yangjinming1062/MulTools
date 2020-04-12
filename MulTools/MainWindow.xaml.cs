@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Interop;
+using System.Windows.Media.Animation;
 
 namespace MulTools
 {
@@ -36,17 +37,30 @@ namespace MulTools
         {
             this.Left = Screen.WorkingArea.X + (Screen.WorkingArea.Width - 190);
             this.Top = Screen.WorkingArea.Y + (Screen.WorkingArea.Height - ActualHeight);
+            CommandPanel.Visibility = Visibility.Hidden;
+            WaitGrid.Visibility = Visibility.Visible;
+            OpenGrid.Visibility = Visibility.Collapsed;
         }
 
         private void BtClose_Click(object sender, RoutedEventArgs e) => Close();
 
         private void BtOpen_Click(object sender, RoutedEventArgs e)
         {
-            //todo
+            WaitGrid.Visibility = Visibility.Collapsed;
+            OpenGrid.Visibility = Visibility.Visible;
+            DoubleAnimation leftAni = new DoubleAnimation();
+            leftAni.To = (Screen.WorkingArea.Width - ActualWidth) / 2;
+            leftAni.Duration = TimeSpan.FromMilliseconds(500);
+            DoubleAnimation topAni = new DoubleAnimation();
+            topAni.Duration = TimeSpan.FromMilliseconds(500);
+            topAni.To = (Screen.WorkingArea.Height - ActualHeight) / 2;
+            this.BeginAnimation(Window.LeftProperty, leftAni);
+            this.BeginAnimation(Window.TopProperty, topAni);
         }
 
         private void GridMouseDown(object sender, MouseButtonEventArgs e)
         {
+            CommandPanel.Visibility = CommandPanel.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 this.DragMove();
