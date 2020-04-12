@@ -6,7 +6,16 @@
         xmlns:local="clr-namespace:MulTools"
         mc:Ignorable="d"
         Title="MainWindow" Height="200" Width="220" Background="Transparent"  AllowsTransparency="True" WindowStyle="None" Loaded="Window_Loaded">
-    <Grid>
-        <Image Source="/Resources/Wait.png" />
+    <Grid MouseDown="GridMouseDown">
+        <Grid x:Name="WaitGrid">
+            <Image x:Name="img" Source="/Resources/Wait.png"/>
+            <WrapPanel x:Name="CommandPanel" Orientation="Vertical">
+                <Button Content="功能展开" Click="BtOpen_Click"/>
+                <Button Content="退出程序" Click="BtClose_Click"/>
+            </WrapPanel>
+        </Grid>
+        <Grid Name="OpenGrid" Visibility="Collapsed">
+            <Image Width="210" Height="120" x:Name="imgOpen" Source="/Resources/Open.png"/>
+        </Grid>
     </Grid>
 </Window>

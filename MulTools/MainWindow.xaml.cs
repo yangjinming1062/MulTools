@@ -37,5 +37,20 @@ namespace MulTools
             this.Left = Screen.WorkingArea.X + (Screen.WorkingArea.Width - 190);
             this.Top = Screen.WorkingArea.Y + (Screen.WorkingArea.Height - ActualHeight);
         }
+
+        private void BtClose_Click(object sender, RoutedEventArgs e) => Close();
+
+        private void BtOpen_Click(object sender, RoutedEventArgs e)
+        {
+            //todo
+        }
+
+        private void GridMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
+        }
     }
 }
