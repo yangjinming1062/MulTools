@@ -24,15 +24,68 @@
                 <Setter Property="Foreground" Value="White"/>
             </Style>
         </Grid.Resources>
-        <Grid x:Name="WaitGrid">
+        <Grid x:Name="WaitGrid" Visibility="Collapsed">
             <Image x:Name="img" Source="/Resources/Wait.png"/>
             <WrapPanel x:Name="CommandPanel" Orientation="Vertical">
                 <Button Content="功能展开" Click="BtOpen_Click"/>
                 <Button Content="退出程序" Click="BtClose_Click"/>
             </WrapPanel>
         </Grid>
-        <Grid Name="OpenGrid" Visibility="Collapsed">
-            <Image Width="210" Height="120" x:Name="imgOpen" Source="/Resources/Open.png"/>
-        </Grid>
+        <Canvas Name="OpenGrid">
+            <Button Content="文件操作" Canvas.Top="25" Click="BtFunc_Click">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Grid>
+                            <Rectangle Width="60" Height="35" RadiusX="32" RadiusY="32">
+                                <Rectangle.Fill>
+                                    <RadialGradientBrush GradientOrigin="0,0">
+                                        <GradientStop Color="#FF324497" Offset="0.736"/>
+                                        <GradientStop Color="#FF603AE2" Offset="0.331"/>
+                                    </RadialGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Label Content="文件操作" VerticalContentAlignment="Center" FontWeight="Bold" Foreground="White"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Content="定时关机" Canvas.Left="65" Click="BtFunc_Click">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Grid>
+                            <Rectangle Width="60" Height="35" RadiusX="32" RadiusY="32">
+                                <Rectangle.Fill>
+                                    <RadialGradientBrush GradientOrigin="0,0.8">
+                                        <GradientStop Color="#FF656A74" Offset="0.736"/>
+                                        <GradientStop Color="#FF2B2B2E" Offset="0.331"/>
+                                    </RadialGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Label Content="定时关机" VerticalContentAlignment="Center" FontWeight="Bold" Foreground="White"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Content="屏幕画笔" Canvas.Left="145" Canvas.Top="25" Click="BtFunc_Click" RenderTransformOrigin="0.5,0.993">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Grid>
+                            <Rectangle Width="60" Height="35" RadiusX="32" RadiusY="32">
+                                <Rectangle.Fill>
+                                    <RadialGradientBrush GradientOrigin="0,0">
+                                        <GradientStop Color="#FF7B9732" Offset="0.481"/>
+                                        <GradientStop Color="#FFA0E25F" Offset="0.234"/>
+                                        <GradientStop Color="#FF32974E" Offset="0.757"/>
+                                    </RadialGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Label Content="屏幕画笔" VerticalContentAlignment="Center" FontWeight="Bold" Foreground="White"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Image Width="210" Height="120" x:Name="imgOpen" Source="/Resources/Open.png" Canvas.Right="0" Canvas.Bottom="0"/>
+            <Button Content="待命" Canvas.Right="0" Canvas.Bottom="0" Foreground="White" Click="BtBack_Click"/>
+        </Canvas>
     </Grid>
 </Window>

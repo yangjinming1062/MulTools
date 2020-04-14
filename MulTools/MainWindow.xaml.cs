@@ -66,5 +66,20 @@ namespace MulTools
                 this.DragMove();
             }
         }
+
+        private void BtFunc_Click(object sender, RoutedEventArgs e)
+        {
+            this.Visibility = Visibility.Collapsed;
+            Window win = WinFactory.GetWindow((sender as Button).Content.ToString());
+            win.ShowDialog();
+            this.Visibility = Visibility.Visible;
+        }
+
+        private void BtBack_Click(object sender, RoutedEventArgs e)
+        {
+            BeginAnimation(LeftProperty, null);
+            BeginAnimation(TopProperty, null);
+            LockPlace();
+        }
     }
 }
