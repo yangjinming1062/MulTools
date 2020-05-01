@@ -3,10 +3,48 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MulTools.Win"
+        xmlns:UC="clr-namespace:MulTools.UC"
         mc:Ignorable="d"
-        Title="文件操作" Height="450" Width="800">
-    <Grid>
-        
+        xmlns:MulTools="clr-namespace:MulTools"
+        Title="文件操作" Height="520" MinWidth="1000" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True">
+    <Grid Margin="8">
+        <Grid.Effect>
+            <DropShadowEffect ShadowDepth="-6" BlurRadius="8" Color="Black"/>
+        </Grid.Effect>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="460"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.ColumnSpan="3" Background="{StaticResource LinearBackground}" MouseDown="TitleGrid_MouseDown">
+            <Grid.Resources>
+                <Style TargetType="MulTools:ActivableButton" BasedOn="{StaticResource FunctionalButton}">
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Width" Value="32"/>
+                    <Setter Property="Height" Value="32"/>
+                    <Setter Property="Margin" Value="4"/>
+                    <Setter Property="Cursor" Value="Arrow"/>
+                    <Setter Property="Focusable" Value="False"/>
+                </Style>
+                <Style TargetType="Path">
+                    <Setter Property="Fill" Value="White"/>
+                    <Setter Property="Stretch" Value="Uniform"/>
+                    <Setter Property="Width" Value="15"/>
+                    <Setter Property="RenderTransformOrigin" Value ="0.5,0.5"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                </Style>
+            </Grid.Resources>
+            <MulTools:ActivableButton x:Name="btClose" ToolTip="关闭工具" HorizontalAlignment="Right" VerticalAlignment="Top" Click="btClose_Click">
+                <Path Data="{DynamicResource IconCross}" />
+            </MulTools:ActivableButton>
+        </Grid>
+        <UC:FileOption Grid.Row="1" Grid.Column="0"/>
+        <GridSplitter Grid.Row="1" Grid.Column="1" Width="2" Background="Black" HorizontalAlignment="Stretch"/>
+        <UC:FileOption Grid.Row="1" Grid.Column="2"/>
     </Grid>
 </Window>
