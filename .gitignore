@@ -17,19 +17,19 @@
 mono_crash.*
 
 # Build results
-MulTools/[Dd]ebug/
-MulTools/[Dd]ebugPublic/
-MulTools/[Rr]elease/
-MulTools/[Rr]eleases/
-MulTools/x64/
-MulTools/x86/
-MulTools/[Aa][Rr][Mm]/
-MulTools/[Aa][Rr][Mm]64/
-MulTools/bld/
-MulTools/[Bb]in/
-MulTools/[Oo]bj/
-MulTools/[Ll]og/
-MulTools/[Ll]ogs/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -351,4 +351,4 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-MulTools/bin/*
+bin/*
