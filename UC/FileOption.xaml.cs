@@ -22,5 +22,55 @@ namespace MulTools.UC
         {
             InitializeComponent();
         }
+
+        private void UC_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Browse_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void BtSearch_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RadioButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtReplace_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Data_Filter(object sender, FilterEventArgs e)
+        {
+
+        }
+
+        private void MOption_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MCompare_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MDirOption_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

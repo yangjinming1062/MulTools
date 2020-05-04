@@ -3,10 +3,162 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MulTools.UC"
+             xmlns:local="clr-namespace:MulTools.UC" 
+             xmlns:co="clr-namespace:MulTools" 
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Height="460">
-    <Grid Background="AliceBlue">
-            
+             Height="460" Width="500" Loaded="UC_Loaded">
+    <UserControl.Resources>
+        <co:ColorConvert x:Key="colorConvert" />
+        <CollectionViewSource x:Name="collection" x:Key="cvsList" Source="{Binding ShowFiles}" Filter="Data_Filter">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="FilePath" Direction="Ascending"/>
+                <scm:SortDescription PropertyName="FileName" Direction="Ascending"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <Style x:Key="BaseHeader" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="{StaticResource LinearBackground}"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{StaticResource ToolButtonBackground}"/>
+        </Style>
+        <Style TargetType="{x:Type DataGridRow}">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Height" Value="24" />
+                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="{x:Type DataGridCell}">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid Background="{StaticResource LinearBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <GroupBox Grid.Row="0" Header="文件夹">
+            <WrapPanel>
+                <CheckBox Width="70" Content="递归加载" VerticalAlignment="Center" IsChecked="{Binding IsRecursive}"/>
+                <TextBox Text="{Binding DirectoryPath, UpdateSourceTrigger=PropertyChanged}" Width="370" Margin="10,0,0,0" HorizontalContentAlignment="Stretch"/>
+                <Button Width="30" Content="浏览" HorizontalAlignment="Right" Click="Browse_Click"/>
+            </WrapPanel>
+        </GroupBox>
+        <GroupBox Header="快捷操作" Grid.Row="1" Visibility="{Binding IsShowOptions}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <GroupBox Header="过滤" Grid.Column="0" Margin="0,0,10,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="搜索：" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Name="txtSearch" TextChanged="Search_TextChanged" VerticalAlignment="Center"/>
+                        <Button IsEnabled="{Binding Compared}" Width="35" Grid.Column="2" Content="相同" Margin="5,0" Click="BtSearch_Click"/>
+                        <Button IsEnabled="{Binding Compared}" Width="35" Grid.Column="3" Content="不同" Margin="0,0,5,0" Click="BtSearch_Click"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Column="2" Header="文件分组" Width="208" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Height="20">
+                        <RadioButton Tag="FilePath" Click="RadioButton_Click" Content="文件路径" IsChecked="True"/>
+                        <RadioButton Tag="FileType" Click="RadioButton_Click" Content="文件类型"/>
+                        <RadioButton Tag="None" Click="RadioButton_Click" Content="不分组"/>
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+        </GroupBox>
+        <DataGrid x:Name="dataGrid" Grid.Row="2"  HorizontalScrollBarVisibility="Auto" Background="Transparent" MinHeight="200" MaxHeight="400"
+                  ItemsSource="{Binding Source={StaticResource cvsList}}" CanUserAddRows="False" AutoGenerateColumns="False"
+                  IsReadOnly ="True" RowHeaderWidth="1" VerticalScrollBarVisibility="Visible">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="删除" ToolTip="删除全部选中的文件" Click="MOption_Click"/>
+                    <MenuItem Header="剪切" ToolTip="剪切全部选中的文件到对侧" Click="MOption_Click"/>
+                    <MenuItem Header="复制" ToolTip="复制全部选中的文件到对侧" Click="MOption_Click"/>
+                    <MenuItem Header="对比" ToolTip="找出对侧不存在的文件，文件名变绿色"  Click="MCompare_Click"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Resources>
+                <Style x:Key="textBlockStyle"  TargetType="TextBlock">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="Padding" Value="10,0"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Margin" Value="0,0,0,5"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander IsExpanded="True" Background="{StaticResource LinearBackground}" BorderBrush="#FF002255" Foreground="Black" BorderThickness="1">
+                                            <Expander.Header>
+                                                <DockPanel Tag="{Binding Path=Name}">
+                                                    <DockPanel.ContextMenu>
+                                                        <ContextMenu>
+                                                            <MenuItem Header="删除文件夹" ToolTip="删除当前文件夹" Tag="{Binding Path=Name}" Click="MDirOption_Click"/>
+                                                            <MenuItem Header="剪切文件夹" ToolTip="剪切当前文件夹到对侧" Tag="{Binding Path=Name}" Click="MDirOption_Click"/>
+                                                            <MenuItem Header="复制文件夹" ToolTip="复制当前文件夹到对侧" Tag="{Binding Path=Name}" Click="MDirOption_Click"/>
+                                                        </ContextMenu>
+                                                    </DockPanel.ContextMenu>
+                                                    <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0" Width="Auto"/>
+                                                </DockPanel>
+                                            </Expander.Header>
+                                            <Expander.Content>
+                                                <ItemsPresenter />
+                                            </Expander.Content>
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn HeaderStyle="{StaticResource BaseHeader}" Header="文件名" Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource textBlockStyle}" Text="{Binding FileName}" Foreground="{Binding Path=NotSame, Converter={StaticResource colorConvert}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn HeaderStyle="{StaticResource BaseHeader}" Header="文件类型" Width="80" Binding="{Binding FileType}" ElementStyle="{StaticResource textBlockStyle}"/>
+                <DataGridTextColumn HeaderStyle="{StaticResource BaseHeader}" Header="文件大小" Width="80" Binding="{Binding FileSize}" ElementStyle="{StaticResource textBlockStyle}"/>
+                <DataGridTextColumn HeaderStyle="{StaticResource BaseHeader}" Header="附加信息" Width="155" Binding="{Binding FileAddInfo}" ElementStyle="{StaticResource textBlockStyle}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="3" HorizontalAlignment="Center">
+            <GroupBox Header="操作" >
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Width="110" Height="20" Text="{Binding ReplaceSource, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="→"/>
+                    <TextBox Width="110" Height="20" Text="{Binding ReplaceTarget, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="替换" Margin="5" Click="BtReplace_Click"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
     </Grid>
 </UserControl>
