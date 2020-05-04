@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Text;
 using System.Windows;
 
 namespace MulTools.ViewModel
@@ -126,8 +124,17 @@ namespace MulTools.ViewModel
                         fileShowInfo.FullName = file.FullName;
                         fileShowInfo.FileName = Path.GetFileNameWithoutExtension(file.FullName);
                         fileShowInfo.FileType = file.Extension;
-                        fileShowInfo.FileSize = ConvertSize(((FileInfo)file).Length);
-                        fileShowInfo.FilePath = Path.GetRelativePath(DirectoryPath, ((FileInfo)file).DirectoryName);
+                        try
+                        {
+                            fileShowInfo.FileSize = ConvertSize(((FileInfo)file).Length);
+                            fileShowInfo.FilePath = Path.GetRelativePath(DirectoryPath, ((FileInfo)file).DirectoryName);
+                        }
+                        catch
+                        {
+                            fileShowInfo.FileSize = ConvertSize(0);
+                            fileShowInfo.FilePath = Path.GetRelativePath(DirectoryPath, ((DirectoryInfo)file).Parent.FullName);
+                        }
+                        
                         if (fileShowInfo.FilePath == ".")
                             fileShowInfo.FilePath = "";
                         ShowFiles.Add(fileShowInfo);
