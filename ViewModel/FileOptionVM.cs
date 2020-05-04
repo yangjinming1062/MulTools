@@ -139,7 +139,6 @@ namespace MulTools.ViewModel
 
             }
         }
-
         private string ConvertSize(long size)
         {
             if (size > 1024)
@@ -158,6 +157,28 @@ namespace MulTools.ViewModel
             else
             {
                 return size.ToString() + "字节";
+            }
+        }
+
+        public void Replace()
+        {
+            if (!string.IsNullOrEmpty(ReplaceSource))
+            {
+                string NewName;
+                foreach (FileShowInfo file in ShowFiles)
+                {
+                    if (file.FileName.Contains(ReplaceSource))
+                    {
+                        file.FileName = file.FileName.Replace(ReplaceSource, ReplaceTarget);
+                        NewName = Path.Combine(Path.GetDirectoryName(file.FullName), file.FileName + file.FileType);
+                        try
+                        {
+                            File.Move(file.FullName, NewName);
+                            file.FullName = NewName;
+                        }
+                        catch (Exception ex) { }
+                    }
+                }
             }
         }
     }
