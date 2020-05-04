@@ -6,7 +6,7 @@
         xmlns:UC="clr-namespace:MulTools.UC"
         mc:Ignorable="d"
         xmlns:MulTools="clr-namespace:MulTools"
-        Title="文件操作" Height="520" MinWidth="1000" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True">
+        Title="文件操作" Height="520" Width="1016" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True">
     <Grid Margin="8">
         <Grid.Effect>
             <DropShadowEffect ShadowDepth="-6" BlurRadius="8" Color="Black"/>
