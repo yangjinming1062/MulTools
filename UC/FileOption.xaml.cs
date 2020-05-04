@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MulTools.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,9 +19,11 @@ namespace MulTools.UC
     /// </summary>
     public partial class FileOption : UserControl
     {
+        FileOptionVM viewModel = new FileOptionVM();
         public FileOption()
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
 
         private void UC_Loaded(object sender, RoutedEventArgs e)
